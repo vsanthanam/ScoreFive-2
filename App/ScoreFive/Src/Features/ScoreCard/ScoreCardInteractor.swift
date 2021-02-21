@@ -77,8 +77,11 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     }
 
     func index(at index: Int) -> String? {
-        // TODO: Implement Index by player
-        String(index + 1)
+        if indexByPlayer,
+            let player = currentScoreCard?.startingPlayer(atIndex: index) {
+            return String(player.name.prefix(1))
+        }
+        return String(index + 1)
     }
 
     func editRowAtIndex(at index: Int) {
@@ -99,7 +102,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
 
     private var indexByPlayer: Bool = true {
         didSet {
-            // TODO: - Implement Reload
+            presenter.reload()
         }
     }
 
@@ -120,5 +123,35 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
         userSettings.indexByPlayerStream
             .assign(to: \.indexByPlayer, on: self)
             .cancelOnDeactivate(interactor: self)
+    }
+}
+
+private extension ScoreCard {
+    func startingPlayer(atIndex index: Int) -> Player {
+        if index == 0 {
+            return orderedPlayers[index % orderedPlayers.count]
+        } else {
+            let active = activePlayers(atIndex: index - 1)
+
+            if Set(active) == Set(orderedPlayers) {
+                return orderedPlayers[index % orderedPlayers.count]
+            } else {
+                var player = startingPlayer(atIndex: index - 1)
+                var position = orderedPlayers.firstIndex(of: player) ?? 0
+                position += 1
+                if position > (orderedPlayers.count - 1) {
+                    position = 0
+                }
+                player = orderedPlayers[position]
+                while !(active.contains(player)) {
+                    position += 1
+                    if position > (orderedPlayers.count - 1) {
+                        position = 0
+                    }
+                    player = orderedPlayers[position]
+                }
+                return player
+            }
+        }
     }
 }

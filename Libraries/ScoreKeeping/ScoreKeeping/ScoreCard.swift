@@ -39,26 +39,17 @@ public struct ScoreCard: Codable, Equatable, Hashable {
 
     /// All the players remaining in the game, in order of who goes first
     public var activePlayers: [Player] {
-        orderedPlayers
-            .filter { player in
-                totalScore(for: player) < scoreLimit
-            }
+        activePlayers(atIndex: rounds.count - 1)
     }
 
     /// All the players in the game, from winning to losing
     public var rankedPlayers: [Player] {
-        orderedPlayers
-            .sorted { lhs, rhs -> Bool in
-                totalScore(for: lhs) < totalScore(for: rhs)
-            }
+        rankedPlayers(atIndex: rounds.count - 1)
     }
 
     /// All the players remaining the game, from winning to losing
-    public var activePlayersRanked: [Player] {
-        rankedPlayers
-            .filter { player in
-                totalScore(for: player) < scoreLimit
-            }
+    public var rankedActivePlayers: [Player] {
+        rankedActivePlayers(atIndex: rounds.count - 1)
     }
 
     /// Whether or not the game is in progress and can accept new rounds
@@ -94,6 +85,37 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     /// - Note: This method produces a run-time failure if the player is not in this game
     public func totalScore(for player: Player) -> Int {
         totalScore(forPlayer: player, atIndex: rounds.count - 1)
+    }
+
+    /// Active players in the game, at a given index, in order if player order
+    /// - Parameter index: The index
+    /// - Returns: The active players at the given index
+    public func activePlayers(atIndex index: Int) -> [Player] {
+        orderedPlayers
+            .filter {
+                totalScore(forPlayer: $0,
+                           atIndex: index) < scoreLimit
+            }
+    }
+
+    /// Ranked players in the game, at a given index
+    /// - Parameter index: The index
+    /// - Returns: The players in the game, ranked
+    public func rankedPlayers(atIndex index: Int) -> [Player] {
+        orderedPlayers
+            .sorted { lhs, rhs -> Bool in
+                totalScore(forPlayer: lhs, atIndex: index) < totalScore(forPlayer: rhs, atIndex: index)
+            }
+    }
+
+    /// Ranked players who are still active, at a given index
+    /// - Parameter index: The Index
+    /// - Returns: The active players in the game, ranked.
+    public func rankedActivePlayers(atIndex index: Int) -> [Player] {
+        activePlayers(atIndex: index)
+            .sorted { lhs, rhs -> Bool in
+                totalScore(forPlayer: lhs, atIndex: index) < totalScore(forPlayer: rhs, atIndex: index)
+            }
     }
 
     /// Get the round at the specified index
