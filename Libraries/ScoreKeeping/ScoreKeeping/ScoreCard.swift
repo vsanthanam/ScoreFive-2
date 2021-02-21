@@ -39,17 +39,17 @@ public struct ScoreCard: Codable, Equatable, Hashable {
 
     /// All the players remaining in the game, in order of who goes first
     public var activePlayers: [Player] {
-        activePlayers(atIndex: rounds.count - 1)
+        activePlayers(at: rounds.count - 1)
     }
 
     /// All the players in the game, from winning to losing
     public var rankedPlayers: [Player] {
-        rankedPlayers(atIndex: rounds.count - 1)
+        rankedPlayers(at: rounds.count - 1)
     }
 
     /// All the players remaining the game, from winning to losing
     public var rankedActivePlayers: [Player] {
-        rankedActivePlayers(atIndex: rounds.count - 1)
+        rankedActivePlayers(at: rounds.count - 1)
     }
 
     /// Whether or not the game is in progress and can accept new rounds
@@ -84,37 +84,37 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     /// - Returns: The total score for the player
     /// - Note: This method produces a run-time failure if the player is not in this game
     public func totalScore(for player: Player) -> Int {
-        totalScore(forPlayer: player, atIndex: rounds.count - 1)
+        totalScore(for: player, at: rounds.count - 1)
     }
 
     /// Active players in the game, at a given index, in order if player order
     /// - Parameter index: The index
     /// - Returns: The active players at the given index
-    public func activePlayers(atIndex index: Int) -> [Player] {
+    public func activePlayers(at index: Int) -> [Player] {
         orderedPlayers
             .filter {
-                totalScore(forPlayer: $0,
-                           atIndex: index) < scoreLimit
+                totalScore(for: $0,
+                           at: index) < scoreLimit
             }
     }
 
     /// Ranked players in the game, at a given index
     /// - Parameter index: The index
     /// - Returns: The players in the game, ranked
-    public func rankedPlayers(atIndex index: Int) -> [Player] {
+    public func rankedPlayers(at index: Int) -> [Player] {
         orderedPlayers
             .sorted { lhs, rhs -> Bool in
-                totalScore(forPlayer: lhs, atIndex: index) < totalScore(forPlayer: rhs, atIndex: index)
+                totalScore(for: lhs, at: index) < totalScore(for: rhs, at: index)
             }
     }
 
     /// Ranked players who are still active, at a given index
     /// - Parameter index: The Index
     /// - Returns: The active players in the game, ranked.
-    public func rankedActivePlayers(atIndex index: Int) -> [Player] {
-        activePlayers(atIndex: index)
+    public func rankedActivePlayers(at index: Int) -> [Player] {
+        activePlayers(at: index)
             .sorted { lhs, rhs -> Bool in
-                totalScore(forPlayer: lhs, atIndex: index) < totalScore(forPlayer: rhs, atIndex: index)
+                totalScore(for: lhs, at: index) < totalScore(for: rhs, at: index)
             }
     }
 
@@ -259,14 +259,14 @@ public struct ScoreCard: Codable, Equatable, Hashable {
         round(at: index)
     }
 
-    private func partialGame(atIndex index: Int) -> ScoreCard {
+    public func partialGame(at index: Int) -> ScoreCard {
         precondition(index < rounds.count, "This round hasn't happend yet")
         var partial = ScoreCard(scoreLimit: scoreLimit, orderedPlayers: orderedPlayers)
         partial.rounds = .init(rounds.prefix(index + 1))
         return partial
     }
 
-    private func totalScore(forPlayer player: Player, atIndex index: Int) -> Int {
+    public func totalScore(for player: Player, at index: Int) -> Int {
         precondition(index < rounds.count, "This round hasn't happened yet")
         precondition(orderedPlayers.contains(player), "This score card does not contain this player")
         return rounds
