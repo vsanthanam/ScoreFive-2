@@ -115,7 +115,7 @@ final class GameRoundCell: ListCell<GameRoundCell.ContentConfiguration, GameRoun
                 get { label.text }
                 set { label.text = newValue }
             }
-            
+
             var titleColor: UIColor? {
                 get { label.textColor }
                 set { label.textColor = newValue }

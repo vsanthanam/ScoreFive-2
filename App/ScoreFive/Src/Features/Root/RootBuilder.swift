@@ -28,6 +28,10 @@ final class RootComponent: BootstrapComponent, RootDependencyProviding {
         dynamicDependency
     }
 
+    var userSettings: UserSettings {
+        shared { UserSettingsImpl() }
+    }
+
     // MARK: - Children
 
     fileprivate var mainBuilder: MainBuildable {

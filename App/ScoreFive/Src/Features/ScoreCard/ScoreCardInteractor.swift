@@ -28,9 +28,11 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
 
     init(presenter: ScoreCardPresentable,
          gameStorageProvider: GameStorageProviding,
-         activeGameStream: ActiveGameStreaming) {
+         activeGameStream: ActiveGameStreaming,
+         userSettings: UserSettings) {
         self.gameStorageProvider = gameStorageProvider
         self.activeGameStream = activeGameStream
+        self.userSettings = userSettings
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -75,6 +77,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     }
 
     func index(at index: Int) -> String? {
+        // TODO: Implement Index by player
         String(index + 1)
     }
 
@@ -86,12 +89,17 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
 
     private let gameStorageProvider: GameStorageProviding
     private let activeGameStream: ActiveGameStreaming
-
-    private var automaticReload: Bool = true
+    private let userSettings: UserSettings
 
     private var currentScoreCard: ScoreCard? {
         didSet {
             presenter.reload()
+        }
+    }
+
+    private var indexByPlayer: Bool = true {
+        didSet {
+            // TODO: - Implement Reload
         }
     }
 
@@ -105,6 +113,12 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
             .filterNil()
             .toOptional()
             .assign(to: \.currentScoreCard, on: self)
+            .cancelOnDeactivate(interactor: self)
+    }
+
+    private func startObservingIndexByPlayerSetting() {
+        userSettings.indexByPlayerStream
+            .assign(to: \.indexByPlayer, on: self)
             .cancelOnDeactivate(interactor: self)
     }
 }

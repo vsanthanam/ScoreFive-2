@@ -12,6 +12,7 @@ import ShortRibs
 protocol ScoreCardDependency: Dependency {
     var gameStorageProvider: GameStorageProviding { get }
     var activeGameStream: ActiveGameStreaming { get }
+    var userSettings: UserSettings { get }
 }
 
 class ScoreCardComponent: Component<ScoreCardDependency> {}
@@ -39,7 +40,8 @@ final class ScoreCardBuilder: ComponentizedBuilder<ScoreCardComponent, ScoreCard
         let viewController = ScoreCardViewController()
         let interactor = ScoreCardInteractor(presenter: viewController,
                                              gameStorageProvider: component.gameStorageProvider,
-                                             activeGameStream: component.activeGameStream)
+                                             activeGameStream: component.activeGameStream,
+                                             userSettings: component.userSettings)
         interactor.listener = listener
         return interactor
     }
