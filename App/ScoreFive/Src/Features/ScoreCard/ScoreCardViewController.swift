@@ -111,12 +111,20 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
     }
 
     private func trailingSwipeActionsConfigurationProvider(_ indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard listener?.canRemoveRow(at: indexPath.row) ?? false else {
-            return nil
-        }
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: "Delete") { [collectionView, listener] _, _, actionPerformed in
             guard let listener = listener else {
+                actionPerformed(false)
+                return
+            }
+
+            guard listener.canRemoveRow(at: indexPath.row) else {
+                let alertController = UIAlertController(title: "Not Allowed",
+                                                        message: "You can't delete this row",
+                                                        preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(action)
+                self.present(alertController, animated: true, completion: nil)
                 actionPerformed(false)
                 return
             }
@@ -131,6 +139,8 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
             })
         }
 
+        deleteAction.backgroundColor = .contentNegative
+
         let editAction = UIContextualAction(style: .normal, title: "Edit") { [listener] _, _, actionPerformed in
             guard let listener = listener else {
                 actionPerformed(false)
@@ -139,6 +149,7 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
             listener.editRowAtIndex(at: indexPath.row)
             actionPerformed(true)
         }
+        editAction.backgroundColor = .contentAccentPrimary
         let config = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         return config
     }

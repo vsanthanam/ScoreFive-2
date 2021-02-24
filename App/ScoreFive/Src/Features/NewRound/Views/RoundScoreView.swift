@@ -13,6 +13,8 @@ import UIKit
 protocol RoundScoreViewDelegate: AnyObject {
     func scoreValueChanged(_ input: String)
     func scoreDidAccept()
+    func scoreDidRegress()
+    func scoreDidProgress()
 }
 
 final class RoundScoreView: BaseView {
@@ -118,7 +120,7 @@ final class RoundScoreView: BaseView {
     private func setUp() {
         backgroundColor = .backgroundPrimary
 
-        titleLabel.font = .systemFont(ofSize: 17.0, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 24.0, weight: .semibold)
         titleLabel.textColor = .contentSecondary
 
         addSubview(titleLabel)
@@ -147,17 +149,35 @@ final class RoundScoreView: BaseView {
         delegate?.scoreValueChanged(input?.text ?? "")
     }
 
+    @objc
+    private func userDidGoForward() {
+        delegate?.scoreDidProgress()
+    }
+
+    @objc
+    private func userDidGoBackward() {
+        delegate?.scoreDidRegress()
+    }
+
     private func configureInput(_ input: ScoreInput) {
         input.textAlignment = .center
-        input.font = UIFont(name: "Consolas", size: 52.0)
+        input.font = UIFont(name: "Consolas", size: 72.0)
         input.keyboardType = .numberPad
         addSubview(input)
 
+        let backItem = UIBarButtonItem.fromSymbol(named: "chevron.backward.square.fill", target: self, action: #selector(userDidGoBackward))
+        backItem.tintColor = .contentPrimary
+
+        let forwardItem = UIBarButtonItem.fromSymbol(named: "chevron.forward.square.fill", target: self, action: #selector(userDidGoForward))
+        forwardItem.tintColor = .contentPrimary
+
         let acceptItem = UIBarButtonItem.fromSymbol(named: "checkmark.circle.fill", target: self, action: #selector(userDidAccept))
         acceptItem.tintColor = .contentPositive
-        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let spacer1 = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let spacer2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        spacer1.width = 16.0
         let toolbar = UIToolbar()
-        toolbar.items = [spacer, acceptItem]
+        toolbar.items = [backItem, spacer1, forwardItem, spacer2, acceptItem]
         toolbar.sizeToFit()
 
         input.inputAccessoryView = toolbar

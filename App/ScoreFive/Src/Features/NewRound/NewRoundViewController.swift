@@ -7,6 +7,7 @@
 
 import FiveUI
 import Foundation
+import ScoreKeeping
 import ShortRibs
 import SnapKit
 import UIKit
@@ -19,6 +20,8 @@ protocol NewRoundPresentableListener: AnyObject {
     func didTapClose()
     func didInputScore(_ score: Int)
     func didSaveScore(_ score: Int)
+    func didRegress()
+    func didProgress()
 }
 
 final class NewRoundViewController: ScopeViewController, NewRoundPresentable, NewRoundViewControllable, UINavigationBarDelegate, RoundScoreViewDelegate {
@@ -64,7 +67,7 @@ final class NewRoundViewController: ScopeViewController, NewRoundPresentable, Ne
         let newValue: String?
 
         if let score = score {
-            newValue = String(score)
+            newValue = score == Round.noScore ? "" : String(score)
         } else {
             newValue = nil
         }
@@ -86,7 +89,16 @@ final class NewRoundViewController: ScopeViewController, NewRoundPresentable, Ne
     }
 
     func showResetError() {
-        // show alert controllerdd
+        let alertController = UIAlertController(title: "Error",
+                                                message: "You can't edit a round by this much!",
+                                                preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK",
+                                        style: .default,
+                                        handler: nil)
+        alertController.addAction(alertAction)
+        present(alertController,
+                animated: true,
+                completion: nil)
     }
 
     // MARK: - UINavigationBarDelegate
@@ -101,9 +113,7 @@ final class NewRoundViewController: ScopeViewController, NewRoundPresentable, Ne
         guard input != "" else {
             return
         }
-        guard let integer = Int(input),
-            integer >= 0,
-            integer <= 50 else {
+        guard let integer = Int(input) else {
             entryView.shake()
             return
         }
@@ -115,6 +125,14 @@ final class NewRoundViewController: ScopeViewController, NewRoundPresentable, Ne
             return
         }
         listener?.didSaveScore(score)
+    }
+
+    func scoreDidRegress() {
+        listener?.didRegress()
+    }
+
+    func scoreDidProgress() {
+        listener?.didProgress()
     }
 
     // MARK: - Private

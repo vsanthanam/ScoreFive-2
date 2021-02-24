@@ -86,19 +86,47 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             if let score = round[nextPlayer],
                 score != Round.noScore {
                 presenter.setVisibleScore(score, with: .forward)
-                presenter.setPlayerName(players[currentPlayerIndex].name)
             } else {
                 presenter.setVisibleScore(nil, with: .forward)
-                presenter.setPlayerName(players[currentPlayerIndex].name)
             }
+            presenter.setPlayerName(players[currentPlayerIndex].name)
         } else {
-            saveRound(adjustActiveEntry: true)
+            saveRound()
         }
     }
 
-    func didInputScore(_ score: Int) {}
+    func didInputScore(_ score: Int) {
+        if score < 0 || score > 50 {
+            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
+            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+        }
+    }
 
-    private func saveRound(adjustActiveEntry: Bool) {
+    func didRegress() {
+        guard currentPlayerIndex > 0 else {
+            return
+        }
+
+        currentPlayerIndex -= 1
+        let player = players[currentPlayerIndex]
+        presenter.setVisibleScore(round[player], with: .backward)
+        presenter.setPlayerName(player.name)
+    }
+
+    func didProgress() {
+        guard currentPlayerIndex < players.count - 1 else {
+            return
+        }
+
+        currentPlayerIndex += 1
+        let player = players[currentPlayerIndex]
+        presenter.setVisibleScore(round[player], with: .forward)
+        presenter.setPlayerName(player.name)
+    }
+
+    // MARK: - Private
+
+    private func saveRound() {
         guard round.isComplete else {
             return
         }
@@ -107,25 +135,13 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             .compactMap { round.score(for: $0) }
             .filter { $0 == 0 }
         guard !zeroes.isEmpty else {
-            if adjustActiveEntry {
-                round[players[currentPlayerIndex]] = Round.noScore
-                presenter.setVisibleScore(nil, with: .error)
-            } else {
-                // show error
-                currentPlayerIndex = 0
-                round = initialRound
-                presenter.setVisibleScore(nil, with: .instant)
-                presenter.showResetError()
-            }
+            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
+            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
             return
         }
         guard zeroes.count < players.count else {
-            if adjustActiveEntry {
-                round[players[currentPlayerIndex]] = Round.noScore
-                presenter.setVisibleScore(nil, with: .error)
-            } else {
-                // show error
-            }
+            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
+            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
             return
         }
 
@@ -135,11 +151,11 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 card.canReplaceRound(at: index, with: round) {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
             } else {
-                // handle error
                 currentPlayerIndex = 0
                 round = initialRound
-                presenter.setVisibleScore(nil, with: .instant)
+                presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
                 presenter.showResetError()
+                presenter.setPlayerName(players[currentPlayerIndex].name)
             }
         } else {
             listener?.newRoundDidAddRound(round)
