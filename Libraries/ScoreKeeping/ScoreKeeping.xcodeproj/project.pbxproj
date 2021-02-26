@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07250E8225E99F0600975DA5 /* CardStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07250E8125E99F0600975DA5 /* CardStats.swift */; };
 		072F81EE259A6AFA005EE56B /* ScoreKeeping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072F81E4259A6AFA005EE56B /* ScoreKeeping.framework */; };
 		072F81F5259A6AFA005EE56B /* ScoreKeeping.h in Headers */ = {isa = PBXBuildFile; fileRef = 072F81E7259A6AFA005EE56B /* ScoreKeeping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		072F8201259A6B0F005EE56B /* ScoreCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072F8200259A6B0F005EE56B /* ScoreCard.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07250E8125E99F0600975DA5 /* CardStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStats.swift; sourceTree = "<group>"; };
 		072F81E4259A6AFA005EE56B /* ScoreKeeping.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ScoreKeeping.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		072F81E7259A6AFA005EE56B /* ScoreKeeping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScoreKeeping.h; sourceTree = "<group>"; };
 		072F81E8259A6AFA005EE56B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				072F8200259A6B0F005EE56B /* ScoreCard.swift */,
 				072F8208259A6C82005EE56B /* Player.swift */,
 				072F8212259A6F29005EE56B /* Round.swift */,
+				07250E8125E99F0600975DA5 /* CardStats.swift */,
 			);
 			path = ScoreKeeping;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				072F8209259A6C82005EE56B /* Player.swift in Sources */,
+				07250E8225E99F0600975DA5 /* CardStats.swift in Sources */,
 				072F8213259A6F29005EE56B /* Round.swift in Sources */,
 				072F8201259A6B0F005EE56B /* ScoreCard.swift in Sources */,
 			);
