@@ -50,7 +50,7 @@ final class MainViewController: ScopeViewController, MainPresentable, MainViewCo
     }
 
     private func embedFiveViewController(_ viewController: ViewControllable) {
-        keyedAssert(fiveViewController == nil, "Unowned Five View Controller!", key: "unowned_five_vc")
+        loggedAssert(fiveViewController == nil, "Unowned Five View Controller!", key: "unowned_five_vc")
         addChild(viewController.uiviewController)
         view.addSubview(viewController.uiviewController.view)
         viewController.uiviewController.view.snp.makeConstraints { make in
@@ -63,7 +63,7 @@ final class MainViewController: ScopeViewController, MainPresentable, MainViewCo
     }
 
     private func removeFiveViewController() {
-        keyedAssert(fiveViewController != nil, "Missing Five View Controller!", key: "missing_five_vc")
+        loggedAssert(fiveViewController != nil, "Missing Five View Controller!", key: "missing_five_vc")
         fiveViewController?.uiviewController.willMove(toParent: self)
         fiveViewController?.uiviewController.view.removeFromSuperview()
         fiveViewController?.uiviewController.removeFromParent()

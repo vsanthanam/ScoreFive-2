@@ -52,7 +52,7 @@ final class RootViewController: ScopeViewController, RootPresentable, RootViewCo
 
     private func embedMainViewController(_ viewController: ViewControllable) {
         assert(mainViewController == nil)
-        keyedAssert(mainViewController == nil, "Unowned Mained View Controller", key: "unowned_main_vc")
+        loggedAssert(mainViewController == nil, "Unowned Mained View Controller", key: "unowned_main_vc")
         addChild(viewController.uiviewController)
         view.addSubview(viewController.uiviewController.view)
         viewController.uiviewController.view.snp.makeConstraints { make in
@@ -65,7 +65,7 @@ final class RootViewController: ScopeViewController, RootPresentable, RootViewCo
     }
 
     private func removeMainViewController() {
-        keyedAssert(mainViewController != nil, "Missing Mained View Controller", key: "missing_main_vc")
+        loggedAssert(mainViewController != nil, "Missing Mained View Controller", key: "missing_main_vc")
         mainViewController?.uiviewController.willMove(toParent: nil)
         mainViewController?.uiviewController.view.removeFromSuperview()
         mainViewController?.uiviewController.removeFromParent()

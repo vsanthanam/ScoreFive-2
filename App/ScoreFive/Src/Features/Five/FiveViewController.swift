@@ -45,49 +45,49 @@ final class FiveViewController: ScopeViewController, FivePresentable, FiveViewCo
         case pop
     }
 
-    private let nav = UINavigationController()
+    private let internalNavigationController = UINavigationController()
 
     private func setUp() {
-        addChild(nav)
-        view.addSubview(nav.view)
-        nav.view.snp.makeConstraints { make in
+        addChild(internalNavigationController)
+        view.addSubview(internalNavigationController.view)
+        internalNavigationController.view.snp.makeConstraints { make in
             make
                 .edges
                 .equalToSuperview()
         }
-        nav.didMove(toParent: self)
+        internalNavigationController.didMove(toParent: self)
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .backgroundPrimary
         let style = NSMutableParagraphStyle()
         style.firstLineHeadIndent = 10 // This is added to the default margin
         appearance.largeTitleTextAttributes = [.paragraphStyle: style]
-        nav.navigationBar.standardAppearance = appearance
-        nav.navigationBar.isTranslucent = false
-        nav.navigationBar.prefersLargeTitles = true
+        internalNavigationController.navigationBar.standardAppearance = appearance
+        internalNavigationController.navigationBar.isTranslucent = false
+        internalNavigationController.navigationBar.prefersLargeTitles = true
     }
 
     private func embedActiveChild(_ viewController: ViewControllable, with direction: Direction) {
-        guard !nav.viewControllers.contains(viewController.uiviewController) else {
+        guard !internalNavigationController.viewControllers.contains(viewController.uiviewController) else {
             return
         }
         switch direction {
         case .pop:
-            nav.setViewControllers([viewController.uiviewController] + nav.viewControllers, animated: false)
-            nav.popToViewController(viewController.uiviewController, animated: true) { [weak nav] in
-                guard let nav = nav else {
-                    keyedAssertionFailure("Managed Navigation Controller OOM", key: "five_navigation_failure")
+            internalNavigationController.setViewControllers([viewController.uiviewController] + internalNavigationController.viewControllers, animated: false)
+            internalNavigationController.popToViewController(viewController.uiviewController, animated: true) { [weak internalNavigationController] in
+                guard let internalNavigationController = internalNavigationController else {
+                    loggedAssertionFailure("Managed Navigation Controller OOM", key: "five_navigation_failure")
                     return
                 }
-                keyedAssert(nav.viewControllers.count == 1, "Invalid View Controller Count", key: "five_navigation_failure")
+                loggedAssert(internalNavigationController.viewControllers.count == 1, "Invalid View Controller Count", key: "five_navigation_failure")
             }
         case .push:
-            nav.pushViewController(viewController: viewController.uiviewController, animated: true) { [weak nav] in
-                guard let nav = nav else {
-                    keyedAssertionFailure("Managed Navigation Controller OOM", key: "five_navigation_failure")
+            internalNavigationController.pushViewController(viewController: viewController.uiviewController, animated: true) { [weak internalNavigationController] in
+                guard let internalNavigationController = internalNavigationController else {
+                    loggedAssertionFailure("Managed Navigation Controller OOM", key: "five_navigation_failure")
                     return
                 }
-                nav.viewControllers = [viewController.uiviewController]
+                internalNavigationController.viewControllers = [viewController.uiviewController]
             }
         }
     }
