@@ -29,10 +29,10 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     init(presenter: ScoreCardPresentable,
          gameStorageProvider: GameStorageProviding,
          activeGameStream: ActiveGameStreaming,
-         userSettings: UserSettings) {
+         userSettingsProvider: UserSettingsProviding) {
         self.gameStorageProvider = gameStorageProvider
         self.activeGameStream = activeGameStream
-        self.userSettings = userSettings
+        self.userSettingsProvider = userSettingsProvider
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -92,7 +92,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
 
     private let gameStorageProvider: GameStorageProviding
     private let activeGameStream: ActiveGameStreaming
-    private let userSettings: UserSettings
+    private let userSettingsProvider: UserSettingsProviding
 
     private var currentScoreCard: ScoreCard? {
         didSet {
@@ -120,7 +120,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     }
 
     private func startObservingIndexByPlayerSetting() {
-        userSettings.indexByPlayerStream
+        userSettingsProvider.indexByPlayerStream
             .assign(to: \.indexByPlayer, on: self)
             .cancelOnDeactivate(interactor: self)
     }

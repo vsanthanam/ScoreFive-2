@@ -31,10 +31,12 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     init(presenter: NewRoundPresentable,
          activeGameStream: ActiveGameStreaming,
          gameStorageProvider: GameStorageProviding,
+         userSettingsProvider: UserSettingsProviding,
          replacingIndex: Int?,
          round: Round) {
         self.activeGameStream = activeGameStream
         self.gameStorageProvider = gameStorageProvider
+        self.userSettingsProvider = userSettingsProvider
         self.replacingIndex = replacingIndex
         self.round = round
         initialRound = round
@@ -56,7 +58,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             return
         }
 
-        players = card.orderedPlayers.filter { round.players.contains($0) }
+        players = card.activePlayers(at: replacingIndex ?? card.rounds.count - 1)
 
         guard Set(players) == Set(round.players) else {
             listener?.newRoundDidCancel()
@@ -77,28 +79,18 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     }
 
     func didSaveScore(_ score: Int) {
-        let player = players[currentPlayerIndex]
-        round[player] = score
-
-        if currentPlayerIndex < players.count - 1 {
-            currentPlayerIndex += 1
-            let nextPlayer = players[currentPlayerIndex]
-            if let score = round[nextPlayer],
-                score != Round.noScore {
-                presenter.setVisibleScore(score, with: .forward)
-            } else {
-                presenter.setVisibleScore(nil, with: .forward)
-            }
-            presenter.setPlayerName(players[currentPlayerIndex].name)
-        } else {
-            saveRound()
-        }
+        saveScore(score)
     }
 
     func didInputScore(_ score: Int) {
+        guard !isSaving else {
+            return
+        }
         if score < 0 || score > 50 {
             round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
             presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+        } else if userSettingsProvider.advanceScoreEntryAutomatically, (score >= 6 || score == 0) {
+            saveScore(score)
         }
     }
 
@@ -126,10 +118,14 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
     // MARK: - Private
 
+    private var isSaving = false
+
     private func saveRound() {
         guard round.isComplete else {
             return
         }
+
+        isSaving = true
 
         let zeroes = players
             .compactMap { round.score(for: $0) }
@@ -137,11 +133,13 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         guard !zeroes.isEmpty else {
             round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
             presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+            isSaving = false
             return
         }
         guard zeroes.count < players.count else {
             round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
             presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+            isSaving = false
             return
         }
 
@@ -151,6 +149,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 card.canReplaceRound(at: index, with: round) {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
             } else {
+                isSaving = false
                 currentPlayerIndex = 0
                 round = initialRound
                 presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
@@ -162,10 +161,26 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         }
     }
 
+    private func saveScore(_ score: Int) {
+        let player = players[currentPlayerIndex]
+        round[player] = score
+
+        if currentPlayerIndex < players.count - 1 {
+            currentPlayerIndex += 1
+            let nextPlayer = players[currentPlayerIndex]
+            let score = round[nextPlayer]
+            presenter.setVisibleScore(score, with: .forward)
+            presenter.setPlayerName(players[currentPlayerIndex].name)
+        } else {
+            saveRound()
+        }
+    }
+
     // MARK: - Private
 
     private let activeGameStream: ActiveGameStreaming
     private let gameStorageProvider: GameStorageProviding
+    private let userSettingsProvider: UserSettingsProviding
 
     private let replacingIndex: Int?
 

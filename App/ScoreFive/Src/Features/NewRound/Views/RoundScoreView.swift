@@ -74,6 +74,7 @@ final class RoundScoreView: BaseView {
         }
 
         newInput.frame = oldInput.frame.offsetBy(dx: oldInput.bounds.size.width, dy: 0.0)
+        isAnimating = true
 
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .layoutSubviews, animations: {
             newInput.frame = oldInput.frame
@@ -84,6 +85,7 @@ final class RoundScoreView: BaseView {
             oldInput.removeFromSuperview()
             self?.input = newInput
             self?.constrainInput()
+            self?.isAnimating = false
         })
     }
 
@@ -99,6 +101,7 @@ final class RoundScoreView: BaseView {
         }
 
         newInput.frame = oldInput.frame.offsetBy(dx: -oldInput.bounds.size.width, dy: 0.0)
+        isAnimating = true
 
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .layoutSubviews, animations: {
             newInput.frame = oldInput.frame
@@ -109,6 +112,7 @@ final class RoundScoreView: BaseView {
             oldInput.removeFromSuperview()
             self?.input = newInput
             self?.constrainInput()
+            self?.isAnimating = false
         })
     }
 
@@ -116,6 +120,7 @@ final class RoundScoreView: BaseView {
 
     private var input: ScoreInput?
     private let titleLabel = UILabel()
+    private var isAnimating = false
 
     private func setUp() {
         backgroundColor = .backgroundPrimary
@@ -146,6 +151,7 @@ final class RoundScoreView: BaseView {
 
     @objc
     private func userDidInput() {
+        guard !isAnimating else { return }
         delegate?.scoreValueChanged(input?.text ?? "")
     }
 

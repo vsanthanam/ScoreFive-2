@@ -9,18 +9,35 @@ import Combine
 import Foundation
 
 /// @mockable
-protocol UserSettings: AnyObject {
-    var indexByPlayer: Bool { get set }
+protocol UserSettingsProviding: AnyObject {
+    var indexByPlayer: Bool { get }
+    var advanceScoreEntryAutomatically: Bool { get }
     var indexByPlayerStream: AnyPublisher<Bool, Never> { get }
+    var advanceScoreEntryAutomaticallyStream: AnyPublisher<Bool, Never> { get }
 }
 
-final class UserSettingsImpl: UserSettings {
+/// @mockable
+protocol UserSettingsManaging: UserSettingsProviding {
+    var indexByPlayer: Bool { get set }
+    var advanceScoreEntryAutomatically: Bool { get set }
+}
+
+final class UserSettingsManager: UserSettingsManaging {
 
     @UserSetting(key: "index_by_player")
     var indexByPlayer: Bool = true
 
+    @UserSetting(key: "advance_score_entry_automatically")
+    var advanceScoreEntryAutomatically = true
+
     var indexByPlayerStream: AnyPublisher<Bool, Never> {
         $indexByPlayer
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+    }
+
+    var advanceScoreEntryAutomaticallyStream: AnyPublisher<Bool, Never> {
+        $advanceScoreEntryAutomatically
             .removeDuplicates()
             .eraseToAnyPublisher()
     }

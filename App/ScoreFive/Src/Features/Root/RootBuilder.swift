@@ -28,8 +28,12 @@ final class RootComponent: BootstrapComponent, RootDependencyProviding {
         dynamicDependency
     }
 
-    var userSettings: UserSettings {
-        shared { UserSettingsImpl() }
+    var userSettingManager: UserSettingsManaging {
+        shared { UserSettingsManager() }
+    }
+
+    var userSettingsProvider: UserSettingsProviding {
+        userSettingManager
     }
 
     // MARK: - Children
