@@ -46,16 +46,16 @@ final class NewRoundInteractorTests: TestCase {
 
         XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 0)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 0)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
 
         interactor.activate()
 
         XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 1)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 1)
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 0)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
     }
 
-    func test_activate_invalidRound_cancels() {
+    func test_activate_invalidRound_resigns() {
         let card = ScoreCard(orderedPlayers: [.testPlayer(), .testPlayer()])
         let identifier = UUID()
         activeGameStream.currentActiveGameIdentifier = identifier
@@ -68,19 +68,19 @@ final class NewRoundInteractorTests: TestCase {
 
         XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 0)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 0)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
 
         interactor.activate()
 
         XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 1)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 1)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 1)
     }
 
     func test_didTapClose_callsListener() {
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 0)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
         interactor.didTapClose()
-        XCTAssertEqual(listener.newRoundDidCancelCallCount, 1)
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 1)
     }
 
     func test_didSaveInvalidScore_resets() {

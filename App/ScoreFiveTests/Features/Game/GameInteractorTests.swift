@@ -143,7 +143,7 @@ final class GameInteractorTests: TestCase {
 
         newRound.isActive = true
 
-        interactor.newRoundDidCancel()
+        interactor.newRoundDidResign()
 
         XCTAssertEqual(interactor.children.count, 0)
         XCTAssertEqual(presenter.showNewRoundCallCount, 1)
@@ -195,6 +195,7 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(gameStorageManager.saveCallCount, 0)
 
         interactor.newRoundDidAddRound(round)
+        interactor.newRoundDidResign()
 
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 2)
         XCTAssertEqual(gameStorageManager.saveCallCount, 1)

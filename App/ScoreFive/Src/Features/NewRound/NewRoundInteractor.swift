@@ -19,7 +19,7 @@ protocol NewRoundPresentable: NewRoundViewControllable {
 
 /// @mockable
 protocol NewRoundListener: AnyObject {
-    func newRoundDidCancel()
+    func newRoundDidResign()
     func newRoundDidAddRound(_ round: Round)
     func newRoundDidReplaceRound(at index: Int, with round: Round)
 }
@@ -54,14 +54,14 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         super.didBecomeActive()
         guard let id = activeGameStream.currentActiveGameIdentifier,
             let card = try? gameStorageProvider.fetchScoreCard(for: id) else {
-            listener?.newRoundDidCancel()
+            listener?.newRoundDidResign()
             return
         }
 
         players = card.activePlayers(at: replacingIndex ?? card.rounds.count - 1)
 
         guard Set(players) == Set(round.players) else {
-            listener?.newRoundDidCancel()
+            listener?.newRoundDidResign()
             return
         }
 
@@ -75,7 +75,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     // MARK: - NewRoundPresentableListener
 
     func didTapClose() {
-        listener?.newRoundDidCancel()
+        listener?.newRoundDidResign()
     }
 
     func didSaveScore(_ score: Int) {
@@ -148,6 +148,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
                 card.canReplaceRound(at: index, with: round) {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
+                listener?.newRoundDidResign()
             } else {
                 isSaving = false
                 currentPlayerIndex = 0
@@ -158,6 +159,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             }
         } else {
             listener?.newRoundDidAddRound(round)
+            listener?.newRoundDidResign()
         }
     }
 

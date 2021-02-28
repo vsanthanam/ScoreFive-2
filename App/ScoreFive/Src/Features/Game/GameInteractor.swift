@@ -104,7 +104,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     // MARK: - NewRoundListener
 
-    func newRoundDidCancel() {
+    func newRoundDidResign() {
         routeAwayFromNewRound()
     }
 
@@ -120,7 +120,6 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
         } catch {
             presenter.showOperationFailure("Couldn't write game data to disk")
         }
-        routeAwayFromNewRound()
     }
 
     func newRoundDidReplaceRound(at index: Int, with round: Round) {
@@ -135,7 +134,6 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
         } catch {
             presenter.showOperationFailure("Couldn't write game data to disk")
         }
-        routeAwayFromNewRound()
     }
 
     // MARK: - GameSettingsListener
