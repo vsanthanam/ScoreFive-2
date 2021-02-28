@@ -10,7 +10,8 @@
     },
     "mockolo": {
         "testableImports": ["ShortRibs",
-                            "ScoreFive"]
+                            "ScoreFive",
+			    "Analytics"]
     },
     "swiftlint": {
         "excludeDirs": ["/Tooling"],

@@ -5,6 +5,7 @@
 //  Created by Varun Santhanam on 12/25/20.
 //
 
+import Analytics
 import ShortRibs
 import UIKit
 
@@ -58,7 +59,8 @@ class ScoreFiveSceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         let builder = RootBuilder()
         root = builder.build(onWindow: window,
-                             persistentContainer: ScoreFiveAppDelegate.shared.persistentContainer)
+                             persistentContainer: ScoreFiveAppDelegate.shared.persistentContainer,
+                             analyticsManager: AnalyticsManager.shared)
         window.makeKeyAndVisible()
         root!.activate()
     }

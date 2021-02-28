@@ -5,13 +5,15 @@
 //  Created by Varun Santhanam on 12/28/20.
 //
 
+import Analytics
 import Foundation
 import NeedleFoundation
 import ShortRibs
 import UIKit
 
 typealias RootDynamicComponentDependency = (
-    PersistentContaining
+    persistentContainer: PersistentContaining,
+    analyticsManager: AnalyticsManaging
 )
 
 final class RootComponent: BootstrapComponent, RootDependencyProviding {
@@ -25,7 +27,11 @@ final class RootComponent: BootstrapComponent, RootDependencyProviding {
     // MARK: - Published Dependencies
 
     var persistentContainer: PersistentContaining {
-        dynamicDependency
+        dynamicDependency.persistentContainer
+    }
+
+    var analyticsManager: AnalyticsManaging {
+        dynamicDependency.analyticsManager
     }
 
     var userSettingManager: UserSettingsManaging {
@@ -56,7 +62,7 @@ typealias RootDynamicBuildDependency = (
 
 /// @mockable
 protocol RootBuildable: AnyObject {
-    func build(onWindow window: UIWindow, persistentContainer: PersistentContaining) -> PresentableInteractable
+    func build(onWindow window: UIWindow, persistentContainer: PersistentContaining, analyticsManager: AnalyticsManaging) -> PresentableInteractable
 }
 
 final class RootBuilder: ComponentizedRootBuilder<RootComponent, PresentableInteractable, RootDynamicBuildDependency, RootDynamicComponentDependency>, RootBuildable {
@@ -68,6 +74,7 @@ final class RootBuilder: ComponentizedRootBuilder<RootComponent, PresentableInte
         let window = dynamicBuildDependency
         let viewController = RootViewController()
         let interactor = RootInteractor(presenter: viewController,
+                                        analyticsManager: component.analyticsManager,
                                         mainBuilder: component.mainBuilder)
         window.rootViewController = viewController
         return interactor
@@ -76,9 +83,11 @@ final class RootBuilder: ComponentizedRootBuilder<RootComponent, PresentableInte
     // MARK: - RootBuildable
 
     func build(onWindow window: UIWindow,
-               persistentContainer: PersistentContaining) -> PresentableInteractable {
+               persistentContainer: PersistentContaining,
+               analyticsManager: AnalyticsManaging) -> PresentableInteractable {
         build(withDynamicBuildDependency: window,
-              dynamicComponentDependency: persistentContainer)
+              dynamicComponentDependency: (persistentContainer,
+                                           analyticsManager))
     }
 
 }

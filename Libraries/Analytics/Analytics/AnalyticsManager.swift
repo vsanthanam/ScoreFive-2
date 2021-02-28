@@ -8,12 +8,23 @@
 import Countly
 import Foundation
 
-public struct AnalyticsConfig: Codable {
-    let appKey: String?
-    let host: String?
+/// @mockable
+public protocol AnalyticsManaging: AnyObject {
+    func send(event: String, segmentation: [String: String]?)
 }
 
-public final class AnalyticsManager {
+public extension AnalyticsManaging {
+    func send(event: String) {
+        send(event: event, segmentation: nil)
+    }
+}
+
+public struct AnalyticsConfig: Codable {
+    public let appKey: String?
+    public let host: String?
+}
+
+public final class AnalyticsManager: AnalyticsManaging {
 
     // MARK: - API
 
@@ -43,6 +54,8 @@ public final class AnalyticsManager {
         isStarted = false
     }
 
+    // MARK: - AnalyticsManaging
+
     /// Send an event
     /// - Parameters:
     ///   - event: The event
@@ -64,7 +77,7 @@ public final class AnalyticsManager {
                     "file": "\(file)",
                     "function": "\(function)",
                     "line": String(line)]
-        Countly.sharedInstance().recordEvent("assertionfailure", segmentation: meta)
+        Countly.sharedInstance().recordEvent("assertionfailure-\(key)", segmentation: meta)
     }
 
 }

@@ -70,6 +70,13 @@ class ScoreFiveAppDelegate: UIResponder, UIApplicationDelegate {
             }
             let data = try Data(contentsOf: file)
             let config = try JSONDecoder().decode(AnalyticsConfig.self, from: data)
+            if let urlString = config.host {
+                if let url = URL(string: urlString) {
+                    print("Found URL \(url)")
+                } else {
+                    fatalError("Invalid Host Url \(urlString)!")
+                }
+            }
             AnalyticsManager.shared.startAnalytics(with: config)
         } catch {
             fatalError("Broken Analytics Configuration: \(error.localizedDescription)")

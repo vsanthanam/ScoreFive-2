@@ -5,6 +5,7 @@
 //  Created by Varun Santhanam on 12/28/20.
 //
 
+@testable import Analytics
 import Foundation
 @testable import ScoreFive
 @testable import ShortRibs
@@ -14,12 +15,13 @@ final class RootInteractorTests: TestCase {
 
     let presenter = RootPresentableMock()
     let mainBuilder = MainBuildableMock()
+    let analyticsManager = AnalyticsManagingMock()
 
     var interactor: RootInteractor!
 
     override func setUp() {
         super.setUp()
-        interactor = .init(presenter: presenter, mainBuilder: mainBuilder)
+        interactor = .init(presenter: presenter, analyticsManager: analyticsManager, mainBuilder: mainBuilder)
     }
 
     func test_init_setsPresenterListener() {
@@ -41,5 +43,14 @@ final class RootInteractorTests: TestCase {
         XCTAssertEqual(mainBuilder.buildCallCount, 1)
         XCTAssertEqual(presenter.showMainCallCount, 1)
         XCTAssertEqual(interactor.children.count, 1)
+    }
+
+    func test_activate_firesAnalyticsEvent() {
+        analyticsManager.sendHandler = { event, _ in
+            XCTAssertEqual(event, "app_tree_activated")
+        }
+        XCTAssertEqual(analyticsManager.sendCallCount, 0)
+        interactor.activate()
+        XCTAssertEqual(analyticsManager.sendCallCount, 1)
     }
 }
