@@ -64,23 +64,23 @@ public final class AnalyticsManager: AnalyticsManaging {
     ///   - segmentation: The segmentation data
     public func send(event: String, segmentation: [String: String]? = nil) {
         guard isStarted else {
+            assertionFailure("Attempt to log event \(event) without active analytics manager!")
             return
         }
 
-        Countly.sharedInstance().recordEvent(event, segmentation: segmentation)
-        if let segmentation = segmentation {
-            os_log("Sending event: %{public}@ with %{public}@", log: .analytics, type: .info, event, segmentation as! CVarArg)
-        } else {
-            os_log("Sending event: %{public}@", log: .analytics, type: .info, event)
-        }
+        os_log("Sending event: %{public}@", log: .analytics, type: .info, event)
+
+        #if targetEnvironment(simulator)
+            return
+        #else
+            Countly.sharedInstance().recordEvent(event, segmentation: segmentation)
+        #endif
+
     }
 
     // MARK: - Private
 
     internal func logAssertError(key: String, file: StaticString, function: StaticString, line: UInt) {
-        guard isStarted else {
-            return
-        }
         let meta = ["key": "\(key)",
                     "file": "\(file)",
                     "function": "\(function)",
@@ -89,9 +89,6 @@ public final class AnalyticsManager: AnalyticsManaging {
     }
 
     internal func logFatalError(key: String, file: StaticString, function: StaticString, line: UInt) {
-        guard isStarted else {
-            return
-        }
         let meta = ["key": "\(key)",
                     "file": "\(file)",
                     "function": "\(function)",
