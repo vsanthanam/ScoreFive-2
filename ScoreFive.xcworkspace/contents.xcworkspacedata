@@ -8,6 +8,10 @@
       location = "group:LICENSE">
    </FileRef>
    <FileRef
+      location = "group:.sftool-config"
+      assignedFileDataType = "public.json">
+   </FileRef>
+   <FileRef
       location = "group:App/ScoreFive.xcodeproj">
    </FileRef>
    <Group

@@ -117,3 +117,7 @@ Similarly, you can remove any currently active analytics configuration with `sft
 $ cd path/to/repo
 $ ./sftool analytics wipe
 ```
+
+### Configuring SFTool
+
+To update the way SFTool behaves, you can edit the configuration file `/.sftool-config`. Here, you can edit things like the test target, swiftlint/swiftformat rules, needle & mockolo behavior, etc.
