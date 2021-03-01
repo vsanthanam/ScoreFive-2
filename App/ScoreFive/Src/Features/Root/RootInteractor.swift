@@ -32,7 +32,7 @@ final class RootInteractor: PresentableInteractor<RootPresentable>, RootInteract
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        analyticsManager.send(event: "app_tree_activated")
+        analyticsManager.send(event: AnalyticsEvent.app_tree_activated)
         routeToMain()
     }
 

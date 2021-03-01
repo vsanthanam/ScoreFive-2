@@ -47,7 +47,11 @@ final class RootInteractorTests: TestCase {
 
     func test_activate_firesAnalyticsEvent() {
         analyticsManager.sendHandler = { event, _ in
-            XCTAssertEqual(event, "app_tree_activated")
+            guard let event = event as? AnalyticsEvent else {
+                XCTFail()
+                return
+            }
+            XCTAssertEqual(event, .app_tree_activated)
         }
         XCTAssertEqual(analyticsManager.sendCallCount, 0)
         interactor.activate()

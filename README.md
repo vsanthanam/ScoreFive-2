@@ -34,7 +34,7 @@ $ cp Tooling/sftool/.build/release/sftool sftool
 
 ```
 $ cd path/to/repo
-$ ./sftool boostrap
+$ ./sftool bootstrap
 ```
 
 After these steps have been taken, you can open `ScoreFive.xcworkspace` and run the app.

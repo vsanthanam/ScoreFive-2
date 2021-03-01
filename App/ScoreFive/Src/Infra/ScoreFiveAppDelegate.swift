@@ -22,6 +22,7 @@ class ScoreFiveAppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         startAnalytics()
         registerProviderFactories()
+        AnalyticsManager.shared.send(event: AnalyticsEvent.app_launch, segmentation: nil)
         return true
     }
 
@@ -79,6 +80,7 @@ class ScoreFiveAppDelegate: UIResponder, UIApplicationDelegate {
                     fatalError("Invalid Host Url \(urlString)!")
                 }
             }
+            AnalyticsManager.shared.eventPrefix = "sf_"
             AnalyticsManager.shared.startAnalytics(with: config)
         } catch {
             fatalError("Broken Analytics Configuration: \(error.localizedDescription)")

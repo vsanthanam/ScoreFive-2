@@ -10,13 +10,17 @@ import Foundation
 import Logging
 import os.log
 
+public protocol Event: Equatable {
+    var key: String { get }
+}
+
 /// @mockable
 public protocol AnalyticsManaging: AnyObject {
-    func send(event: String, segmentation: [String: String]?)
+    func send<T>(event: T, segmentation: [String: String]?) where T: Event
 }
 
 public extension AnalyticsManaging {
-    func send(event: String) {
+    func send<T>(event: T) where T: Event {
         send(event: event, segmentation: nil)
     }
 }
@@ -36,11 +40,15 @@ public final class AnalyticsManager: AnalyticsManaging {
     /// Whether or not analytics events are accepted
     public private(set) var isStarted: Bool = false
 
+    /// Event Prefix
+    public var eventPrefix: String = ""
+
     /// Start the analytics manager
     /// - Parameter config: The configuration, used to determine where to send events
     public func startAnalytics(with config: AnalyticsConfig) {
         guard let appKey = config.appKey,
             let host = config.host else {
+            isStarted = true
             return
         }
         let countlyConfig = CountlyConfig()
@@ -62,20 +70,8 @@ public final class AnalyticsManager: AnalyticsManaging {
     /// - Parameters:
     ///   - event: The event
     ///   - segmentation: The segmentation data
-    public func send(event: String, segmentation: [String: String]? = nil) {
-        guard isStarted else {
-            assertionFailure("Attempt to log event \(event) without active analytics manager!")
-            return
-        }
-
-        os_log("Sending event: %{public}@", log: .analytics, type: .info, event)
-
-        #if targetEnvironment(simulator)
-            return
-        #else
-            Countly.sharedInstance().recordEvent(event, segmentation: segmentation)
-        #endif
-
+    public func send<T>(event: T, segmentation: [String: String]?) where T: Event {
+        send(key: event.key, segmentation: segmentation)
     }
 
     // MARK: - Private
@@ -85,7 +81,7 @@ public final class AnalyticsManager: AnalyticsManaging {
                     "file": "\(file)",
                     "function": "\(function)",
                     "line": String(line)]
-        send(event: "failure-\(key)", segmentation: meta)
+        send(key: "failure-\(key)", segmentation: meta)
     }
 
     internal func logFatalError(key: String, file: StaticString, function: StaticString, line: UInt) {
@@ -93,18 +89,23 @@ public final class AnalyticsManager: AnalyticsManaging {
                     "file": "\(file)",
                     "function": "\(function)",
                     "line": String(line)]
-        send(event: "fatal-\(key)", segmentation: meta)
+        send(key: "fatal-\(key)", segmentation: meta)
     }
 
-}
+    private func send(key: String, segmentation: [String: String]? = nil) {
+        guard isStarted else {
+            assertionFailure("Attempt to log event \(key) without active analytics manager!")
+            return
+        }
 
-public enum Analytics {
+        let key = eventPrefix + key
 
-    /// Send an event
-    /// - Parameters:
-    ///   - event: The event
-    ///   - segmentation: The segmentation data
-    public static func send(event: String, segmentation: [String: String]? = nil) {
-        AnalyticsManager.shared.send(event: event, segmentation: segmentation)
+        #if targetEnvironment(simulator)
+            os_log("Ignoring event: %{public}@", log: .analytics, type: .info, key)
+        #else
+            os_log("Sending event: %{public}@", log: .analytics, type: .info, key)
+            Countly.sharedInstance().recordEvent(key, segmentation: segmentation)
+        #endif
     }
+
 }
