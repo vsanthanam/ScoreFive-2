@@ -7,6 +7,8 @@
 
 import Countly
 import Foundation
+import Logging
+import os.log
 
 /// @mockable
 public protocol AnalyticsManaging: AnyObject {
@@ -64,7 +66,13 @@ public final class AnalyticsManager: AnalyticsManaging {
         guard isStarted else {
             return
         }
+
         Countly.sharedInstance().recordEvent(event, segmentation: segmentation)
+        if let segmentation = segmentation {
+            os_log("Sending event: %{public}@ with %{public}@", log: .analytics, type: .info, event, segmentation as! CVarArg)
+        } else {
+            os_log("Sending event: %{public}@", log: .analytics, type: .info, event)
+        }
     }
 
     // MARK: - Private
@@ -77,7 +85,18 @@ public final class AnalyticsManager: AnalyticsManaging {
                     "file": "\(file)",
                     "function": "\(function)",
                     "line": String(line)]
-        Countly.sharedInstance().recordEvent("assertionfailure-\(key)", segmentation: meta)
+        send(event: "failure-\(key)", segmentation: meta)
+    }
+
+    internal func logFatalError(key: String, file: StaticString, function: StaticString, line: UInt) {
+        guard isStarted else {
+            return
+        }
+        let meta = ["key": "\(key)",
+                    "file": "\(file)",
+                    "function": "\(function)",
+                    "line": String(line)]
+        send(event: "fatal-\(key)", segmentation: meta)
     }
 
 }

@@ -7,7 +7,9 @@
 
 import Analytics
 import CoreData
+import Logging
 import NeedleFoundation
+import os.log
 import ShortRibs
 import UIKit
 
@@ -72,7 +74,7 @@ class ScoreFiveAppDelegate: UIResponder, UIApplicationDelegate {
             let config = try JSONDecoder().decode(AnalyticsConfig.self, from: data)
             if let urlString = config.host {
                 if let url = URL(string: urlString) {
-                    print("Found URL \(url)")
+                    os_log("Starting analytics on host: %{public}@", log: .standard, type: .info, url.description)
                 } else {
                     fatalError("Invalid Host Url \(urlString)!")
                 }

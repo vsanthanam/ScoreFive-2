@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072C265325EC707D0057C2C9 /* Logging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265225EC707D0057C2C9 /* Logging.framework */; };
+		072C265425EC707D0057C2C9 /* Logging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265225EC707D0057C2C9 /* Logging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		073134D225C744DA00B81569 /* Analytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073134C825C744DA00B81569 /* Analytics.framework */; };
 		073134D725C744DA00B81569 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073134D625C744DA00B81569 /* AnalyticsTests.swift */; };
 		073134D925C744DA00B81569 /* Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 073134CB25C744DA00B81569 /* Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		073134E525C744EF00B81569 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073134E425C744EF00B81569 /* AnalyticsManager.swift */; };
 		073134EA25C7456000B81569 /* Countly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073134E925C7456000B81569 /* Countly.framework */; };
-		07A57F7525C7AAA400DDD29C /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A57F7425C7AAA400DDD29C /* Assert.swift */; };
+		07A57F7525C7AAA400DDD29C /* LoggedAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A57F7425C7AAA400DDD29C /* LoggedAssert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,7 +27,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		072C265525EC707E0057C2C9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				072C265425EC707D0057C2C9 /* Logging.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		072C265225EC707D0057C2C9 /* Logging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Logging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		073134C825C744DA00B81569 /* Analytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Analytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		073134CB25C744DA00B81569 /* Analytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analytics.h; sourceTree = "<group>"; };
 		073134CC25C744DA00B81569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -34,7 +51,7 @@
 		073134D825C744DA00B81569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		073134E425C744EF00B81569 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		073134E925C7456000B81569 /* Countly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Countly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		07A57F7425C7AAA400DDD29C /* Assert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assert.swift; sourceTree = "<group>"; };
+		07A57F7425C7AAA400DDD29C /* LoggedAssert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedAssert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				072C265325EC707D0057C2C9 /* Logging.framework in Frameworks */,
 				073134EA25C7456000B81569 /* Countly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +100,7 @@
 				073134CB25C744DA00B81569 /* Analytics.h */,
 				073134CC25C744DA00B81569 /* Info.plist */,
 				073134E425C744EF00B81569 /* AnalyticsManager.swift */,
-				07A57F7425C7AAA400DDD29C /* Assert.swift */,
+				07A57F7425C7AAA400DDD29C /* LoggedAssert.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -99,6 +117,7 @@
 		073134E825C7456000B81569 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				072C265225EC707D0057C2C9 /* Logging.framework */,
 				073134E925C7456000B81569 /* Countly.framework */,
 			);
 			name = Frameworks;
@@ -126,6 +145,7 @@
 				073134C425C744DA00B81569 /* Sources */,
 				073134C525C744DA00B81569 /* Frameworks */,
 				073134C625C744DA00B81569 /* Resources */,
+				072C265525EC707E0057C2C9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -214,7 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				073134E525C744EF00B81569 /* AnalyticsManager.swift in Sources */,
-				07A57F7525C7AAA400DDD29C /* Assert.swift in Sources */,
+				07A57F7525C7AAA400DDD29C /* LoggedAssert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

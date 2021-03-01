@@ -31,6 +31,7 @@
 		07250E9125E9B69D00975DA5 /* NewRoundInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07250E9025E9B69D00975DA5 /* NewRoundInteractorTests.swift */; };
 		07250EBF25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07250EBE25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift */; };
 		072AFC0925AEC68300BBFF25 /* GameStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AFC0825AEC68300BBFF25 /* GameStorageTests.swift */; };
+		072C265825EC709E0057C2C9 /* Logging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265725EC709E0057C2C9 /* Logging.framework */; };
 		072F8162259A4D48005EE56B /* NeedleFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8161259A4D48005EE56B /* NeedleFoundation.framework */; };
 		072F8163259A4D48005EE56B /* NeedleFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8161259A4D48005EE56B /* NeedleFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		072F8168259A4D4D005EE56B /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8167259A4D4D005EE56B /* SnapKit.framework */; };
@@ -158,6 +159,7 @@
 		07250E9025E9B69D00975DA5 /* NewRoundInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoundInteractorTests.swift; sourceTree = "<group>"; };
 		07250EBE25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundScoreViewSnapshotTests.swift; sourceTree = "<group>"; };
 		072AFC0825AEC68300BBFF25 /* GameStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStorageTests.swift; sourceTree = "<group>"; };
+		072C265725EC709E0057C2C9 /* Logging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Logging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		072F8161259A4D48005EE56B /* NeedleFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NeedleFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		072F8167259A4D4D005EE56B /* SnapKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		072F816C259A4D57005EE56B /* ShortRibs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ShortRibs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				072C265825EC709E0057C2C9 /* Logging.framework in Frameworks */,
 				070683D0259CFCA4004B7A78 /* FiveUI.framework in Frameworks */,
 				072F8162259A4D48005EE56B /* NeedleFoundation.framework in Frameworks */,
 				07077CE525C74A7400CF380D /* Countly.framework in Frameworks */,
@@ -360,6 +363,7 @@
 		072F8160259A4D48005EE56B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				072C265725EC709E0057C2C9 /* Logging.framework */,
 				07E8050325CF213C008B3125 /* FBSnapshotTestCase.framework */,
 				07077CE425C74A7400CF380D /* Countly.framework */,
 				073135AB25C749A600B81569 /* Analytics.framework */,
