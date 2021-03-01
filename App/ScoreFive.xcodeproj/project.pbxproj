@@ -70,6 +70,7 @@
 		073135AD25C749A600B81569 /* Analytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 073135AB25C749A600B81569 /* Analytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0733537825ED927900E3E0C8 /* AnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0733537725ED927900E3E0C8 /* AnalyticsEvents.swift */; };
 		077178B3259FB1FF00DD5E84 /* NewGamePlayerNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077178B2259FB1FF00DD5E84 /* NewGamePlayerNameCell.swift */; };
+		077B8FDC25EDA03400DF6383 /* NewRoundViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077B8FDB25EDA03400DF6383 /* NewRoundViewControllerTests.swift */; };
 		0782077B25CF2C9A00D8D659 /* MainViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782077A25CF2C9900D8D659 /* MainViewControllerSnapshotTests.swift */; };
 		0782077E25CF2CF800D8D659 /* RootViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782077D25CF2CF800D8D659 /* RootViewControllerSnapshotTests.swift */; };
 		0782078225CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782078125CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift */; };
@@ -194,6 +195,7 @@
 		073135AB25C749A600B81569 /* Analytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Analytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0733537725ED927900E3E0C8 /* AnalyticsEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvents.swift; sourceTree = "<group>"; };
 		077178B2259FB1FF00DD5E84 /* NewGamePlayerNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGamePlayerNameCell.swift; sourceTree = "<group>"; };
+		077B8FDB25EDA03400DF6383 /* NewRoundViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoundViewControllerTests.swift; sourceTree = "<group>"; };
 		0782077A25CF2C9900D8D659 /* MainViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
 		0782077D25CF2CF800D8D659 /* RootViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
 		0782078125CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 				07250EBD25EAADC900975DA5 /* Views */,
 				07250E8C25E9B55B00975DA5 /* NewRoundViewControllerSnapshotTests.swift */,
 				07250E9025E9B69D00975DA5 /* NewRoundInteractorTests.swift */,
+				077B8FDB25EDA03400DF6383 /* NewRoundViewControllerTests.swift */,
 			);
 			path = NewRound;
 			sourceTree = "<group>";
@@ -884,6 +887,7 @@
 			files = (
 				07250EBF25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift in Sources */,
 				0782078925CF627500D8D659 /* HomeButtonSnapshotTests.swift in Sources */,
+				077B8FDC25EDA03400DF6383 /* NewRoundViewControllerTests.swift in Sources */,
 				072F81D4259A658F005EE56B /* FiveInteractorTests.swift in Sources */,
 				072F81B2259A5D9E005EE56B /* RootInteractorTests.swift in Sources */,
 				0782077B25CF2C9A00D8D659 /* MainViewControllerSnapshotTests.swift in Sources */,
