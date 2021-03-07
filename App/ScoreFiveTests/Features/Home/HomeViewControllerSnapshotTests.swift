@@ -21,6 +21,7 @@ final class HomeViewControllerSnapshotTests: FBSnapshotTestCase {
         viewController.loadView()
         viewController.viewDidLoad()
         viewController.hideResumeButton()
+        viewController.hideLoadButton()
         FBSnapshotVerifyViewController(viewController)
     }
 
@@ -29,6 +30,25 @@ final class HomeViewControllerSnapshotTests: FBSnapshotTestCase {
         viewController.loadView()
         viewController.viewDidLoad()
         viewController.showResumeButton()
+        viewController.hideLoadButton()
+        FBSnapshotVerifyViewController(viewController)
+    }
+
+    func test_load_homeScreen() {
+        let viewController = HomeViewController()
+        viewController.loadView()
+        viewController.viewDidLoad()
+        viewController.hideResumeButton()
+        viewController.showLoadButton()
+        FBSnapshotVerifyViewController(viewController)
+    }
+
+    func test_resumeLast_load_homeScreen() {
+        let viewController = HomeViewController()
+        viewController.loadView()
+        viewController.viewDidLoad()
+        viewController.showResumeButton()
+        viewController.showLoadButton()
         FBSnapshotVerifyViewController(viewController)
     }
 }

@@ -13,6 +13,7 @@ import ShortRibs
 
 /// @mockable
 protocol GameStorageProviding: AnyObject {
+    var gameRecords: AnyPublisher<[GameRecord], Never> { get }
     func fetchScoreCard(for identifier: UUID) throws -> ScoreCard?
     func scoreCard(for identifier: UUID) -> AnyPublisher<ScoreCard?, Never>
     func fetchGameRecords() throws -> [GameRecord]
@@ -24,6 +25,7 @@ protocol GameStorageManaging: GameStorageProviding {
     func newGame(from scoreCard: ScoreCard, with identifiuer: UUID) throws -> GameRecord
     func save(scoreCard: ScoreCard, with identifier: UUID) throws
     func saveAllGames() throws
+    func removeRecord(with identifier: UUID) throws
 }
 
 /// @mockable
@@ -45,6 +47,12 @@ final class GameStorageWorker: Worker, GameStorageWorking {
     }
 
     // MARK: - GameStorageProviding
+
+    var gameRecords: AnyPublisher<[GameRecord], Never> {
+        saveSubject
+            .filterNil()
+            .eraseToAnyPublisher()
+    }
 
     func fetchScoreCard(for identifier: UUID) throws -> ScoreCard? {
         try fetchGame(for: identifier)?.getScoreCard()
@@ -101,6 +109,19 @@ final class GameStorageWorker: Worker, GameStorageWorking {
         try persistentContainer.saveContext()
         let games = try fetchGameRecords()
         saveSubject.send(games)
+    }
+
+    func removeRecord(with identifier: UUID) throws {
+        let filter = NSPredicate(format: "rawIdentifier == %@", identifier as CVarArg)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GameRecordMO")
+        fetchRequest.predicate = filter
+        let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try persistentContainer.viewContext.execute(request)
+            try saveAllGames()
+        } catch {
+            throw GameStorageError.unknown
+        }
     }
 
     // MARK: - Private

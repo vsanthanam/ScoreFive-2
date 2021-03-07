@@ -33,17 +33,24 @@ final class HomeInteractorTests: TestCase {
     }
 
     func test_activate_noGames_hidesResumeButton() {
-        gameStorageManager.fetchGameRecordsHandler = { [] }
+        gameStorageManager.gameRecords = Just<[GameRecord]>([]).eraseToAnyPublisher()
         XCTAssertEqual(presenter.hideResumeButtonCallCount, 0)
         interactor.activate()
         XCTAssertEqual(presenter.hideResumeButtonCallCount, 1)
     }
 
-    func test_activate_noGames_showsResumeButton() {
-        gameStorageManager.fetchGameRecordsHandler = { [GameRecordMock()] }
+    func test_activate_hasGames_showsResumeButton() {
+        gameStorageManager.gameRecords = Just<[GameRecord]>([GameRecordMock(inProgress: true)]).eraseToAnyPublisher()
         XCTAssertEqual(presenter.showResumeButtonCallCount, 0)
         interactor.activate()
         XCTAssertEqual(presenter.showResumeButtonCallCount, 1)
+    }
+
+    func test_activate_hasGames_notInProgress_showsResumeButton() {
+        gameStorageManager.gameRecords = Just<[GameRecord]>([GameRecordMock(inProgress: false)]).eraseToAnyPublisher()
+        XCTAssertEqual(presenter.hideResumeButtonCallCount, 0)
+        interactor.activate()
+        XCTAssertEqual(presenter.hideResumeButtonCallCount, 1)
     }
 
     func test_didTapNewGame_attachesChild_callsPresenter() {

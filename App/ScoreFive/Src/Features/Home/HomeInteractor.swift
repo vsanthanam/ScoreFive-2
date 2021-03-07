@@ -14,6 +14,8 @@ protocol HomePresentable: HomeViewControllable {
     var listener: HomePresentableListener? { get set }
     func showResumeButton()
     func hideResumeButton()
+    func showLoadButton()
+    func hideLoadButton()
     func showNewGame(_ viewController: ViewControllable)
     func closeNewGame()
     func showMoreOptions(_ viewController: ViewControllable)
@@ -53,7 +55,8 @@ final class HomeInteractor: PresentableInteractor<HomePresentable>, HomeInteract
     override func didBecomeActive() {
         super.didBecomeActive()
         openNewGameIfEmpty()
-        checkForResume()
+        startObservingInProgressRecords()
+        startObservingTotalRecords()
     }
 
     // MARK: - NewGameListener
@@ -86,13 +89,9 @@ final class HomeInteractor: PresentableInteractor<HomePresentable>, HomeInteract
     }
 
     func didTapResumeLastGame() {
-        do {
-            let games = try gameStorageManager.fetchInProgressGameRecords()
-            if let identifier = games.first?.uniqueIdentifier {
-                listener?.homeWantToOpenGame(withIdentifier: identifier)
-            }
-        } catch {
-            return
+        let games = try? gameStorageManager.fetchInProgressGameRecords()
+        if let identifier = games?.first?.uniqueIdentifier {
+            listener?.homeWantToOpenGame(withIdentifier: identifier)
         }
     }
 
@@ -122,15 +121,40 @@ final class HomeInteractor: PresentableInteractor<HomePresentable>, HomeInteract
         }
     }
 
-    private func checkForResume() {
-        do {
-            let inProgress = try gameStorageManager.fetchGameRecords()
-            if !inProgress.isEmpty {
-                presenter.showResumeButton()
-            } else {
-                presenter.hideResumeButton()
+    private func startObservingInProgressRecords() {
+        gameStorageManager.gameRecords
+            .map { $0.filter(\.inProgress) }
+            .map { !$0.isEmpty }
+            .removeDuplicates()
+            .sink { showResume in
+                if showResume {
+                    self.presenter.showResumeButton()
+                } else {
+                    self.presenter.hideResumeButton()
+                }
             }
-        } catch {}
+            .cancelOnDeactivate(interactor: self)
+    }
+
+    private func startObservingTotalRecords() {
+        gameStorageManager.gameRecords
+            .map { records -> Bool in
+                if records.count > 1 {
+                    return true
+                } else if let first = records.first, !first.inProgress {
+                    return true
+                }
+                return false
+            }
+            .removeDuplicates()
+            .sink { showLoad in
+                if showLoad {
+                    self.presenter.showLoadButton()
+                } else {
+                    self.presenter.hideLoadButton()
+                }
+            }
+            .cancelOnDeactivate(interactor: self)
     }
 
     private func routeToNewGame() {
