@@ -148,7 +148,6 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
                 card.canReplaceRound(at: index, with: round) {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
-                listener?.newRoundDidResign()
             } else {
                 isSaving = false
                 currentPlayerIndex = 0
@@ -159,7 +158,6 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             }
         } else {
             listener?.newRoundDidAddRound(round)
-            listener?.newRoundDidResign()
         }
     }
 

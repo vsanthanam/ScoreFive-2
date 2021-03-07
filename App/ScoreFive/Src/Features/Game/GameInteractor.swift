@@ -120,6 +120,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
         } catch {
             presenter.showOperationFailure("Couldn't write game data to disk")
         }
+        routeAwayFromNewRound()
     }
 
     func newRoundDidReplaceRound(at index: Int, with round: Round) {
@@ -134,6 +135,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
         } catch {
             presenter.showOperationFailure("Couldn't write game data to disk")
         }
+        routeAwayFromNewRound()
     }
 
     // MARK: - GameSettingsListener

@@ -14,11 +14,12 @@ protocol GameLibraryViewControllable: ViewControllable {}
 
 /// @mockable
 protocol GameLibraryPresentableListener: AnyObject {
+    func didSelect(identifier: UUID)
     func didDelete(identifier: UUID)
     func didTapClose()
 }
 
-final class GameLibraryViewController: ScopeViewController, GameLibraryPresentable, GameLibraryViewControllable, UINavigationBarDelegate {
+final class GameLibraryViewController: ScopeViewController, GameLibraryPresentable, GameLibraryViewControllable, UINavigationBarDelegate, UICollectionViewDelegate {
 
     // MARK: - UIViewController
 
@@ -33,10 +34,10 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
 
     weak var listener: GameLibraryPresentableListener?
 
-    func update(with identifiers: [UUID]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, UUID>()
+    func update(with models: [LibraryCellViewModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, LibraryCellViewModel>()
         snapshot.appendSections([0])
-        snapshot.appendItems(identifiers, toSection: 0)
+        snapshot.appendItems(models, toSection: 0)
         dataSource.apply(snapshot)
     }
 
@@ -46,9 +47,21 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
         .topAttached
     }
 
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        if let model = dataSource.itemIdentifier(for: indexPath) {
+            listener?.didSelect(identifier: model.identifier)
+        }
+
+    }
+
     // MARK: - Private
 
     private let header = UINavigationBar()
+    private let listFormatter = ListFormatter()
+    private let dateFormatter = DateFormatter()
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout { _, environment in
@@ -56,7 +69,7 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
             config.trailingSwipeActionsConfigurationProvider = { indexPath in
                 let deleteAction = UIContextualAction(style: .destructive,
                                                       title: "Delete") { [weak self] _, _, actionPerformed in
-                    if let identifier = self?.dataSource.itemIdentifier(for: indexPath) {
+                    if let identifier = self?.dataSource.itemIdentifier(for: indexPath)?.identifier {
                         self?.listener?.didDelete(identifier: identifier)
                         actionPerformed(true)
                     }
@@ -70,22 +83,25 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, UUID> = {
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, LibraryCellViewModel> = {
 
-        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, UUID> { cell, indexPath, identifier in
+        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellViewModel> { [listFormatter, dateFormatter] cell, indexPath, model in
             var config = cell.defaultContentConfiguration()
-            config.text = identifier.description
+            config.text = listFormatter.string(from: model.players)
+            config.secondaryText = dateFormatter.string(from: model.date)
             cell.contentConfiguration = config
         }
 
-        let dataSource = UICollectionViewDiffableDataSource<Int, UUID>(collectionView: collectionView,
-                                                                       cellProvider: { view, indexPath, identifier in
-                                                                           view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: identifier)
-                                                                       })
+        let dataSource = UICollectionViewDiffableDataSource<Int, LibraryCellViewModel>(collectionView: collectionView,
+                                                                                       cellProvider: { view, indexPath, model in
+                                                                                           view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
+                                                                                       })
         return dataSource
     }()
 
     private func setUp() {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
         let navigationItem = UINavigationItem(title: "Load Game")
         let closeItem = UIBarButtonItem(barButtonSystemItem: .close,
                                         target: self,
@@ -106,6 +122,7 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
         specializedView.addSubview(header)
 
         collectionView.dataSource = dataSource
+        collectionView.delegate = self
         specializedView.addSubview(collectionView)
 
         specializedView.addSubview(header)

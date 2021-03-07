@@ -82,6 +82,11 @@ final class HomeInteractor: PresentableInteractor<HomePresentable>, HomeInteract
         routeAwayFromGameLibrary()
     }
 
+    func gameLibraryDidSelectGame(with identifier: UUID) {
+        routeAwayFromGameLibrary()
+        listener?.homeWantToOpenGame(withIdentifier: identifier)
+    }
+
     // MARK: - HomePresentableListener
 
     func didTapNewGame() {
