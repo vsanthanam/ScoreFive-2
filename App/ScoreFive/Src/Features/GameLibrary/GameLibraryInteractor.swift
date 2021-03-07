@@ -25,8 +25,10 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
     // MARK: - Initializers
 
     init(presenter: GameLibraryPresentable,
-         gameStorageManager: GameStorageManaging) {
+         gameStorageManager: GameStorageManaging,
+         userSettingsProvider: UserSettingsProviding) {
         self.gameStorageManager = gameStorageManager
+        self.userSettingsProvider = userSettingsProvider
         super.init(presenter: presenter)
     }
 
@@ -35,6 +37,10 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
     weak var listener: GameLibraryListener?
 
     // MARK: - GameLibraryPresentableListener
+
+    var shouldWarnBeforeDeleting: Bool {
+        userSettingsProvider.warnBeforeDeletingGame
+    }
 
     func didTapClose() {
         listener?.gameLibraryDidResign()
@@ -58,6 +64,7 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
     // MARK: - Private
 
     private let gameStorageManager: GameStorageManaging
+    private let userSettingsProvider: UserSettingsProviding
 
     private func startObservingGameRecords() {
         gameStorageManager.gameRecords

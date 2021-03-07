@@ -41,53 +41,41 @@ final class HomeViewController: ScopeViewController, HomePresentable, HomeViewCo
     weak var listener: HomePresentableListener?
 
     func showResumeButton() {
-        confineTo(viewEvents: [.viewDidLoad], once: true) { [weak self] in
-            guard let self = self else { return }
-            if let previous = self.resumeGameButton {
-                self.buttonStackView.removeArrangedSubview(previous)
-                self.resumeGameButton = nil
-            }
-            let button = HomeButton(title: "Resume Last Game")
-            button.addTarget(self, action: #selector(self.didTapResume), for: .touchUpInside)
-            self.buttonStackView.addArrangedSubview(button)
-            self.resumeGameButton = button
+        if let previous = resumeGameButton {
+            buttonStackView.removeArrangedSubview(previous)
+            resumeGameButton = nil
         }
+        let button = HomeButton(title: "Resume Last Game")
+        button.addTarget(self, action: #selector(didTapResume), for: .touchUpInside)
+        buttonStackView.addArrangedSubview(button)
+        resumeGameButton = button
     }
 
     func hideResumeButton() {
-        confineTo(viewEvents: [.viewDidLoad], once: true) { [weak self] in
-            guard let self = self else { return }
-            guard let previous = self.resumeGameButton else { return }
-            self.buttonStackView.removeArrangedSubview(previous)
-            self.resumeGameButton = nil
-        }
+        guard let previous = resumeGameButton else { return }
+        buttonStackView.removeArrangedSubview(previous)
+        resumeGameButton = nil
     }
 
     func showLoadButton() {
-        confineTo(viewEvents: [.viewDidLoad], once: true) { [weak self] in
-            guard let self = self else { return }
-            if let previous = self.loadGameButton {
-                self.buttonStackView.removeArrangedSubview(previous)
-                self.loadGameButton = nil
-            }
-            let button = HomeButton(title: "Load Game")
-            button.addTarget(self, action: #selector(self.didTapLoad), for: .touchUpInside)
-            self.buttonStackView.addArrangedSubview(button)
-            self.loadGameButton = button
+        if let previous = loadGameButton {
+            buttonStackView.removeArrangedSubview(previous)
+            loadGameButton = nil
         }
+        let button = HomeButton(title: "Load Game")
+        button.addTarget(self, action: #selector(didTapLoad), for: .touchUpInside)
+        buttonStackView.addArrangedSubview(button)
+        loadGameButton = button
     }
 
     func hideLoadButton() {
-        confineTo(viewEvents: [.viewDidLoad], once: true) { [weak self] in
-            guard let self = self else { return }
-            guard let previous = self.loadGameButton else { return }
-            self.buttonStackView.removeArrangedSubview(previous)
-            self.loadGameButton = nil
-        }
+        guard let previous = loadGameButton else { return }
+        buttonStackView.removeArrangedSubview(previous)
+        loadGameButton = nil
     }
 
     func showNewGame(_ viewController: ViewControllable) {
-        confineTo(viewEvents: [.viewDidAppear], once: true) {
+        confineTo(viewEvents: [.viewDidAppear], once: false) {
             if let current = self.newGameViewController {
                 current.uiviewController.dismiss(animated: true) { [weak self] in
                     self?.newGameViewController = nil
@@ -107,7 +95,7 @@ final class HomeViewController: ScopeViewController, HomePresentable, HomeViewCo
     }
 
     func showMoreOptions(_ viewController: ViewControllable) {
-        confineTo(viewEvents: [.viewDidAppear], once: true) { [weak self] in
+        confineTo(viewEvents: [.viewDidAppear], once: false) { [weak self] in
             if let current = self?.moreOptionsViewController {
                 current.uiviewController.dismiss(animated: true) { [weak self] in
                     self?.moreOptionsViewController = nil
@@ -230,10 +218,6 @@ final class HomeViewController: ScopeViewController, HomePresentable, HomeViewCo
         newGameButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         newGameButton.addTarget(self, action: #selector(didTapAdd), for: .touchUpInside)
         buttonStackView.insertArrangedSubview(newGameButton, at: 0)
-
-//        loadGameButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-//        loadGameButton.addTarget(self, action: #selector(didTapLoad), for: .touchUpInside)
-//        buttonStackView.insertArrangedSubview(loadGameButton, at: buttonStackView.arrangedSubviews.count)
     }
 
     @objc

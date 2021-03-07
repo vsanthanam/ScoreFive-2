@@ -11,6 +11,7 @@ import ShortRibs
 
 protocol GameLibraryDependency: Dependency {
     var gameStorageManager: GameStorageManaging { get }
+    var userSettingsProvider: UserSettingsProviding { get }
 }
 
 class GameLibraryComponent: Component<GameLibraryDependency> {}
@@ -35,7 +36,8 @@ final class GameLibraryBuilder: ComponentizedBuilder<GameLibraryComponent, Prese
         let listener = dynamicBuildDependency
         let viewController = GameLibraryViewController()
         let interactor = GameLibraryInteractor(presenter: viewController,
-                                               gameStorageManager: component.gameStorageManager)
+                                               gameStorageManager: component.gameStorageManager,
+                                               userSettingsProvider: component.userSettingsProvider)
         viewController.listener = interactor
         interactor.listener = listener
         return interactor

@@ -14,12 +14,15 @@ protocol UserSettingsProviding: AnyObject {
     var advanceScoreEntryAutomatically: Bool { get }
     var indexByPlayerStream: AnyPublisher<Bool, Never> { get }
     var advanceScoreEntryAutomaticallyStream: AnyPublisher<Bool, Never> { get }
+    var warnBeforeDeletingGame: Bool { get }
+    var warnBeforeDeletingGameStream: AnyPublisher<Bool, Never> { get }
 }
 
 /// @mockable
 protocol UserSettingsManaging: UserSettingsProviding {
     var indexByPlayer: Bool { get set }
     var advanceScoreEntryAutomatically: Bool { get set }
+    var warnBeforeDeletingGame: Bool { get set }
 }
 
 final class UserSettingsManager: UserSettingsManaging {
@@ -30,6 +33,9 @@ final class UserSettingsManager: UserSettingsManaging {
     @UserSetting(key: "advance_score_entry_automatically")
     var advanceScoreEntryAutomatically = true
 
+    @UserSetting(key: "warn_before_deleting_game")
+    var warnBeforeDeletingGame: Bool = true
+
     var indexByPlayerStream: AnyPublisher<Bool, Never> {
         $indexByPlayer
             .removeDuplicates()
@@ -38,6 +44,12 @@ final class UserSettingsManager: UserSettingsManaging {
 
     var advanceScoreEntryAutomaticallyStream: AnyPublisher<Bool, Never> {
         $advanceScoreEntryAutomatically
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+    }
+
+    var warnBeforeDeletingGameStream: AnyPublisher<Bool, Never> {
+        $warnBeforeDeletingGame
             .removeDuplicates()
             .eraseToAnyPublisher()
     }

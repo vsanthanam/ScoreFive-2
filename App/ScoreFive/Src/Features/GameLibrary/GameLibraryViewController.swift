@@ -14,6 +14,7 @@ protocol GameLibraryViewControllable: ViewControllable {}
 
 /// @mockable
 protocol GameLibraryPresentableListener: AnyObject {
+    var shouldWarnBeforeDeleting: Bool { get }
     func didSelect(identifier: UUID)
     func didDelete(identifier: UUID)
     func didTapClose()
@@ -70,8 +71,7 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
                 let deleteAction = UIContextualAction(style: .destructive,
                                                       title: "Delete") { [weak self] _, _, actionPerformed in
                     if let identifier = self?.dataSource.itemIdentifier(for: indexPath)?.identifier {
-                        self?.listener?.didDelete(identifier: identifier)
-                        actionPerformed(true)
+                        self?.deleteItem(with: identifier, actionPerformer: actionPerformed)
                     }
                     actionPerformed(false)
                 }
@@ -85,7 +85,7 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, LibraryCellViewModel> = {
 
-        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellViewModel> { [listFormatter, dateFormatter] cell, indexPath, model in
+        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellViewModel> { [listFormatter, dateFormatter] cell, _, model in
             var config = cell.defaultContentConfiguration()
             config.text = listFormatter.string(from: model.players)
             config.secondaryText = dateFormatter.string(from: model.date)
@@ -145,6 +145,25 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
                 .top
                 .equalTo(header.snp.bottom)
         }
+    }
+
+    private func deleteItem(with identifier: UUID, actionPerformer: @escaping (Bool) -> Void) {
+        guard listener?.shouldWarnBeforeDeleting == true else {
+            listener?.didDelete(identifier: identifier)
+            actionPerformer(true)
+            return
+        }
+        let controller = UIAlertController(title: "Are you sure?", message: "This action is irreversable", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            actionPerformer(false)
+        }
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [listener] _ in
+            listener?.didDelete(identifier: identifier)
+            actionPerformer(true)
+        }
+        controller.addAction(cancelAction)
+        controller.addAction(deleteAction)
+        present(controller, animated: true, completion: nil)
     }
 
     @objc
