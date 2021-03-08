@@ -11,7 +11,7 @@ import ShortRibs
 /// @mockable
 protocol GameLibraryPresentable: GameLibraryViewControllable {
     var listener: GameLibraryPresentableListener? { get set }
-    func update(with models: [LibraryCellViewModel])
+    func update(with models: [LibraryCellModel])
 }
 
 /// @mockable
@@ -71,9 +71,9 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
             .map { (records: [GameRecord]) -> [GameRecord] in
                 records.filter(\.inProgress)
             }
-            .map { (records: [GameRecord]) -> [LibraryCellViewModel] in
+            .map { (records: [GameRecord]) -> [LibraryCellModel] in
                 records
-                    .map { record -> LibraryCellViewModel in
+                    .map { record -> LibraryCellModel in
                         .init(players: record.orderedPlayers.map(\.name),
                               date: record.lastSavedDate,
                               identifier: record.uniqueIdentifier)

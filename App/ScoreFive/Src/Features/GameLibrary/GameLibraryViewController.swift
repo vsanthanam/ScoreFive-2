@@ -35,8 +35,8 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
 
     weak var listener: GameLibraryPresentableListener?
 
-    func update(with models: [LibraryCellViewModel]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, LibraryCellViewModel>()
+    func update(with models: [LibraryCellModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, LibraryCellModel>()
         snapshot.appendSections([0])
         snapshot.appendItems(models, toSection: 0)
         dataSource.apply(snapshot)
@@ -83,19 +83,21 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, LibraryCellViewModel> = {
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, LibraryCellModel> = {
 
-        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellViewModel> { [listFormatter, dateFormatter] cell, _, model in
+        let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellModel> { [listFormatter, dateFormatter] cell, _, model in
             var config = cell.defaultContentConfiguration()
             config.text = listFormatter.string(from: model.players)
             config.secondaryText = dateFormatter.string(from: model.date)
             cell.contentConfiguration = config
         }
 
-        let dataSource = UICollectionViewDiffableDataSource<Int, LibraryCellViewModel>(collectionView: collectionView,
-                                                                                       cellProvider: { view, indexPath, model in
-                                                                                           view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
-                                                                                       })
+        let dataSource = UICollectionViewDiffableDataSource<Int, LibraryCellModel>(collectionView: collectionView,
+                                                                                   cellProvider: { view, indexPath, model in
+                                                                                       view.dequeueConfiguredReusableCell(using: cellRegistratation,
+                                                                                                                          for: indexPath,
+                                                                                                                          item: model)
+                                                                                    })
         return dataSource
     }()
 

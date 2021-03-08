@@ -31,7 +31,6 @@
 		07250E9125E9B69D00975DA5 /* NewRoundInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07250E9025E9B69D00975DA5 /* NewRoundInteractorTests.swift */; };
 		07250EBF25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07250EBE25EAADE200975DA5 /* RoundScoreViewSnapshotTests.swift */; };
 		072AFC0925AEC68300BBFF25 /* GameStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AFC0825AEC68300BBFF25 /* GameStorageTests.swift */; };
-		072C265825EC709E0057C2C9 /* Logging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265725EC709E0057C2C9 /* Logging.framework */; };
 		072F8162259A4D48005EE56B /* NeedleFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8161259A4D48005EE56B /* NeedleFoundation.framework */; };
 		072F8163259A4D48005EE56B /* NeedleFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8161259A4D48005EE56B /* NeedleFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		072F8168259A4D4D005EE56B /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072F8167259A4D4D005EE56B /* SnapKit.framework */; };
@@ -81,10 +80,13 @@
 		07A45E6625A6E500000929D1 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A45E6525A6E500000929D1 /* TestCase.swift */; };
 		07A57F7F25C7B85A00DDD29C /* Consolas.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07A57F7E25C7B85A00DDD29C /* Consolas.ttf */; };
 		07A57FA925CA686300DDD29C /* HomeInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A57FA825CA686300DDD29C /* HomeInteractorTests.swift */; };
-		07A7D5D425F58C590094CD9A /* LibraryCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A7D5D325F58C590094CD9A /* LibraryCellViewModel.swift */; };
+		07A7D5D425F58C590094CD9A /* LibraryCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A7D5D325F58C590094CD9A /* LibraryCellModel.swift */; };
 		07B2143625D86B7F004B24EA /* RoundScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B2143525D86B7F004B24EA /* RoundScoreView.swift */; };
 		07B6647925A24BDC00A994A8 /* NewGameSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B6647825A24BDC00A994A8 /* NewGameSectionHeaderView.swift */; };
 		07B6647D25A2528C00A994A8 /* NewGameSectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B6647C25A2528B00A994A8 /* NewGameSectionFooterView.swift */; };
+		07C04DEC25F5CC37002A1748 /* RoundCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C04DEB25F5CC37002A1748 /* RoundCellModel.swift */; };
+		07C04DF125F5CCF4002A1748 /* Logging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265725EC709E0057C2C9 /* Logging.framework */; };
+		07C04DF225F5CCF4002A1748 /* Logging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265725EC709E0057C2C9 /* Logging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07C38CD1259FCEFA00A9AFCD /* NewGameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C38CD0259FCEFA00A9AFCD /* NewGameButton.swift */; };
 		07C38CD5259FD8E900A9AFCD /* GameHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C38CD4259FD8E900A9AFCD /* GameHeaderView.swift */; };
 		07C38CDA259FEA6F00A9AFCD /* AddRoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C38CD9259FEA6F00A9AFCD /* AddRoundButton.swift */; };
@@ -131,6 +133,7 @@
 				072F8163259A4D48005EE56B /* NeedleFoundation.framework in Embed Frameworks */,
 				07077CE625C74A7400CF380D /* Countly.framework in Embed Frameworks */,
 				072F8230259AA2DF005EE56B /* ScoreKeeping.framework in Embed Frameworks */,
+				07C04DF225F5CCF4002A1748 /* Logging.framework in Embed Frameworks */,
 				072F816E259A4D57005EE56B /* ShortRibs.framework in Embed Frameworks */,
 				072F8169259A4D4D005EE56B /* SnapKit.framework in Embed Frameworks */,
 				073135AD25C749A600B81569 /* Analytics.framework in Embed Frameworks */,
@@ -208,10 +211,11 @@
 		07A45E6525A6E500000929D1 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		07A57F7E25C7B85A00DDD29C /* Consolas.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Consolas.ttf; sourceTree = "<group>"; };
 		07A57FA825CA686300DDD29C /* HomeInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractorTests.swift; sourceTree = "<group>"; };
-		07A7D5D325F58C590094CD9A /* LibraryCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCellViewModel.swift; sourceTree = "<group>"; };
+		07A7D5D325F58C590094CD9A /* LibraryCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCellModel.swift; sourceTree = "<group>"; };
 		07B2143525D86B7F004B24EA /* RoundScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundScoreView.swift; sourceTree = "<group>"; };
 		07B6647825A24BDC00A994A8 /* NewGameSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameSectionHeaderView.swift; sourceTree = "<group>"; };
 		07B6647C25A2528B00A994A8 /* NewGameSectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameSectionFooterView.swift; sourceTree = "<group>"; };
+		07C04DEB25F5CC37002A1748 /* RoundCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCellModel.swift; sourceTree = "<group>"; };
 		07C38CD0259FCEFA00A9AFCD /* NewGameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameButton.swift; sourceTree = "<group>"; };
 		07C38CD4259FD8E900A9AFCD /* GameHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHeaderView.swift; sourceTree = "<group>"; };
 		07C38CD9259FEA6F00A9AFCD /* AddRoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRoundButton.swift; sourceTree = "<group>"; };
@@ -246,11 +250,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				072C265825EC709E0057C2C9 /* Logging.framework in Frameworks */,
 				070683D0259CFCA4004B7A78 /* FiveUI.framework in Frameworks */,
 				072F8162259A4D48005EE56B /* NeedleFoundation.framework in Frameworks */,
 				07077CE525C74A7400CF380D /* Countly.framework in Frameworks */,
 				072F822F259AA2DF005EE56B /* ScoreKeeping.framework in Frameworks */,
+				07C04DF125F5CCF4002A1748 /* Logging.framework in Frameworks */,
 				072F816D259A4D57005EE56B /* ShortRibs.framework in Frameworks */,
 				072F8168259A4D4D005EE56B /* SnapKit.framework in Frameworks */,
 				073135AC25C749A600B81569 /* Analytics.framework in Frameworks */,
@@ -304,6 +308,7 @@
 		070683D4259CFE14004B7A78 /* ScoreCard */ = {
 			isa = PBXGroup;
 			children = (
+				07C04DEA25F5CC2E002A1748 /* Models */,
 				070683FD259D22E0004B7A78 /* Views */,
 				070683E4259D072C004B7A78 /* ScoreCardViewController.swift */,
 				070683E5259D072C004B7A78 /* ScoreCardBuilder.swift */,
@@ -581,7 +586,7 @@
 		07A7D5D225F58C4E0094CD9A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				07A7D5D325F58C590094CD9A /* LibraryCellViewModel.swift */,
+				07A7D5D325F58C590094CD9A /* LibraryCellModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -592,6 +597,14 @@
 				07B2143525D86B7F004B24EA /* RoundScoreView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		07C04DEA25F5CC2E002A1748 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				07C04DEB25F5CC37002A1748 /* RoundCellModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		07C38CD3259FD8DD00A9AFCD /* Views */ = {
@@ -837,7 +850,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				072F81BC259A5FC3005EE56B /* FiveViewController.swift in Sources */,
-				07A7D5D425F58C590094CD9A /* LibraryCellViewModel.swift in Sources */,
+				07A7D5D425F58C590094CD9A /* LibraryCellModel.swift in Sources */,
 				070683E8259D072C004B7A78 /* ScoreCardViewController.swift in Sources */,
 				07068403259D27A4004B7A78 /* NewGameScoreLimitCell.swift in Sources */,
 				072F8193259A523F005EE56B /* MainBuilder.swift in Sources */,
@@ -870,6 +883,7 @@
 				072F8264259C0908005EE56B /* HomeBuilder.swift in Sources */,
 				07068397259C33F9004B7A78 /* NewRoundViewController.swift in Sources */,
 				07B2143625D86B7F004B24EA /* RoundScoreView.swift in Sources */,
+				07C04DEC25F5CC37002A1748 /* RoundCellModel.swift in Sources */,
 				070683DE259D02CA004B7A78 /* Optional+ScoreFive.swift in Sources */,
 				07B6647925A24BDC00A994A8 /* NewGameSectionHeaderView.swift in Sources */,
 				070683FF259D22F8004B7A78 /* NewGameAddPlayerCell.swift in Sources */,
@@ -1071,7 +1085,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 160;
 				DEVELOPMENT_TEAM = Y88YPD4RJA;
 				INFOPLIST_FILE = ScoreFive/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
@@ -1094,7 +1108,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 150;
+				CURRENT_PROJECT_VERSION = 160;
 				DEVELOPMENT_TEAM = Y88YPD4RJA;
 				INFOPLIST_FILE = ScoreFive/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;

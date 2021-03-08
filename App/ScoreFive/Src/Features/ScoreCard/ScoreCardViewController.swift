@@ -19,13 +19,6 @@ protocol ScoreCardPresentableListener: AnyObject {
     func didEditRowAtIndex(at index: Int)
 }
 
-struct RoundCellViewModel: Equatable, Hashable {
-    let visibleIndex: String?
-    let index: Int
-    let scores: [Int?]
-    let canRemove: Bool
-}
-
 final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, ScoreCardViewControllable, UICollectionViewDelegate {
 
     // MARK: - UIViewController
@@ -39,8 +32,8 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
 
     weak var listener: ScoreCardPresentableListener?
 
-    func update(models: [RoundCellViewModel]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, RoundCellViewModel>()
+    func update(models: [RoundCellModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, RoundCellModel>()
         snapshot.appendSections([0])
         snapshot.appendItems(models, toSection: 0)
         dataSource.apply(snapshot)
@@ -59,9 +52,9 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, RoundCellViewModel> = {
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, RoundCellModel> = {
 
-        let cellRegistratation = UICollectionView.CellRegistration<GameRoundCell, RoundCellViewModel> { cell, _, model in
+        let cellRegistratation = UICollectionView.CellRegistration<GameRoundCell, RoundCellModel> { cell, _, model in
             var config = GameRoundCell.newConfiguration()
             config.scores = model.scores.map { $0.map(String.init) }
             config.visibleIndex = model.visibleIndex
@@ -69,9 +62,9 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
             cell.contentConfiguration = config
         }
 
-        let dataSource = UICollectionViewDiffableDataSource<Int, RoundCellViewModel>(collectionView: collectionView,
-                                                                                     cellProvider: { view, indexPath, model in
-                                                                                         view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
+        let dataSource = UICollectionViewDiffableDataSource<Int, RoundCellModel>(collectionView: collectionView,
+                                                                                 cellProvider: { view, indexPath, model in
+                                                                                     view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
                                                                                        })
         return dataSource
     }()

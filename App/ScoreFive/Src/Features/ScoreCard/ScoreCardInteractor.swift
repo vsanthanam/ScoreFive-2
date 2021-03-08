@@ -13,7 +13,7 @@ import ShortRibs
 /// @mockable
 protocol ScoreCardPresentable: ScoreCardViewControllable {
     var listener: ScoreCardPresentableListener? { get set }
-    func update(models: [RoundCellViewModel])
+    func update(models: [RoundCellModel])
 }
 
 /// @mockable
@@ -79,15 +79,18 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
             .switchToLatest()
             .filterNil()
             .combineLatest(userSettingsProvider.indexByPlayerStream)
-            .sink { [presenter] card, indexByPlayer in
-                var models = [RoundCellViewModel]()
+            .map { card, indexByPlayer -> [RoundCellModel] in
+                var models = [RoundCellModel]()
                 for i in 0 ..< card.rounds.count {
                     let round = card[i]
                     let scores = card.orderedPlayers.map { round[$0] }
                     let index = indexByPlayer ? String(card.startingPlayer(atIndex: i).name.prefix(1)) : String(i + 1)
-                    let model = RoundCellViewModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(at: i))
+                    let model = RoundCellModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(at: i))
                     models.append(model)
                 }
+                return models
+            }
+            .sink { [presenter] models in
                 presenter.update(models: models)
             }
             .cancelOnDeactivate(interactor: self)
