@@ -13,7 +13,7 @@ import ShortRibs
 /// @mockable
 protocol ScoreCardPresentable: ScoreCardViewControllable {
     var listener: ScoreCardPresentableListener? { get set }
-    func reload()
+    func update(models: [RoundCellViewModel])
 }
 
 /// @mockable
@@ -56,35 +56,11 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
 
     // MARK: - ScoreCardPresentableListener
 
-    var numberOfRounds: Int {
-        currentScoreCard?.numberOfRounds ?? 0
-    }
-
-    var orderedPlayers: [Player] {
-        currentScoreCard?.orderedPlayers ?? []
-    }
-
-    func round(at index: Int) -> Round? {
-        currentScoreCard?[index]
-    }
-
-    func canRemoveRow(at index: Int) -> Bool {
-        currentScoreCard?.canRemoveRound(at: index) ?? false
-    }
-
     func didRemoveRow(at index: Int) {
         listener?.scoreCardDidDeleteRound(at: index)
     }
 
-    func index(at index: Int) -> String? {
-        if indexByPlayer,
-            let player = currentScoreCard?.startingPlayer(atIndex: index) {
-            return String(player.name.prefix(1))
-        }
-        return String(index + 1)
-    }
-
-    func editRowAtIndex(at index: Int) {
+    func didEditRowAtIndex(at index: Int) {
         listener?.scoreCardWantToEditRound(at: index)
     }
 
@@ -94,18 +70,6 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     private let activeGameStream: ActiveGameStreaming
     private let userSettingsProvider: UserSettingsProviding
 
-    private var currentScoreCard: ScoreCard? {
-        didSet {
-            presenter.reload()
-        }
-    }
-
-    private var indexByPlayer: Bool = true {
-        didSet {
-            presenter.reload()
-        }
-    }
-
     private func startObservingScoreCardChanges() {
         activeGameStream.activeGameIdentifier
             .filterNil()
@@ -114,14 +78,18 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
             }
             .switchToLatest()
             .filterNil()
-            .toOptional()
-            .assign(to: \.currentScoreCard, on: self)
-            .cancelOnDeactivate(interactor: self)
-    }
-
-    private func startObservingIndexByPlayerSetting() {
-        userSettingsProvider.indexByPlayerStream
-            .assign(to: \.indexByPlayer, on: self)
+            .combineLatest(userSettingsProvider.indexByPlayerStream)
+            .sink { [presenter] card, indexByPlayer in
+                var models = [RoundCellViewModel]()
+                for i in 0 ..< card.rounds.count {
+                    let round = card[i]
+                    let scores = card.orderedPlayers.map { round[$0] }
+                    let index = indexByPlayer ? String(card.startingPlayer(atIndex: i).name.prefix(1)) : String(i + 1)
+                    let model = RoundCellViewModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(at: i))
+                    models.append(model)
+                }
+                presenter.update(models: models)
+            }
             .cancelOnDeactivate(interactor: self)
     }
 }

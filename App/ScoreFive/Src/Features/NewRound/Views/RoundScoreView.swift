@@ -187,7 +187,7 @@ final class RoundScoreView: BaseView {
         toolbar.sizeToFit()
 
         input.inputAccessoryView = toolbar
-        input.addTarget(self, action: #selector(userDidInput), for: .allEditingEvents)
+        input.addTarget(self, action: #selector(userDidInput), for: .editingChanged)
     }
 
     private func constrainInput() {

@@ -25,15 +25,15 @@ final class GameRoundCell: ListCell<GameRoundCell.ContentConfiguration, GameRoun
         // MARK: - CellContentView
 
         override func apply(configuration: ContentConfiguration) {
-            let scores = configuration.orderedPlayers
-                .map { player -> String? in
-                    if let score = configuration.round?[player] {
-                        return String(score)
-                    }
-                    return nil
-                }
+//            let scores = configuration.orderedPlayers
+//                .map { player -> String? in
+//                    if let score = configuration.round?[player] {
+//                        return String(score)
+//                    }
+//                    return nil
+//                }
             stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-            scores.forEach { score in
+            configuration.scores.forEach { score in
                 let index = IndexView()
                 index.title = score
                 if score == "0" {
@@ -45,7 +45,7 @@ final class GameRoundCell: ListCell<GameRoundCell.ContentConfiguration, GameRoun
                 }
                 stack.addArrangedSubview(index)
             }
-            index.text = configuration.index
+            index.text = configuration.visibleIndex
         }
 
         // MARK: - Private
@@ -144,17 +144,23 @@ final class GameRoundCell: ListCell<GameRoundCell.ContentConfiguration, GameRoun
     }
 
     struct ContentConfiguration: CellContentConfiguration {
-        init() {}
-
-        var orderedPlayers: [Player] = []
-        var round: Round?
-        var index: String?
-        var max: String {
-            orderedPlayers
-                .compactMap { round?[$0] }
-                .max()
-                .map(String.init) ?? ""
+        init() {
+            scores = []
         }
+
+//        var orderedPlayers: [Player] = []
+//        var round: Round?
+//        var index: String?
+//        var max: String {
+//            orderedPlayers
+//                .compactMap { round?[$0] }
+//                .max()
+//                .map(String.init) ?? ""
+//        }
+
+        var visibleIndex: String?
+        var scores: [String?]
+        var max: String?
 
         // MARK: - UIContentConfiguration
 

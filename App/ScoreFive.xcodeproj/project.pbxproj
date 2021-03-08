@@ -76,6 +76,7 @@
 		0782078225CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782078125CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift */; };
 		0782078925CF627500D8D659 /* HomeButtonSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782078825CF627500D8D659 /* HomeButtonSnapshotTests.swift */; };
 		0782079425CF85F000D8D659 /* NewGameInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782079325CF85F000D8D659 /* NewGameInteractorTests.swift */; };
+		078D33BA25F5A55400DB5236 /* Collection+ScoreFive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078D33B925F5A55400DB5236 /* Collection+ScoreFive.swift */; };
 		07A45E6225A6E408000929D1 /* ActiveGameStreamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A45E6125A6E408000929D1 /* ActiveGameStreamTests.swift */; };
 		07A45E6625A6E500000929D1 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A45E6525A6E500000929D1 /* TestCase.swift */; };
 		07A57F7F25C7B85A00DDD29C /* Consolas.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07A57F7E25C7B85A00DDD29C /* Consolas.ttf */; };
@@ -202,6 +203,7 @@
 		0782078125CF2DE900D8D659 /* NewGameViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
 		0782078825CF627500D8D659 /* HomeButtonSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeButtonSnapshotTests.swift; sourceTree = "<group>"; };
 		0782079325CF85F000D8D659 /* NewGameInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameInteractorTests.swift; sourceTree = "<group>"; };
+		078D33B925F5A55400DB5236 /* Collection+ScoreFive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+ScoreFive.swift"; sourceTree = "<group>"; };
 		07A45E6125A6E408000929D1 /* ActiveGameStreamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveGameStreamTests.swift; sourceTree = "<group>"; };
 		07A45E6525A6E500000929D1 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		07A57F7E25C7B85A00DDD29C /* Consolas.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Consolas.ttf; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 			children = (
 				070683DD259D02CA004B7A78 /* Optional+ScoreFive.swift */,
 				0731343225C63C7E00B81569 /* Notification+ScoreFive.swift */,
+				078D33B925F5A55400DB5236 /* Collection+ScoreFive.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -843,6 +846,7 @@
 				072F8263259C0908005EE56B /* HomeViewController.swift in Sources */,
 				07C38CD1259FCEFA00A9AFCD /* NewGameButton.swift in Sources */,
 				07B6647D25A2528C00A994A8 /* NewGameSectionFooterView.swift in Sources */,
+				078D33BA25F5A55400DB5236 /* Collection+ScoreFive.swift in Sources */,
 				07E8050825CF21E0008B3125 /* HomeButton.swift in Sources */,
 				07068398259C33F9004B7A78 /* NewRoundBuilder.swift in Sources */,
 				070683EA259D072C004B7A78 /* ScoreCardInteractor.swift in Sources */,

@@ -7,7 +7,6 @@
 
 import Foundation
 import os.log
-import ShortRibs
 
 extension OSLog {
     public static let standard: OSLog = .init(subsystem: .subsystem, category: "ScoreFive")

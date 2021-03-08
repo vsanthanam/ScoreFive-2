@@ -15,16 +15,18 @@ protocol ScoreCardViewControllable: ViewControllable {}
 
 /// @mockable
 protocol ScoreCardPresentableListener: AnyObject {
-    var numberOfRounds: Int { get }
-    var orderedPlayers: [Player] { get }
-    func round(at index: Int) -> Round?
-    func index(at index: Int) -> String?
-    func canRemoveRow(at index: Int) -> Bool
     func didRemoveRow(at index: Int)
-    func editRowAtIndex(at index: Int)
+    func didEditRowAtIndex(at index: Int)
 }
 
-final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, ScoreCardViewControllable, UICollectionViewDelegate, UICollectionViewDataSource {
+struct RoundCellViewModel: Equatable, Hashable {
+    let visibleIndex: String?
+    let index: Int
+    let scores: [Int?]
+    let canRemove: Bool
+}
+
+final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, ScoreCardViewControllable, UICollectionViewDelegate {
 
     // MARK: - UIViewController
 
@@ -37,30 +39,11 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
 
     weak var listener: ScoreCardPresentableListener?
 
-    func reload() {
-        collectionView.reloadData()
-    }
-
-    // MARK: - UICollectionViewDataSource
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        listener?.numberOfRounds ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .roundCellIdentifier, for: indexPath) as? GameRoundCell else {
-            fatalError()
-        }
-        var config = GameRoundCell.newConfiguration()
-        config.orderedPlayers = listener?.orderedPlayers ?? []
-        config.round = listener?.round(at: indexPath.row)
-        config.index = listener?.index(at: indexPath.row)
-        cell.contentConfiguration = config
-        return cell
+    func update(models: [RoundCellViewModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, RoundCellViewModel>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(models, toSection: 0)
+        dataSource.apply(snapshot)
     }
 
     // MARK: - Private
@@ -76,13 +59,29 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
 
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, RoundCellViewModel> = {
+
+        let cellRegistratation = UICollectionView.CellRegistration<GameRoundCell, RoundCellViewModel> { cell, _, model in
+            var config = GameRoundCell.newConfiguration()
+            config.scores = model.scores.map { $0.map(String.init) }
+            config.visibleIndex = model.visibleIndex
+            config.max = model.scores.filterNil().max().map(String.init)
+            cell.contentConfiguration = config
+        }
+
+        let dataSource = UICollectionViewDiffableDataSource<Int, RoundCellViewModel>(collectionView: collectionView,
+                                                                                     cellProvider: { view, indexPath, model in
+                                                                                         view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
+                                                                                       })
+        return dataSource
+    }()
+
     private func setUp() {
         specializedView.backgroundColor = .backgroundPrimary
 
         collectionView.backgroundColor = .backgroundPrimary
         collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(GameRoundCell.self, forCellWithReuseIdentifier: .roundCellIdentifier)
+        collectionView.dataSource = dataSource
 
         specializedView.addSubview(collectionView)
         ruleView.backgroundColor = .controlDisabled
@@ -112,13 +111,8 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
 
     private func trailingSwipeActionsConfigurationProvider(_ indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
-                                              title: "Delete") { [collectionView, listener] _, _, actionPerformed in
-            guard let listener = listener else {
-                actionPerformed(false)
-                return
-            }
-
-            guard listener.canRemoveRow(at: indexPath.row) else {
+                                              title: "Delete") { [dataSource, listener] _, _, actionPerformed in
+            guard dataSource.itemIdentifier(for: indexPath)?.canRemove == true else {
                 let alertController = UIAlertController(title: "Not Allowed",
                                                         message: "You can't delete this row",
                                                         preferredStyle: .alert)
@@ -130,13 +124,7 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
             }
 
             actionPerformed(true)
-
-            collectionView.performBatchUpdates({
-                collectionView.deleteItems(at: [IndexPath(row: indexPath.row, section: 0)])
-                listener.didRemoveRow(at: indexPath.row)
-            }, completion: { _ in
-                collectionView.reloadData()
-            })
+            listener?.didRemoveRow(at: indexPath.row)
         }
 
         deleteAction.backgroundColor = .contentNegative
@@ -146,7 +134,7 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
                 actionPerformed(false)
                 return
             }
-            listener.editRowAtIndex(at: indexPath.row)
+            listener.didEditRowAtIndex(at: indexPath.row)
             actionPerformed(true)
         }
         editAction.backgroundColor = .contentAccentPrimary
