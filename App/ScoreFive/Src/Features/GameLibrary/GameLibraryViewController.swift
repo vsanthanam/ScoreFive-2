@@ -70,10 +70,11 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
             config.trailingSwipeActionsConfigurationProvider = { indexPath in
                 let deleteAction = UIContextualAction(style: .destructive,
                                                       title: "Delete") { [weak self] _, _, actionPerformed in
-                    if let identifier = self?.dataSource.itemIdentifier(for: indexPath)?.identifier {
-                        self?.deleteItem(with: identifier, actionPerformer: actionPerformed)
+                    guard let identifier = self?.dataSource.itemIdentifier(for: indexPath)?.identifier else {
+                        actionPerformed(false)
+                        return
                     }
-                    actionPerformed(false)
+                    self?.deleteItem(with: identifier, actionPerformer: actionPerformed)
                 }
                 deleteAction.backgroundColor = .contentNegative
                 return UISwipeActionsConfiguration(actions: [deleteAction])

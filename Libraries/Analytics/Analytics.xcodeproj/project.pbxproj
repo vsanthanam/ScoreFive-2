@@ -8,13 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		072C265325EC707D0057C2C9 /* Logging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265225EC707D0057C2C9 /* Logging.framework */; };
-		072C265425EC707D0057C2C9 /* Logging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 072C265225EC707D0057C2C9 /* Logging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		073134D225C744DA00B81569 /* Analytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073134C825C744DA00B81569 /* Analytics.framework */; };
 		073134D725C744DA00B81569 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073134D625C744DA00B81569 /* AnalyticsTests.swift */; };
 		073134D925C744DA00B81569 /* Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 073134CB25C744DA00B81569 /* Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		073134E525C744EF00B81569 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073134E425C744EF00B81569 /* AnalyticsManager.swift */; };
-		073134EA25C7456000B81569 /* Countly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073134E925C7456000B81569 /* Countly.framework */; };
 		07A57F7525C7AAA400DDD29C /* LoggedAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A57F7425C7AAA400DDD29C /* LoggedAssert.swift */; };
+		07C04DFA25F5D59A002A1748 /* Countly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 073134E925C7456000B81569 /* Countly.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,20 +25,6 @@
 			remoteInfo = Analytics;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		072C265525EC707E0057C2C9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				072C265425EC707D0057C2C9 /* Logging.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		072C265225EC707D0057C2C9 /* Logging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Logging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,7 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				072C265325EC707D0057C2C9 /* Logging.framework in Frameworks */,
-				073134EA25C7456000B81569 /* Countly.framework in Frameworks */,
+				07C04DFA25F5D59A002A1748 /* Countly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,7 +130,6 @@
 				073134C425C744DA00B81569 /* Sources */,
 				073134C525C744DA00B81569 /* Frameworks */,
 				073134C625C744DA00B81569 /* Resources */,
-				072C265525EC707E0057C2C9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

@@ -102,22 +102,41 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
         collectionView.bringSubviewToFront(ruleView)
     }
 
+    private func deleteRound(at indexPath: IndexPath, actionPerformer: @escaping (Bool) -> Void) {
+        guard dataSource.itemIdentifier(for: indexPath)?.canRemove == true else {
+            let alertController = UIAlertController(title: "Not Allowed",
+                                                    message: "You can't delete this row",
+                                                    preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(action)
+            present(alertController, animated: true, completion: nil)
+            actionPerformer(false)
+            return
+        }
+
+        let controller = UIAlertController(title: "Are you sure?",
+                                           message: "This action is irreversable",
+                                           preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            actionPerformer(false)
+        }
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [listener] _ in
+            listener?.didRemoveRow(at: indexPath.row)
+            actionPerformer(true)
+        }
+        controller.addAction(cancelAction)
+        controller.addAction(deleteAction)
+        present(controller, animated: true, completion: nil)
+    }
+
     private func trailingSwipeActionsConfigurationProvider(_ indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
-                                              title: "Delete") { [dataSource, listener] _, _, actionPerformed in
-            guard dataSource.itemIdentifier(for: indexPath)?.canRemove == true else {
-                let alertController = UIAlertController(title: "Not Allowed",
-                                                        message: "You can't delete this row",
-                                                        preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alertController.addAction(action)
-                self.present(alertController, animated: true, completion: nil)
+                                              title: "Delete") { [weak self] _, _, actionPerformed in
+            guard let self = self else {
                 actionPerformed(false)
                 return
             }
-
-            actionPerformed(true)
-            listener?.didRemoveRow(at: indexPath.row)
+            self.deleteRound(at: indexPath, actionPerformer: actionPerformed)
         }
 
         deleteAction.backgroundColor = .contentNegative
