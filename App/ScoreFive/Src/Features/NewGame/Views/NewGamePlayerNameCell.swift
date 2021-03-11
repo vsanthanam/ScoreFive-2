@@ -29,34 +29,23 @@ final class NewGamePlayerNameCell: ListCell<NewGamePlayerNameCell.ContentConfigu
         override func apply(configuration: ContentConfiguration) {
             input.placeholder = "Player \(configuration.playerIndex + 1)"
             input.text = configuration.enteredPlayerName
-            editingAction = UIAction { [unowned input] _ in
-                configuration.delegate?.didInputPlayerName(input: input.text, index: configuration.playerIndex)
-            }
+            playerIndex = configuration.playerIndex
+            delegate = configuration.delegate
         }
 
         // MARK: - Private
 
         private let input = UITextField()
-
-        private var editingAction: UIAction? {
-            didSet {
-                if let oldAction = oldValue {
-                    input.removeAction(oldAction, for: .editingChanged)
-                }
-                if let newAction = editingAction {
-                    input.addAction(newAction, for: .editingChanged)
-                }
-            }
-        }
+        private var playerIndex: Int = -1
+        private weak var delegate: NewGamePlayerNameCellDelegate?
 
         private func setUp() {
             backgroundColor = .backgroundSecondary
             input.textColor = .contentPrimary
             input.clearButtonMode = .whileEditing
             input.returnKeyType = .done
-            input.addAction(UIAction { [unowned input] _ in
-                input.resignFirstResponder()
-            }, for: .editingDidEndOnExit)
+            input.addTarget(input, action: #selector(resignFirstResponder), for: .editingDidEndOnExit)
+            input.addTarget(self, action: #selector(processInput), for: .editingChanged)
             addSubview(input)
             input.snp.makeConstraints { make in
                 make
@@ -64,6 +53,11 @@ final class NewGamePlayerNameCell: ListCell<NewGamePlayerNameCell.ContentConfigu
                     .equalToSuperview()
                     .inset(16.0)
             }
+        }
+
+        @objc
+        private func processInput() {
+            delegate?.didInputPlayerName(input: input.text, index: playerIndex)
         }
     }
 

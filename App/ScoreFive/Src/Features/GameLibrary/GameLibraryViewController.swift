@@ -85,7 +85,6 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
     }()
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, LibraryCellModel> = {
-
         let cellRegistratation = UICollectionView.CellRegistration<UICollectionViewListCell, LibraryCellModel> { [listFormatter, dateFormatter] cell, _, model in
             var config = cell.defaultContentConfiguration()
             config.text = listFormatter.string(from: model.players)

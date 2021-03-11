@@ -20,7 +20,7 @@ protocol NewGamePresentableListener: AnyObject {
     func didTapClose()
 }
 
-final class NewGameViewController: ScopeViewController, NewGamePresentable, NewGameViewControllable, NewGameScoreLimitCellDelegate, NewGamePlayerNameCellDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationBarDelegate {
+final class NewGameViewController: ScopeViewController, NewGamePresentable, NewGameViewControllable, NewGameScoreLimitCellDelegate, NewGamePlayerNameCellDelegate, UICollectionViewDelegate, UINavigationBarDelegate {
 
     // MARK: - Initializers
 
@@ -35,9 +35,8 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         super.viewDidLoad()
         setUp()
         startObservingKeyboardNotifications()
+        update()
     }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle { .darkContent }
 
     // MARK: - NewGamePresentable
 
@@ -52,83 +51,13 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         present(alertController, animated: true, completion: nil)
     }
 
-    // MARK: - UICollectionViewDataSource
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        enteredPlayerNames.count < 8 ? 3 : 2
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else if section == 1 {
-            return enteredPlayerNames.count
-        } else if section == 2 {
-            return 1
-        }
-        return 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.section == 0,
-            indexPath.row == 0,
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .scoreLimitCellIdentifier,
-                                                          for: indexPath) as? NewGameScoreLimitCell {
-            var config = NewGameScoreLimitCell.newConfiguration()
-            config.defaultScore = "250"
-            config.enteredScore = enteredScoreLimit
-            config.delegate = self
-            cell.contentConfiguration = config
-            return cell
-        } else if indexPath.section == 1,
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .newPlayerCellIdentifier,
-                                                          for: indexPath) as? NewGamePlayerNameCell {
-            var config = NewGamePlayerNameCell.newConfiguration()
-            config.delegate = self
-            config.playerIndex = indexPath.row
-            config.enteredPlayerName = enteredPlayerNames[indexPath.row]
-            cell.contentConfiguration = config
-            return cell
-        } else if indexPath.section == 2,
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .addPlayerCellIdentifier,
-                                                          for: indexPath) as? NewGameAddPlayerCell {
-            var config = NewGameAddPlayerCell.newConfiguration()
-            config.title = "Add Player"
-            cell.contentConfiguration = config
-            return cell
-        }
-        fatalError()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        indexPath.section == 2
-    }
+    // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        addPlayer()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader,
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                                         withReuseIdentifier: .headerIdentifier,
-                                                                         for: indexPath) as? NewGameSectionHeaderView {
-            if indexPath.section == 0 {
-                header.title = "Score Limit"
-            }
-            return header
-        } else if kind == UICollectionView.elementKindSectionFooter,
-            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
-                                                                         withReuseIdentifier: .footerIdentifier,
-                                                                         for: indexPath) as? NewGameSectionFooterView {
-            if indexPath.section == 1 {
-                footer.title = "Add between 2 and 8 players"
-            }
-            return footer
+        if let item = dataSource.itemIdentifier(for: indexPath), case NewGameCellModel.button = item {
+            addPlayer()
         }
-
-        fatalError()
     }
 
     // MARK: - NewGameScoreLimitCellDelegate
@@ -174,8 +103,84 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         return collectionView
     }()
 
+    private lazy var dataSource: UICollectionViewDiffableDataSource<NewGameSectionModel, NewGameCellModel> = {
+
+        let limitRegistration = UICollectionView.CellRegistration<NewGameScoreLimitCell, NewGameCellModel> { cell, _, model in
+            guard case let NewGameCellModel.limit(value) = model else {
+                fatalError()
+            }
+            var config = NewGameScoreLimitCell.newConfiguration()
+            config.defaultScore = "250"
+            config.enteredScore = value
+            cell.contentConfiguration = config
+        }
+
+        let playerRegistration = UICollectionView.CellRegistration<NewGamePlayerNameCell, NewGameCellModel> { cell, indexPath, model in
+            guard case let NewGameCellModel.player(name, index) = model else {
+                fatalError()
+            }
+            var config = NewGamePlayerNameCell.newConfiguration()
+            config.enteredPlayerName = name
+            config.playerIndex = indexPath.row
+            config.delegate = self
+            cell.contentConfiguration = config
+        }
+
+        let addRegistration = UICollectionView.CellRegistration<NewGameAddPlayerCell, NewGameCellModel> { cell, _, model in
+            guard case let NewGameCellModel.button(title) = model else {
+                fatalError()
+            }
+            var config = NewGameAddPlayerCell.newConfiguration()
+            config.title = "Add Player"
+            cell.contentConfiguration = config
+        }
+
+        let dataSource = UICollectionViewDiffableDataSource<NewGameSectionModel, NewGameCellModel>(collectionView: collectionView,
+                                                                                                   cellProvider: { view, indexPath, model in
+                                                                                                       switch model {
+                                                                                                       case .limit:
+                                                                                                           return view.dequeueConfiguredReusableCell(using: limitRegistration,
+                                                                                                                                                     for: indexPath,
+                                                                                                                                                     item: model)
+                                                                                                       case .player:
+                                                                                                           return view.dequeueConfiguredReusableCell(using: playerRegistration,
+                                                                                                                                                     for: indexPath,
+                                                                                                                                                     item: model)
+                                                                                                       case .button:
+                                                                                                           return view.dequeueConfiguredReusableCell(using: addRegistration,
+                                                                                                                                                     for: indexPath,
+                                                                                                                                                     item: model)
+                                                                                                       }
+                                                                                       })
+        dataSource.supplementaryViewProvider = { view, kind, indexPath in
+            if kind == UICollectionView.elementKindSectionHeader,
+                let header = view.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                   withReuseIdentifier: .headerIdentifier,
+                                                                   for: indexPath) as? NewGameSectionHeaderView {
+                if indexPath.section == 0 {
+                    header.title = "Score Limit"
+                }
+                return header
+            } else if kind == UICollectionView.elementKindSectionFooter,
+                let footer = view.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
+                                                                   withReuseIdentifier: .footerIdentifier,
+                                                                   for: indexPath) as? NewGameSectionFooterView {
+                if indexPath.section == 1 {
+                    footer.title = "Add between 2 and 8 players"
+                }
+                return footer
+            }
+            fatalError()
+        }
+        return dataSource
+    }()
+
     private var enteredScoreLimit: String? = nil
-    private var enteredPlayerNames: [String?] = [nil, nil]
+    private var enteredPlayerNames: [String?] = [nil, nil] {
+        didSet {
+            print(enteredPlayerNames)
+        }
+    }
 
     private func setUp() {
         specializedView.backgroundColor = .backgroundPrimary
@@ -200,7 +205,7 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         specializedView.addSubview(header)
 
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = dataSource
         collectionView.contentInset = .init(top: 16.0, left: 0.0, bottom: 0.0, right: 0.0)
         collectionView.register(NewGameSectionHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -208,12 +213,6 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         collectionView.register(NewGameSectionFooterView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                 withReuseIdentifier: .footerIdentifier)
-        collectionView.register(NewGameScoreLimitCell.self,
-                                forCellWithReuseIdentifier: .scoreLimitCellIdentifier)
-        collectionView.register(NewGamePlayerNameCell.self,
-                                forCellWithReuseIdentifier: .newPlayerCellIdentifier)
-        collectionView.register(NewGameAddPlayerCell.self,
-                                forCellWithReuseIdentifier: .addPlayerCellIdentifier)
         specializedView.addSubview(collectionView)
 
         newGameButton.addTarget(self, action: #selector(didTapNewGame), for: .touchUpInside)
@@ -304,27 +303,30 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
     }
 
     private func addPlayer() {
-        precondition(enteredPlayerNames.count < 8)
         enteredPlayerNames.append(nil)
-        collectionView.performBatchUpdates({
-            collectionView.insertItems(at: [IndexPath(row: enteredPlayerNames.count - 1, section: 1)])
-            if enteredPlayerNames.count == 8 {
-                collectionView.deleteSections(IndexSet([2]))
-            }
-        }, completion: nil)
+        update()
     }
 
     private func removePlayer(at index: Int) {
-        precondition(enteredPlayerNames.count > 2)
         enteredPlayerNames.remove(at: index)
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [IndexPath(row: index, section: 1)])
-            if enteredPlayerNames.count == 7 {
-                collectionView.insertSections(IndexSet([2]))
-            }
-        }, completion: { [weak self] _ in
-            self?.collectionView.reloadData()
-        })
+        update()
+    }
+
+    private func update() {
+        var snapshot = NSDiffableDataSourceSnapshot<NewGameSectionModel, NewGameCellModel>()
+        snapshot.appendSections([.limitSection])
+        snapshot.appendItems([.limit(value: enteredScoreLimit)], toSection: .limitSection)
+        snapshot.appendSections([.playerSection])
+        var players = [NewGameCellModel]()
+        for i in 0 ..< enteredPlayerNames.count {
+            players.append(.player(name: enteredPlayerNames[i], id: .init()))
+        }
+        snapshot.appendItems(players, toSection: .playerSection)
+        if enteredPlayerNames.count < 8 {
+            snapshot.appendSections([.addSection])
+            snapshot.appendItems([.button(title: "Add Player")], toSection: .addSection)
+        }
+        dataSource.apply(snapshot)
     }
 
     @objc
@@ -340,9 +342,44 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
 }
 
 private extension String {
-    static var scoreLimitCellIdentifier: String { "score-limit-cell-identifier" }
-    static var newPlayerCellIdentifier: String { "new-player-limit-cell-identifier" }
-    static var addPlayerCellIdentifier: String { "add-player-cell-identifier" }
     static var headerIdentifier: String { "header-identifier" }
     static var footerIdentifier: String { "footer-identifier" }
+}
+
+private enum NewGameSectionModel: Hashable {
+    case limitSection
+    case playerSection
+    case addSection
+
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .limitSection:
+            hasher.combine(#line)
+        case .playerSection:
+            hasher.combine(#line)
+        case .addSection:
+            hasher.combine(#line)
+        }
+    }
+}
+
+private enum NewGameCellModel: Equatable, Hashable {
+    case limit(value: String?)
+    case player(name: String?, id: UUID)
+    case button(title: String)
+
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case let .limit(value):
+            hasher.combine(#line)
+            hasher.combine(value)
+        case let .player(name, id):
+            hasher.combine(#line)
+            hasher.combine(name)
+            hasher.combine(id)
+        case let .button(title):
+            hasher.combine(#line)
+            hasher.combine(title)
+        }
+    }
 }
