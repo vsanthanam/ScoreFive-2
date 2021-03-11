@@ -1,5 +1,5 @@
 #  ScoreFive
-[![Build Status](https://jenkins.vsanthanam.com/buildStatus/icon?job=ScoreFive-iOS-Default)](https://jenkins.vsanthanam.com/job/ScoreFive-iOS-Default/)
+[![Build Status](https://badge.buildkite.com/d1c99f98602af9271e05a7020e2f18b941ed3a2f632d6eeb1b.svg)](https://buildkite.com/varun-santhanam/scorefive-main-branch)
 [![License](https://img.shields.io/github/license/vsanthanam/scorefive-2)](https://opensource.org/licenses/MIT)
 
 ## Setup
