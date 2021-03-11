@@ -11,12 +11,7 @@
         <attribute name="rawScoreLimit" attributeType="Integer 64" minValueString="50" defaultValueString="50" usesScalarValueType="YES"/>
         <attribute name="scoreCardData" attributeType="Binary"/>
     </entity>
-    <entity name="SavedPlayerMO" representedClassName="SavedPlayerMO" syncable="YES" codeGenerationType="class">
-        <attribute name="rawIdentifier" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="savedPlayerName" attributeType="String" defaultValueString="Player"/>
-    </entity>
     <elements>
         <element name="GameRecordMO" positionX="-403.6437377929688" positionY="686.5408630371094" width="128" height="164"/>
-        <element name="SavedPlayerMO" positionX="-387" positionY="765" width="128" height="59"/>
     </elements>
 </model>
