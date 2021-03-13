@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(name: "SnapKit",
                       organizationName: "Varun Santhanam",
+                      settings: .init(base: [:],
+                                      debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      defaultSettings: .recommended),
                       targets: [
                         Target(name: "SnapKit",
                                platform: .iOS,
@@ -9,10 +13,11 @@ let project = Project(name: "SnapKit",
                                bundleId: "com.varunsanthanam.SnapKit",
                                infoPlist: "SnapKit/Info.plist",
                                sources: ["SnapKit/**"],
-                               dependencies: [
-                                    /* Target dependencies can be defined here */
-                                    /* .framework(path: "framework") */
-                                ]),
+                               dependencies: [],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/SnapKit.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/SnapKit.xcconfig")),
+                                               defaultSettings: .recommended)),
                         Target(name: "SnapKitTests",
                                platform: .iOS,
                                product: .unitTests,
@@ -21,5 +26,9 @@ let project = Project(name: "SnapKit",
                                sources: ["SnapKitTests/**"],
                                dependencies: [
                                     .target(name: "SnapKit")
-                               ])
+                               ],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/SnapKitTests.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/SnapKitTests.xcconfig")),
+                                               defaultSettings: .recommended))
                       ])

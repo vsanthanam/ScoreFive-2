@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(name: "Countly",
                       organizationName: "Varun Santhanam",
+                      settings: .init(base: [:],
+                                      debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      defaultSettings: .recommended),
                       targets: [
                         Target(name: "Countly",
                                platform: .iOS,
@@ -12,10 +16,11 @@ let project = Project(name: "Countly",
                                headers: Headers(public: ["Countly/Sources/Public/**"],
                                                 private: [],
                                                 project: ["Countly/Sources/Project/**"]),
-                               dependencies: [
-                                    /* Target dependencies can be defined here */
-                                    /* .framework(path: "framework") */
-                                ]),
+                               dependencies: [],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/Countly.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/Countly.xcconfig")),
+                                               defaultSettings: .recommended)),
                         Target(name: "CountlyTests",
                                platform: .iOS,
                                product: .unitTests,
@@ -24,5 +29,9 @@ let project = Project(name: "Countly",
                                sources: ["CountlyTests/**"],
                                dependencies: [
                                     .target(name: "Countly")
-                               ])
+                               ],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/CountlyTests.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/CountlyTests.xcconfig")),
+                                               defaultSettings: .recommended))
                       ])

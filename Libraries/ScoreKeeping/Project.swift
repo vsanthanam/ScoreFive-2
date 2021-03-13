@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(name: "ScoreKeeping",
                       organizationName: "Varun Santhanam",
+                      settings: .init(base: [:],
+                                      debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      defaultSettings: .recommended),
                       targets: [
                           Target(name: "ScoreKeeping",
                                  platform: .iOS,
@@ -9,10 +13,11 @@ let project = Project(name: "ScoreKeeping",
                                  bundleId: "com.varunsanthanam.ScoreKeeping",
                                  infoPlist: "ScoreKeeping/Info.plist",
                                  sources: ["ScoreKeeping/**"],
-                                 dependencies: [
-                                     /* Target dependencies can be defined here */
-                                     /* .framework(path: "framework") */
-                                 ]),
+                                 dependencies: [],
+                                 settings: .init(base: [:],
+                                                 debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeeping.xcconfig")),
+                                                 release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeeping.xcconfig")),
+                                                 defaultSettings: .recommended)),
                           Target(name: "ScoreKeepingTests",
                                  platform: .iOS,
                                  product: .unitTests,
@@ -21,5 +26,9 @@ let project = Project(name: "ScoreKeeping",
                                  sources: ["ScoreKeepingTests/**"],
                                  dependencies: [
                                      .target(name: "ScoreKeeping"),
-                                 ]),
+                                 ],
+                                 settings: .init(base: [:],
+                                                 debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
+                                                 release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
+                                                 defaultSettings: .recommended)),
                       ])

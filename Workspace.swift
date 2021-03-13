@@ -10,12 +10,7 @@ let workspace = Workspace(name: "Workspace",
                               "Vendor/SnapKit",
                               "Vendor/NeedleFoundation",
                               "Vendor/Countly",
-                              "Vendor/FBSnapshotTestCase"
+                              "Vendor/FBSnapshotTestCase",
                           ],
                           schemes: [],
-                          additionalFiles: [
-                              "README.md",
-                              ".sftool-config",
-                              "LICENSE",
-                              "Workspace.swift",
-                          ])
+                          additionalFiles: [])

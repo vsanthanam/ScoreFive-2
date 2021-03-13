@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(name: "ScoreFive",
                       organizationName: "Varun Santhanam",
+                      settings: .init(base: [:],
+                                      debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      defaultSettings: .recommended),
                       targets: [
                           Target(name: "ScoreFive",
                                  platform: .iOS,
@@ -19,7 +23,13 @@ let project = Project(name: "ScoreFive",
                                      .project(target: "SnapKit", path: "../Vendor/SnapKit"),
                                      .project(target: "NeedleFoundation", path: "../Vendor/NeedleFoundation"),
                                      .project(target: "Countly", path: "../Vendor/Countly"),
+                                     .sdk(name: "UIKit.framework", status: .required),
+                                     .sdk(name: "Combine.framework", status: .required),
                                  ],
+                                 settings: .init(base: [:],
+                                                 debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
+                                                 release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
+                                                 defaultSettings: .recommended),
                                  coreDataModels: [
                                      CoreDataModel("ScoreFive/ScoreFive.xcdatamodeld", currentVersion: "ScoreFive"),
                                  ]),
@@ -31,6 +41,10 @@ let project = Project(name: "ScoreFive",
                                  sources: ["ScoreFiveTests/**"],
                                  dependencies: [
                                      .target(name: "ScoreFive"),
-                                     .project(target: "FBSnapshotTestCase", path: "../Vendor/FBSnapshotTestCase")
-                                 ]),
+                                     .project(target: "FBSnapshotTestCase", path: "../Vendor/FBSnapshotTestCase"),
+                                 ],
+                                 settings: .init(base: [:],
+                                                 debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFiveTests.xcconfig")),
+                                                 release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFiveTests.xcconfig")),
+                                                 defaultSettings: .recommended)),
                       ])

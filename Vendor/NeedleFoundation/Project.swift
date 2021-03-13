@@ -2,6 +2,10 @@ import ProjectDescription
 
 let project = Project(name: "NeedleFoundation",
                       organizationName: "Varun Santhanam",
+                      settings: .init(base: [:],
+                                      debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
+                                      defaultSettings: .recommended),
                       targets: [
                         Target(name: "NeedleFoundation",
                                platform: .iOS,
@@ -9,10 +13,11 @@ let project = Project(name: "NeedleFoundation",
                                bundleId: "com.varunsanthanam.NeedleFoundation",
                                infoPlist: "NeedleFoundation/Info.plist",
                                sources: ["NeedleFoundation/**"],
-                               dependencies: [
-                                    /* Target dependencies can be defined here */
-                                    /* .framework(path: "framework") */
-                                ]),
+                               dependencies: [],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundation.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundation.xcconfig")),
+                                               defaultSettings: .recommended)),
                         Target(name: "NeedleFoundationTests",
                                platform: .iOS,
                                product: .unitTests,
@@ -21,5 +26,9 @@ let project = Project(name: "NeedleFoundation",
                                sources: ["NeedleFoundationTests/**"],
                                dependencies: [
                                     .target(name: "NeedleFoundation")
-                               ])
+                               ],
+                               settings: .init(base: [:],
+                                               debug: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundationTests.xcconfig")),
+                                               release: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundationTests.xcconfig")),
+                                               defaultSettings: .recommended))
                       ])
