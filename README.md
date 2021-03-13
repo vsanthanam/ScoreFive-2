@@ -6,7 +6,7 @@
 
 ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
-Xcode projects are generated  via [tuist](https://tuist.io/docs/usage/get-started/), and are not checked into the repository.
+Xcode projects are generated via [Tuist](https://tuist.io), and are not checked into the repository.
 
 0. Install homebrew. More information is available at [https://brew.sh](https://brew.sh)
 
@@ -64,13 +64,13 @@ $ cd path/to/repo
 $ ./sftool gen mocks
 ```
 
-2. Run the tests with `xcodebuild` via with `sftool`
+2. Run the tests with `tuist test` via with `sftool`
 
 ```
 $ cd path/to/repo
 $ ./sftool test
 ```
-You can also open `ScoreFive.xcworkspae` and run the unit tests from within Xcode.
+You can also open the workspace with `./sftool develop` and run the unit tests from within Xcode.
 
 ### Running SwiftFormat
 
@@ -133,3 +133,16 @@ $ ./sftool analytics wipe
 ### Configuring SFTool
 
 To update the way SFTool behaves, you can edit the configuration file `/.sftool-config`. Here, you can edit things like the test target, swiftlint/swiftformat rules, needle & mockolo behavior, etc.
+
+### Continuous Integration
+
+I use BuildKite for continuous builds. If you want to fork this repo and setup your own pipeline, `sftool` provides a handy utility to communicate a the right script to your runners. My script looks like this:
+
+```
+$ cd /path/to/repo
+$ ./sftool gen ci > buildkite.sh
+$ chmod +x buildkite.sh
+$ /.buildkite.sh
+```
+
+You can customize the behavior of `./sftool gen ci` by editing `.sftool-config`.
