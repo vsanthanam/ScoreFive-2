@@ -87,8 +87,12 @@ enum Commands {
         return try decoder.decode(AnalyticsConfig.self, from: jsonData)
     }
 
-    static func runTests(_ root: String, name: String, os: String) throws -> String {
-        try shellOut(to: "xcodebuild -workspace \(root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(name),OS=\(os)' test")
+    static func runTests(_ root: String, name: String, os: String, verbose: Bool) throws -> String {
+        let command = "tuist test ScoreFive --device \"\(name)\" --os \(os)"
+        if verbose {
+            print("Running \(command)")
+        }
+        return try shellOut(to: command)
     }
 }
 

@@ -14,7 +14,7 @@
 			    "Analytics"]
     },
     "swiftlint": {
-        "excludeDirs": ["/Tooling"],
+        "excludeDirs": ["/Tooling", "/App/Derived"],
         "disabledRules": ["line_length",
                           "nesting",
                           "function_body_length",

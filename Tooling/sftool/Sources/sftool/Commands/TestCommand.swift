@@ -28,6 +28,9 @@ struct TestCommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "Simulator Version")
     var os: String?
+    
+    @Flag(name: .shortAndLong, help: "Verbose Logging")
+    var verbose: Bool = false
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)
@@ -36,7 +39,7 @@ struct TestCommand: ParsableCommand {
         print("Running tests on \(device) running \(os)")
         print("This might take a few minutes")
         do {
-            let results = try Commands.runTests(root, name: device, os: os)
+            let results = try Commands.runTests(root, name: device, os: os, verbose: verbose)
             print(results)
             print("Tests Complete! 🍻")
         } catch {
