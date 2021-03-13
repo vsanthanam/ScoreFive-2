@@ -9,6 +9,8 @@ App/ScoreFiveTests/FailureDiffs/
 .swiftformat
 .swiftlint.yml
 
+*.xcworkspace/
+*.xcodeproj/
 
 ### Objective-C ###
 # Xcode
