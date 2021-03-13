@@ -25,6 +25,7 @@ let project = Project(name: "ScoreFive",
                                      .project(target: "Countly", path: "../Vendor/Countly"),
                                      .sdk(name: "UIKit.framework", status: .required),
                                      .sdk(name: "Combine.framework", status: .required),
+                                     .sdk(name: "CoreData.framework", status: .required)
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
