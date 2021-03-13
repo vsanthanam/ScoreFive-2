@@ -1,6 +1,6 @@
 import ProjectDescription
 
-let workspace = Workspace(name: "Workspace",
+let workspace = Workspace(name: "ScoreFive",
                           projects: [
                               "App",
                               "Libraries/Analytics",

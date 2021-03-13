@@ -6,7 +6,7 @@
 
 ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
-Before opening the `.xcworkspace` and building the app, complete the following steps to setup the tooling
+Xcode projects are generated  via [tuist](https://tuist.io/docs/usage/get-started/), and are not checked into the repository.
 
 0. Install homebrew. More information is available at [https://brew.sh](https://brew.sh)
 
@@ -16,13 +16,20 @@ Before opening the `.xcworkspace` and building the app, complete the following s
 $ brew install needle
 ```
 
-2. ScoreFive uses [Mockolo](https://www.github.com/uber/mockolo) for efficient Swift mock generation. Install the mockolo code generation tools from uber/mockolo through homebrew. (This step is optional if you don't want to run the unit tests.)
+2. ScoreFive uses [Mockolo](https://www.github.com/uber/mockolo) for efficient Swift mock generation. Install the mockolo code generation tools from uber/mockolo through homebrew.
 
 ```
 $ brew install mockolo
 ```
 
-3. Rather than interfacing with the aformentioned tools directly. ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
+3. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation. Install tuist from the developers directly:
+
+```
+$ bash <(curl -Ls https://install.tuist.io)
+$ tuist
+```
+
+4. Rather than interfacing with the aformentioned tools directly. ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
 
 ```
 $ cd path/to/repo
@@ -37,7 +44,12 @@ $ cd path/to/repo
 $ ./sftool bootstrap
 ```
 
-After these steps have been taken, you can open `ScoreFive.xcworkspace` and run the app.
+5. Finally, you can generate the Xcode projects with `./sftool`
+
+```
+$ cd path/to/repo
+$ ./sftool develop
+```
 
 ## Development
 

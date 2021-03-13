@@ -28,7 +28,7 @@ struct TestCommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "Simulator Version")
     var os: String?
-    
+
     @Flag(name: .shortAndLong, help: "Verbose Logging")
     var verbose: Bool = false
 

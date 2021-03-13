@@ -17,7 +17,8 @@ struct sftool: ParsableCommand {
                       SwiftLintCommand.self,
                       BootstrapCommand.self,
                       AnalyticsCommand.self,
-                      TestCommand.self]
+                      TestCommand.self,
+                      DevelopCommand.self]
     )
 }
 
@@ -93,6 +94,19 @@ enum Commands {
             print("Running \(command)")
         }
         return try shellOut(to: command)
+    }
+
+    static func killXcode() throws {
+        try shellOut(to: "killall Xcode")
+    }
+
+    static func generate() throws {
+        try shellOut(to: "tuist generate")
+    }
+
+    static func openWorkspace(on root: String) throws {
+        let path = root + "/ScoreFive.xcworkspace"
+        try shellOut(to: "open \(path)")
     }
 }
 
