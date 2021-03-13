@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 import ShellOut
 
-struct GenerateMocks: ParsableCommand {
+struct GenerateMocksCommand: ParsableCommand {
 
     // MARK: - Initializers
 

@@ -19,6 +19,8 @@ struct GenerateCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "gen",
         abstract: "Generate code",
-        subcommands: [GenerateMocks.self, GenerateDependencyGraphCommand.self]
+        subcommands: [GenerateMocksCommand.self,
+                      GenerateDependencyGraphCommand.self,
+                      GenerateCICommand.self]
     )
 }
