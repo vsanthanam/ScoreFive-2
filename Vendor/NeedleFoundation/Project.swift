@@ -34,4 +34,10 @@ let project = Project(name: "NeedleFoundation",
                                                debug: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundationTests.xcconfig")),
                                                release: .settings([:], xcconfig: .relativeToManifest("Config/NeedleFoundationTests.xcconfig")),
                                                defaultSettings: .recommended))
+                      ],
+                      schemes: [
+                        .init(name: "NeedleFoundation",
+                              shared: true,
+                              buildAction: BuildAction(targets: ["NeedleFoundation"]),
+                              testAction: TestAction(targets: ["NeedleFoundationTests"]))
                       ])

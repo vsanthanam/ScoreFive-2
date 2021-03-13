@@ -34,4 +34,10 @@ let project = Project(name: "Countly",
                                                debug: .settings([:], xcconfig: .relativeToManifest("Config/CountlyTests.xcconfig")),
                                                release: .settings([:], xcconfig: .relativeToManifest("Config/CountlyTests.xcconfig")),
                                                defaultSettings: .recommended))
+                      ],
+                      schemes: [
+                        .init(name: "Countly",
+                              shared: true,
+                              buildAction: BuildAction(targets: ["Countly"]),
+                              testAction: TestAction(targets: ["CountlyTests"])),
                       ])

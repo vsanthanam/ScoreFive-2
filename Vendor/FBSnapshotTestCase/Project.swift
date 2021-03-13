@@ -21,4 +21,9 @@ let project = Project(name: "FBSnapshotTestCase",
                                                debug: .settings([:], xcconfig: .relativeToManifest("Config/FBSnapshotTestCase.xcconfig")),
                                                release: .settings([:], xcconfig: .relativeToManifest("Config/FBSnapshotTestCase.xcconfig")),
                                                defaultSettings: .recommended)),
+                      ],
+                      schemes: [
+                        .init(name: "FBSnapshotTestCase",
+                              shared: true,
+                              buildAction: BuildAction(targets: ["FBSnapshotTestCase"]))
                       ])

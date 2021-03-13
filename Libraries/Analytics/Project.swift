@@ -37,4 +37,10 @@ let project = Project(name: "Analytics",
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/AnalyticsTests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/AnalyticsTests.xcconfig")),
                                                  defaultSettings: .recommended)),
+                      ],
+                      schemes: [
+                          .init(name: "Analytics",
+                                shared: true,
+                                buildAction: BuildAction(targets: ["Analytics"]),
+                                testAction: TestAction(targets: ["AnalyticsTests"])),
                       ])

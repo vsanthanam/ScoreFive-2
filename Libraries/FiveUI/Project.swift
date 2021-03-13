@@ -36,4 +36,10 @@ let project = Project(name: "FiveUI",
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/FiveUITests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/FiveUITests.xcconfig")),
                                                  defaultSettings: .recommended)),
+                      ],
+                      schemes: [
+                          .init(name: "FiveUI",
+                                shared: true,
+                                buildAction: BuildAction(targets: ["FiveUI"]),
+                                testAction: TestAction(targets: ["FiveUITests"])),
                       ])

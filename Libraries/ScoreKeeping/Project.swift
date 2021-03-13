@@ -34,4 +34,10 @@ let project = Project(name: "ScoreKeeping",
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
                                                  defaultSettings: .recommended)),
+                      ],
+                      schemes: [
+                          .init(name: "ScoreKeeping",
+                                shared: true,
+                                buildAction: BuildAction(targets: ["ScoreKeeping"]),
+                                testAction: TestAction(targets: ["ScoreKeepingTests"])),
                       ])

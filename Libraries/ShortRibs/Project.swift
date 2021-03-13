@@ -34,4 +34,10 @@ let project = Project(name: "ShortRibs",
                                                  debug: .init(settings: [:], xcconfig: .relativeToManifest("Config/ShortRibsTests.xcconfig")),
                                                  release: .init(settings: [:], xcconfig: .relativeToManifest("Config/ShortRibsTests.xcconfig")),
                                                  defaultSettings: .recommended)),
+                      ],
+                      schemes: [
+                          .init(name: "ShortRibs",
+                                shared: true,
+                                buildAction: BuildAction(targets: ["ShortRibs"]),
+                                testAction: TestAction(targets: ["ShortRibsTests"])),
                       ])

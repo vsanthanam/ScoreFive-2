@@ -34,4 +34,10 @@ let project = Project(name: "SnapKit",
                                                debug: .settings([:], xcconfig: .relativeToManifest("Config/SnapKitTests.xcconfig")),
                                                release: .settings([:], xcconfig: .relativeToManifest("Config/SnapKitTests.xcconfig")),
                                                defaultSettings: .recommended))
+                      ],
+                      schemes: [
+                        .init(name: "SnapKit",
+                              shared: true,
+                              buildAction: BuildAction(targets: ["SnapKit"]),
+                              testAction: TestAction(targets: ["SnapKitTests"]))
                       ])
