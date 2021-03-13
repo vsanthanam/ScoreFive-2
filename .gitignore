@@ -8,6 +8,8 @@ App/ScoreFiveTests/Mocks.swift
 App/ScoreFiveTests/FailureDiffs/
 .swiftformat
 .swiftlint.yml
+Tuist/Config.swift
+
 
 *.xcworkspace/
 *.xcodeproj/

@@ -30,7 +30,7 @@ struct DevelopCommand: ParsableCommand {
 
     func run() throws {
         try? Commands.killXcode()
-        try Commands.generate()
+        try Commands.generate(on: root)
         if !dontOpenXcode {
             try Commands.openWorkspace(on: root)
         }
