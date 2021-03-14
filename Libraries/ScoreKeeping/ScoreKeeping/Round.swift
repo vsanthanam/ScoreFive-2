@@ -19,7 +19,7 @@ public struct Round: Codable, Equatable, Hashable {
 
     /// An create an empty `Round`
     public init() {
-        scores = [Player: Int]()
+        scores = [UUID: Int]()
     }
 
     /// Create a round with players but no score
@@ -34,12 +34,12 @@ public struct Round: Codable, Equatable, Hashable {
     public init(entries: [(Player, Int)]) {
         let players = entries.map { entry in entry.0 }
         precondition(entries.count == Set(players).count, "Entry must not contain duplicate players")
-        scores = entries.reduce([Player: Int]()) { scores, entry in
+        scores = entries.reduce([UUID: Int]()) { scores, entry in
             let (player, score) = entry
             precondition(score >= -1, "Entry must not contain scores less than 0")
             precondition(score <= 50, "Entry must not contain score greater than 50")
             var existing = scores
-            existing[player] = score
+            existing[player.uuid] = score
             return existing
         }
     }
@@ -63,11 +63,12 @@ public struct Round: Codable, Equatable, Hashable {
 
     // MARK: - API
 
-    /// The players in this round that have a score
-    public var players: [Player] {
+    /// The identifiers of the players in this round
+    public var playerIds: [UUID] {
         .init(scores.keys)
     }
 
+    /// Whether or not this round contains scores for every player it has.
     public var isComplete: Bool {
         !(scores.values.map { $0 == Round.noScore }.contains(true))
     }
@@ -75,7 +76,7 @@ public struct Round: Codable, Equatable, Hashable {
     /// Add a player to the round
     /// - Parameter player: The player to add
     public mutating func addPlayer(_ player: Player) {
-        set(score: Round.noScore, for: player)
+        set(score: Round.noScore, for: player.id)
     }
 
     /// Add players to the round
@@ -90,17 +91,21 @@ public struct Round: Codable, Equatable, Hashable {
     /// Remove a player from the round
     /// - Parameter player: The player to remove
     public mutating func removePlayer(_ player: Player) {
-        guard players.contains(player) else {
+        removePlayer(withId: player.id)
+    }
+
+    public mutating func removePlayer(withId id: UUID) {
+        guard playerIds.contains(id) else {
             fatalError("This round does not contain this player!")
         }
-        scores.removeValue(forKey: player)
+        scores.removeValue(forKey: id)
     }
 
     /// Retrieve the score for player stored in this round
     /// - Parameter player: The player to retrieve the score
     /// - Returns: The score fo the player if it exists in this round, or `nil` if no such player exists
-    public func score(for player: Player) -> Int? {
-        scores[player]
+    public func score(for playerId: UUID) -> Int? {
+        scores[playerId]
     }
 
     /// Set the score for a player in the round
@@ -109,36 +114,39 @@ public struct Round: Codable, Equatable, Hashable {
     ///   - player: The player to hold the score
     /// - Note: If the round already contains a score for the player, the previous value is replaced
     /// - Note: This method produces a run-time failure if the provided score is invalid
-    public mutating func set(score: Int, for player: Player) {
+    public mutating func set(score: Int, for playerId: UUID) {
         precondition(score >= -1, "Score must be greater than 0")
         precondition(score <= 50, "Score must be less than or equal to 50")
-        scores[player] = score
+        scores[playerId] = score
     }
 
     /// Remove a score from a player
     /// - Parameter player: The player to remove the score
-    public mutating func removeScore(for player: Player) {
-        set(score: Round.noScore, for: player)
+    public mutating func removeScore(for playerId: UUID) {
+        guard playerIds.contains(playerId) else {
+            fatalError("You cannot remove a score from a player not stored in this round!")
+        }
+        set(score: Round.noScore, for: playerId)
     }
 
     // MARK: - Subscript
 
     /// Subscriptable interface to retrieve, add and remove scores from the round
-    public subscript(player: Player) -> Int? {
+    public subscript(playerId: UUID) -> Int? {
         get {
-            score(for: player)
+            score(for: playerId)
         }
 
         set {
             if let score = newValue {
-                set(score: score, for: player)
+                set(score: score, for: playerId)
             } else {
-                removePlayer(player)
+                removePlayer(withId: playerId)
             }
         }
     }
 
     // MARK: - Private
 
-    private var scores: [Player: Int]
+    private var scores: [UUID: Int]
 }

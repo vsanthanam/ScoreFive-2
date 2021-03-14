@@ -37,6 +37,13 @@ public struct Player: Codable, Hashable, Equatable, Identifiable {
     public var id: ID {
         uuid
     }
+
+    // MARK: - Hashable
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(uuid)
+    }
 }
 
 public func == (lhs: Player, rhs: Player) -> Bool {

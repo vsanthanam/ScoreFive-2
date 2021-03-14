@@ -83,7 +83,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
                 var models = [RoundCellModel]()
                 for i in 0 ..< card.rounds.count {
                     let round = card[i]
-                    let scores = card.orderedPlayers.map { round[$0] }
+                    let scores = card.orderedPlayers.map { round[$0.id] }
                     let index = indexByPlayer ? String(card.startingPlayer(atIndex: i).name.prefix(1)) : String(i + 1)
                     let model = RoundCellModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(at: i))
                     models.append(model)

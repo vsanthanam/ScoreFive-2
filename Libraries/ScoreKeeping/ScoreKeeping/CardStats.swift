@@ -87,8 +87,8 @@ extension ScoreCard {
     var allScores: [Int] {
         let scores: [Int?] = rounds.reduce([]) { scores, round in
             var newScores = scores
-            for player in round.players {
-                newScores.append(round[player])
+            for id in round.playerIds {
+                newScores.append(round.score(for: id))
             }
             return newScores
         }
@@ -99,7 +99,7 @@ extension ScoreCard {
         rounds
             .reduce([]) { scores, round in
                 var newScores = scores
-                newScores.append(round[player])
+                newScores.append(round[player.id])
                 return newScores
             }
             .compactMap { $0 }

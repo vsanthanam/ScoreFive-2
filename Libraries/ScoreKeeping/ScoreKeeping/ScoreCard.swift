@@ -232,10 +232,10 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     public mutating func addRound(_ round: Round) {
         precondition(round.isComplete, "This round is missing scores and cannot be added until it has a score for every player")
         precondition(canAddRounds, "This game cannot accept rounds unless its score limit is increased or existing rounds are removed")
-        precondition(Set(round.players) == Set(activePlayers), "Round players do not match currently active players")
+        precondition(Set(round.playerIds) == Set(activePlayers.map(\.uuid)), "Round players do not match currently active players")
         let zeros = round.containedScores.filter { score in score == 0 }
         precondition(zeros.count >= 1, "Round must contain at least 1 winner before being added")
-        precondition(zeros.count < round.players.count, "Round must contain 1 loser before being added")
+        precondition(zeros.count < round.playerIds.count, "Round must contain 1 loser before being added")
         rounds.append(round)
         precondition(activePlayers.count >= 1, "Round must leave at least one player standing after being added")
     }
@@ -275,7 +275,7 @@ public struct ScoreCard: Codable, Equatable, Hashable {
                 round.containsScore(for: player)
             }
             .reduce(0) { total, round in
-                total + (round.score(for: player) ?? 0)
+                total + (round.score(for: player.id) ?? 0)
             }
     }
 }
@@ -283,11 +283,11 @@ public struct ScoreCard: Codable, Equatable, Hashable {
 private extension Round {
 
     func containsScore(for player: Player) -> Bool {
-        score(for: player) != Round.noScore
+        score(for: player.id) != Round.noScore
     }
 
     var containedScores: [Int] {
-        players
+        playerIds
             .map(score(for:))
             .compactMap { $0 }
             .filter { $0 != Round.noScore }

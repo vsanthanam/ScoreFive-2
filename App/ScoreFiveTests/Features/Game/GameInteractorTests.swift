@@ -188,7 +188,7 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(card.rounds.count, 0)
 
         for i in 0 ..< card.orderedPlayers.count {
-            round[card.orderedPlayers[i]] = i
+            round[card.orderedPlayers[i].id] = i
         }
 
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)

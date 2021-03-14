@@ -60,12 +60,12 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
         players = card.activePlayers(at: replacingIndex ?? card.rounds.count - 1)
 
-        guard Set(players) == Set(round.players) else {
+        guard Set(players.map(\.uuid)) == Set(round.playerIds) else {
             listener?.newRoundDidResign()
             return
         }
 
-        if let score = round[players[currentPlayerIndex]], score != Round.noScore {
+        if let score = round[players[currentPlayerIndex].id], score != Round.noScore {
             presenter.setVisibleScore(score, with: .instant)
         }
 
@@ -87,8 +87,8 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             return
         }
         if score < 0 || score > 50 {
-            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
-            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+            round[players[currentPlayerIndex].id] = initialRound[players[currentPlayerIndex].id]
+            presenter.setVisibleScore(round[players[currentPlayerIndex].id], with: .error)
         } else if userSettingsProvider.advanceScoreEntryAutomatically, (score >= 6 || score == 0) {
             saveScore(score)
         }
@@ -101,7 +101,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
         currentPlayerIndex -= 1
         let player = players[currentPlayerIndex]
-        presenter.setVisibleScore(round[player], with: .backward)
+        presenter.setVisibleScore(round[player.id], with: .backward)
         presenter.setPlayerName(player.name)
     }
 
@@ -112,7 +112,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
         currentPlayerIndex += 1
         let player = players[currentPlayerIndex]
-        presenter.setVisibleScore(round[player], with: .forward)
+        presenter.setVisibleScore(round[player.id], with: .forward)
         presenter.setPlayerName(player.name)
     }
 
@@ -128,17 +128,17 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         isSaving = true
 
         let zeroes = players
-            .compactMap { round.score(for: $0) }
+            .compactMap { round.score(for: $0.id) }
             .filter { $0 == 0 }
         guard !zeroes.isEmpty else {
-            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
-            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+            round[players[currentPlayerIndex].id] = initialRound[players[currentPlayerIndex].id]
+            presenter.setVisibleScore(round[players[currentPlayerIndex].id], with: .error)
             isSaving = false
             return
         }
         guard zeroes.count < players.count else {
-            round[players[currentPlayerIndex]] = initialRound[players[currentPlayerIndex]]
-            presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+            round[players[currentPlayerIndex].id] = initialRound[players[currentPlayerIndex].id]
+            presenter.setVisibleScore(round[players[currentPlayerIndex].id], with: .error)
             isSaving = false
             return
         }
@@ -152,7 +152,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 isSaving = false
                 currentPlayerIndex = 0
                 round = initialRound
-                presenter.setVisibleScore(round[players[currentPlayerIndex]], with: .error)
+                presenter.setVisibleScore(round[players[currentPlayerIndex].id], with: .error)
                 presenter.showResetError()
                 presenter.setPlayerName(players[currentPlayerIndex].name)
             }
@@ -163,12 +163,12 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
     private func saveScore(_ score: Int) {
         let player = players[currentPlayerIndex]
-        round[player] = score
+        round[player.id] = score
 
         if currentPlayerIndex < players.count - 1 {
             currentPlayerIndex += 1
             let nextPlayer = players[currentPlayerIndex]
-            let score = round[nextPlayer]
+            let score = round[nextPlayer.id]
             presenter.setVisibleScore(score, with: .forward)
             presenter.setPlayerName(players[currentPlayerIndex].name)
         } else {
