@@ -133,9 +133,9 @@ open class Interactor: Interactable {
     }
 }
 
-extension Publisher where Failure == Never {
+public extension Publisher where Failure == Never {
 
-    public func confine(to interactor: Interactable) -> AnyPublisher<Output, Failure> {
+    func confine(to interactor: Interactable) -> AnyPublisher<Output, Failure> {
         combineLatest(interactor.isActiveStream) { element, isActive in
             (element, isActive)
         }
@@ -150,10 +150,10 @@ extension Publisher where Failure == Never {
 
 }
 
-extension Cancellable {
+public extension Cancellable {
 
     @discardableResult
-    public func cancelOnDeactivate(interactor: Interactor) -> Cancellable {
+    func cancelOnDeactivate(interactor: Interactor) -> Cancellable {
         if !interactor.store(cancellable: self) {
             cancel()
         }

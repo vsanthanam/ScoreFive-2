@@ -160,10 +160,10 @@ open class Worker: Working {
 
 }
 
-extension Cancellable {
+public extension Cancellable {
 
     @discardableResult
-    public func cancelOnStop(worker: Worker) -> Cancellable {
+    func cancelOnStop(worker: Worker) -> Cancellable {
         if !worker.store(cancellable: self) {
             cancel()
         }

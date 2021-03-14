@@ -89,7 +89,8 @@ enum Commands {
     }
 
     static func runTests(_ root: String, name: String, os: String, verbose: Bool) throws -> String {
-        let command = "tuist test ScoreFive --device \"\(name)\" --os \(os)"
+        let tuistCommand = root + "/bin/tuist/tuist"
+        let command = "\(tuistCommand) test ScoreFive --device \"\(name)\" --os \(os)"
         if verbose {
             print("Running \(command)")
         }
@@ -104,7 +105,8 @@ enum Commands {
 
     static func generate(on root: String) throws {
         try tuist(on: root) {
-            try shellOut(to: "tuist generate")
+            let command = root + "/bin/tuist/tuist"
+            return try shellOut(to: "\(command) generate")
         }
     }
 
@@ -116,11 +118,11 @@ enum Commands {
     static func swiftlint(on root: String) -> String {
         root + "/bin/swiftlint/swiftlint"
     }
-    
+
     static func swiftformat(on root: String) -> String {
         root + "/bin/swiftformat/swiftformat"
     }
-    
+
     fileprivate static func needle(on root: String) -> String {
         root + "/bin/needle/needle"
     }

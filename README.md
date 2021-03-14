@@ -11,30 +11,14 @@ ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
 Xcode projects are generated using the provided tooling, and are not checked into the repo.
 
-1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation. Install tuist from the developers directly:
-
-```
-$ bash <(curl -Ls https://install.tuist.io)
-$ tuist
-```
-
-2. In addition to Tuist, ScoreFive uses `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
-
-```
-$ cd path/to/repo
-$ cd swift build --package-path Tooling/sftool --configuration release
-$ cp Tooling/sftool/.build/release/sftool bin/sftool/sftool
-$ ln -s bin/sftool/sftool sftool
-```
-
-Alternatively, you can use the provided script to build sftool
+1. In addition to Tuist, ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
 
 ```
 $ cd path/to/repo
 $ ./update-sftool.sh
 ```
 
-3. Prepare the repository for development
+2. Prepare the repository for development
 
 ```
 $ cd path/to/repo
@@ -42,7 +26,7 @@ $ ./sftool bootstrap
 ```
 > *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/` and right click on the included binaries and click "open". This will tell the OS that you're okay to run them.
 
-4. Finally, you can generate the Xcode projects with `./sftool`
+3. Finally, you can generate the Xcode projects with `./sftool`
 
 ```
 $ cd path/to/repo

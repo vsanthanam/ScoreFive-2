@@ -26,7 +26,8 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
 
     init(presenter: GameLibraryPresentable,
          gameStorageManager: GameStorageManaging,
-         userSettingsProvider: UserSettingsProviding) {
+         userSettingsProvider: UserSettingsProviding)
+    {
         self.gameStorageManager = gameStorageManager
         self.userSettingsProvider = userSettingsProvider
         super.init(presenter: presenter)

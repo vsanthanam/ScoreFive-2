@@ -8,11 +8,12 @@
 import Foundation
 import UIKit
 
-extension UINavigationController {
+public extension UINavigationController {
 
-    public func pushViewController(viewController: UIViewController,
-                                   animated: Bool,
-                                   completion: (() -> Void)?) {
+    func pushViewController(viewController: UIViewController,
+                            animated: Bool,
+                            completion: (() -> Void)?)
+    {
         pushViewController(viewController, animated: animated)
         guard animated, let coordinator = transitionCoordinator else {
             defer {
@@ -24,9 +25,10 @@ extension UINavigationController {
     }
 
     @discardableResult
-    public func popToViewController(_ viewController: UIViewController,
-                                    animated: Bool,
-                                    completion: (() -> Void)?) -> [UIViewController]? {
+    func popToViewController(_ viewController: UIViewController,
+                             animated: Bool,
+                             completion: (() -> Void)?) -> [UIViewController]?
+    {
         let vcs = popToViewController(viewController, animated: animated)
         guard animated, let coordinator = transitionCoordinator else {
             defer {
@@ -38,7 +40,7 @@ extension UINavigationController {
         return vcs
     }
 
-    public func popViewController(animated: Bool, completion: (() -> Void)?) {
+    func popViewController(animated: Bool, completion: (() -> Void)?) {
         popViewController(animated: animated)
         guard animated, let coordinator = transitionCoordinator else {
             defer {

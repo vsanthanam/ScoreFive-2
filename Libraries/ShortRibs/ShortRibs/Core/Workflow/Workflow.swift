@@ -157,7 +157,8 @@ open class Step<WorkflowActionableItemType, ActionableItemType, ValueType> {
     // MARK: - Private
 
     fileprivate init(workflow: Workflow<WorkflowActionableItemType>,
-                     publisher: AnyPublisher<(ActionableItemType, ValueType), Error>) {
+                     publisher: AnyPublisher<(ActionableItemType, ValueType), Error>)
+    {
         self.workflow = workflow
         self.publisher = publisher
     }
@@ -167,14 +168,14 @@ open class Step<WorkflowActionableItemType, ActionableItemType, ValueType> {
 }
 
 /// `Workflow` related obervable extensions.
-extension Publisher {
+public extension Publisher {
 
     /// Fork the step from this obervable.
     ///
     /// - parameter workflow: The workflow this step belongs to.
     /// - returns: The newly forked step in the workflow. `nil` if this observable does not conform to the required
     ///   generic type of (ActionableItemType, ValueType).
-    public func fork<WorkflowActionableItemType, ActionableItemType, ValueType>(_ workflow: Workflow<WorkflowActionableItemType>) -> Step<WorkflowActionableItemType, ActionableItemType, ValueType>? {
+    func fork<WorkflowActionableItemType, ActionableItemType, ValueType>(_ workflow: Workflow<WorkflowActionableItemType>) -> Step<WorkflowActionableItemType, ActionableItemType, ValueType>? {
         guard let stepPublisher = eraseToAnyPublisher() as? AnyPublisher<(ActionableItemType, ValueType), Error> else {
             return nil
         }
@@ -184,7 +185,7 @@ extension Publisher {
 }
 
 /// `Workflow` related `Disposable` extensions.
-extension Cancellable {
+public extension Cancellable {
 
     /// Dispose the subscription when the given `Workflow` is disposed.
     ///
@@ -195,14 +196,14 @@ extension Cancellable {
     /// - note: This is the preferred method when trying to confine a subscription to the lifecycle of a `Workflow`.
     ///
     /// - parameter workflow: The workflow to dispose the subscription with.
-    public func cancelWith<ActionableItemType>(workflow: Workflow<ActionableItemType>) {
+    func cancelWith<ActionableItemType>(workflow: Workflow<ActionableItemType>) {
         store(in: &workflow.compositeCancellable)
     }
 }
 
-extension Publisher {
+public extension Publisher {
 
-    public func subscribe() -> Cancellable {
+    func subscribe() -> Cancellable {
         sink(receiveCompletion: { _ in },
              receiveValue: { _ in })
     }

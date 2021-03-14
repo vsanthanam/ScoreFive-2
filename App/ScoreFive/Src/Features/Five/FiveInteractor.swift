@@ -29,7 +29,8 @@ final class FiveInteractor: PresentableInteractor<FivePresentable>, FiveInteract
          mutableActiveGameStream: MutableActiveGameStreaming,
          gameStorageWorker: GameStorageWorking,
          homeBuilder: HomeBuildable,
-         gameBuilder: GameBuildable) {
+         gameBuilder: GameBuildable)
+    {
         self.mutableActiveGameStream = mutableActiveGameStream
         self.gameStorageWorker = gameStorageWorker
         self.homeBuilder = homeBuilder
@@ -45,8 +46,9 @@ final class FiveInteractor: PresentableInteractor<FivePresentable>, FiveInteract
         gameStorageWorker.start(on: self)
         let records = (try? gameStorageWorker.fetchGameRecords()) ?? []
         if records.count == 1,
-            let record = records.first,
-            record.inProgress {
+           let record = records.first,
+           record.inProgress
+        {
             mutableActiveGameStream.activateGame(with: record.uniqueIdentifier)
         }
         startUpdatingActiveChild()

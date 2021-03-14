@@ -24,13 +24,15 @@ open class ComponentizedBuilder<Component, Interactor, DynamicBuildDependency, D
     }
 
     public final func build(withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
-                            dynamicComponentDependency: DynamicComponentDependency) -> Interactor {
+                            dynamicComponentDependency: DynamicComponentDependency) -> Interactor
+    {
         build(withDynamicBuildDependency: dynamicBuildDependency,
               dynamicComponentDependency: dynamicComponentDependency).1
     }
 
     public final func build(withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency,
-                            dynamicComponentDependency: DynamicComponentDependency) -> (Component, Interactor) {
+                            dynamicComponentDependency: DynamicComponentDependency) -> (Component, Interactor)
+    {
         let component = componentBuilder(dynamicComponentDependency)
         let newComponent = component as AnyObject
         assert(lastComponent !== newComponent, "componentBuilder should produce new instances of component when build is invoked")

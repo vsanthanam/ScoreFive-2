@@ -97,7 +97,7 @@ final class GameLibraryViewController: ScopeViewController, GameLibraryPresentab
                                                                                        view.dequeueConfiguredReusableCell(using: cellRegistratation,
                                                                                                                           for: indexPath,
                                                                                                                           item: model)
-                                                                                    })
+                                                                                   })
         return dataSource
     }()
 

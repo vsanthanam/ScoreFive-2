@@ -80,7 +80,8 @@ open class BaseScopeViewController<T>: UIViewController, ViewControllable where 
                                                         .viewWillAppear,
                                                         .viewWillDisappear],
                         once: Bool = false,
-                        closure: @escaping () -> Void) {
+                        closure: @escaping () -> Void)
+    {
         confineTo(viewEvents: viewEvents,
                   value: (),
                   once: once,
@@ -98,7 +99,8 @@ open class BaseScopeViewController<T>: UIViewController, ViewControllable where 
                                                            .viewWillDisappear],
                            value: T,
                            once: Bool = false,
-                           closure: @escaping (T) -> Void) {
+                           closure: @escaping (T) -> Void)
+    {
         var confined = Just<T>(value)
             .eraseToAnyPublisher()
             .confineTo(viewEvents: viewEvents,
@@ -206,16 +208,16 @@ open class ScopeViewController: BaseScopeViewController<ScopeView> {
     }
 }
 
-extension Cancellable {
+public extension Cancellable {
     @discardableResult
-    public func cancelOnDeinit<T>(_ viewController: BaseScopeViewController<T>) -> Cancellable {
+    func cancelOnDeinit<T>(_ viewController: BaseScopeViewController<T>) -> Cancellable {
         viewController.store(cancellable: self)
         return self
     }
 }
 
-extension Set where Element: Cancellable {
-    public func cancelOnDeinit<T>(_ viewController: BaseScopeViewController<T>) {
+public extension Set where Element: Cancellable {
+    func cancelOnDeinit<T>(_ viewController: BaseScopeViewController<T>) {
         forEach { cancellable in
             cancellable.cancelOnDeinit(viewController)
         }

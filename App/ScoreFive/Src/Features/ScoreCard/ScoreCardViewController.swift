@@ -65,7 +65,7 @@ final class ScoreCardViewController: ScopeViewController, ScoreCardPresentable, 
         let dataSource = UICollectionViewDiffableDataSource<Int, RoundCellModel>(collectionView: collectionView,
                                                                                  cellProvider: { view, indexPath, model in
                                                                                      view.dequeueConfiguredReusableCell(using: cellRegistratation, for: indexPath, item: model)
-                                                                                       })
+                                                                                 })
         return dataSource
     }()
 

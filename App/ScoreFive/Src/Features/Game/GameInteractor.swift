@@ -36,7 +36,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
          activeGameStream: ActiveGameStreaming,
          newRoundBuilder: NewRoundBuildable,
          scoreCardBuilder: ScoreCardBuildable,
-         gameSettingsBuilder: GameSettingsBuildable) {
+         gameSettingsBuilder: GameSettingsBuildable)
+    {
         self.gameStorageManager = gameStorageManager
         self.activeGameStream = activeGameStream
         self.newRoundBuilder = newRoundBuilder
@@ -63,7 +64,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func wantNewRound() {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-            let card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+              let card = try? gameStorageManager.fetchScoreCard(for: identifier)
+        else {
             return
         }
         let round = card.newRound()
@@ -82,7 +84,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func scoreCardDidDeleteRound(at index: Int) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-            var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
+        else {
             presenter.showOperationFailure("Couldn't read current game data from disk")
             return
         }
@@ -96,7 +99,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func scoreCardWantToEditRound(at index: Int) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-            let card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+              let card = try? gameStorageManager.fetchScoreCard(for: identifier)
+        else {
             return
         }
         routeToNewRound(using: card[index], replacing: index)
@@ -110,7 +114,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func newRoundDidAddRound(_ round: Round) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-            var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
+        else {
             presenter.showOperationFailure("Couldn't read current game data from disk")
             return
         }
@@ -125,7 +130,8 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func newRoundDidReplaceRound(at index: Int, with round: Round) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-            var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
+        else {
             presenter.showOperationFailure("Couldn't read current game data from disk")
             return
         }

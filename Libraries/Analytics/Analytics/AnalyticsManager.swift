@@ -47,7 +47,8 @@ public final class AnalyticsManager: AnalyticsManaging {
     /// - Parameter config: The configuration, used to determine where to send events
     public func startAnalytics(with config: AnalyticsConfig) {
         guard let appKey = config.appKey,
-            let host = config.host else {
+              let host = config.host
+        else {
             isStarted = true
             return
         }

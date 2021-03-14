@@ -107,7 +107,8 @@ final class NewRoundInteractorTests: TestCase {
     }
 
     private func buildInteractor(round: Round,
-                                 index: Int? = nil) {
+                                 index: Int? = nil)
+    {
         interactor = .init(presenter: presenter,
                            activeGameStream: activeGameStream,
                            gameStorageProvider: gameStorageProvider,

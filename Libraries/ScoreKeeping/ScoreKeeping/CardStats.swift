@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension ScoreCard {
+public extension ScoreCard {
 
     /// Average score in this card
-    public var averageScore: Int {
+    var averageScore: Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -18,7 +18,7 @@ extension ScoreCard {
     }
 
     /// Average score in this card, excluding zeroes
-    public var averageNonZeroScore: Int {
+    var averageNonZeroScore: Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -28,7 +28,7 @@ extension ScoreCard {
     /// Average score for a player in this card
     /// - Parameter player: The player
     /// - Returns: The score
-    public func averageScore(for player: Player) -> Int {
+    func averageScore(for player: Player) -> Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -38,7 +38,7 @@ extension ScoreCard {
     /// Average score for a player in this card, excluding zeroes
     /// - Parameter player: The player
     /// - Returns: The score
-    public func averageNonZeroScore(for player: Player) -> Int {
+    func averageNonZeroScore(for player: Player) -> Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -46,7 +46,7 @@ extension ScoreCard {
     }
 
     /// Best score in this round, excluding zeros
-    public var bestNonZeroScore: Int {
+    var bestNonZeroScore: Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -54,7 +54,7 @@ extension ScoreCard {
     }
 
     /// Worst score in this round, excluding 50s
-    public var worstNonFiftyScore: Int {
+    var worstNonFiftyScore: Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -64,7 +64,7 @@ extension ScoreCard {
     /// Best score for the player, given a player, excluding zeros
     /// - Parameter player: The player
     /// - Returns: The score
-    public func bestNonZeroScore(for player: Player) -> Int {
+    func bestNonZeroScore(for player: Player) -> Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }
@@ -74,7 +74,7 @@ extension ScoreCard {
     /// Worst score for the player, given a player, excluding 50s
     /// - Parameter player: The player
     /// - Returns: The score
-    public func worstNonFiftyScore(for player: Player) -> Int {
+    func worstNonFiftyScore(for player: Player) -> Int {
         guard !rounds.isEmpty else {
             fatalError("This game has no scores")
         }

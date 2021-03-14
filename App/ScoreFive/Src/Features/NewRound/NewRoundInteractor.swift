@@ -33,7 +33,8 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
          gameStorageProvider: GameStorageProviding,
          userSettingsProvider: UserSettingsProviding,
          replacingIndex: Int?,
-         round: Round) {
+         round: Round)
+    {
         self.activeGameStream = activeGameStream
         self.gameStorageProvider = gameStorageProvider
         self.userSettingsProvider = userSettingsProvider
@@ -53,7 +54,8 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     override func didBecomeActive() {
         super.didBecomeActive()
         guard let id = activeGameStream.currentActiveGameIdentifier,
-            let card = try? gameStorageProvider.fetchScoreCard(for: id) else {
+              let card = try? gameStorageProvider.fetchScoreCard(for: id)
+        else {
             listener?.newRoundDidResign()
             return
         }
@@ -145,8 +147,9 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
         if let index = replacingIndex {
             if let identifier = activeGameStream.currentActiveGameIdentifier,
-                let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
-                card.canReplaceRound(at: index, with: round) {
+               let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
+               card.canReplaceRound(at: index, with: round)
+            {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
             } else {
                 isSaving = false

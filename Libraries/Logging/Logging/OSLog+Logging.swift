@@ -8,9 +8,9 @@
 import Foundation
 import os.log
 
-extension OSLog {
-    public static let standard: OSLog = .init(subsystem: .subsystem, category: "ScoreFive")
-    public static let analytics: OSLog = .init(subsystem: .subsystem, category: "Analytics")
+public extension OSLog {
+    static let standard: OSLog = .init(subsystem: .subsystem, category: "ScoreFive")
+    static let analytics: OSLog = .init(subsystem: .subsystem, category: "Analytics")
 }
 
 private extension String {

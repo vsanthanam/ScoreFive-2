@@ -8,103 +8,103 @@
 import Foundation
 import UIKit
 
-extension UIColor {
+public extension UIColor {
 
     // MARK: - Semantic Colors
 
-    public static var transparent: UIColor {
+    static var transparent: UIColor {
         ColorPalette.Transparent
     }
 
-    public static var shadowColor: UIColor {
+    static var shadowColor: UIColor {
         dynamicDarkPrimary
     }
 
-    public static var backgroundPrimary: UIColor {
+    static var backgroundPrimary: UIColor {
         dynamicLightPrimary
     }
 
-    public static var backgroundSecondary: UIColor {
+    static var backgroundSecondary: UIColor {
         dynamicLightSecondary
     }
 
-    public static var backgroundTertiary: UIColor {
+    static var backgroundTertiary: UIColor {
         dynamicLightTertiary
     }
 
-    public static var backgroundInversePrimary: UIColor {
+    static var backgroundInversePrimary: UIColor {
         dynamicDarkPrimary
     }
 
-    public static var backgroundInverseSecondary: UIColor {
+    static var backgroundInverseSecondary: UIColor {
         dynamicDarkSecondary
     }
 
-    public static var backgrondInverserTertiary: UIColor {
+    static var backgrondInverserTertiary: UIColor {
         dynamicDarkTertiary
     }
 
-    public static var contentPrimary: UIColor {
+    static var contentPrimary: UIColor {
         dynamicDarkPrimary
     }
 
-    public static var contentSecondary: UIColor {
+    static var contentSecondary: UIColor {
         dynamicDarkSecondary
     }
 
-    public static var contentTertiary: UIColor {
+    static var contentTertiary: UIColor {
         dynamicDarkTertiary
     }
 
-    public static var contentInversePrimary: UIColor {
+    static var contentInversePrimary: UIColor {
         dynamicLightPrimary
     }
 
-    public static var contentInverseSecondary: UIColor {
+    static var contentInverseSecondary: UIColor {
         dynamicLightSecondary
     }
 
-    public static var contentInverseTertiary: UIColor {
+    static var contentInverseTertiary: UIColor {
         dynamicLightTertiary
     }
 
-    public static var contentOnColorPrimary: UIColor {
+    static var contentOnColorPrimary: UIColor {
         staticLightPrimary
     }
 
-    public static var contentOnColorSecondary: UIColor {
+    static var contentOnColorSecondary: UIColor {
         staticLightSecondary
     }
 
-    public static var contentOnColorInversePrimary: UIColor {
+    static var contentOnColorInversePrimary: UIColor {
         staticDarkPrimary
     }
 
-    public static var contentOnColorInverseSecondary: UIColor {
+    static var contentOnColorInverseSecondary: UIColor {
         staticDarkSecondary
     }
 
-    public static var contentOnColorInverseTertiary: UIColor {
+    static var contentOnColorInverseTertiary: UIColor {
         staticDarkTertiary
     }
 
-    public static var contentAccentPrimary: UIColor {
+    static var contentAccentPrimary: UIColor {
         staticThemePrimary
     }
 
-    public static var contentAccentSecondary: UIColor {
+    static var contentAccentSecondary: UIColor {
         staticThemeSecondary
     }
 
-    public static var controlDisabled: UIColor {
+    static var controlDisabled: UIColor {
         ColorPalette.Grey500
     }
 
-    public static var contentPositive: UIColor {
+    static var contentPositive: UIColor {
         ColorPalette.Green700
     }
 
-    public static var contentNegative: UIColor {
+    static var contentNegative: UIColor {
         ColorPalette.Red700
     }
 
