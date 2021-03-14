@@ -26,6 +26,15 @@ struct GenerateCICommand: ParsableCommand {
         let configuration = try fetchConfiguration(on: root)
         let device = configuration.testConfig.device
         let os = configuration.testConfig.os
-        print("./sftool analytics wipe && ./sftool gen mocks && ./sftool gen deps && tuist test ScoreFive --device \"\(device)\" --os \(os)")
+        let script = """
+        #! /bin/sh
+        ./sftool analytics wipe
+        ./sftool gen deps
+        ./sftool gen mocks
+        ./sftool develop -d
+        set -euo pipefail
+        xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
+        """
+        print(script)
     }
 }
