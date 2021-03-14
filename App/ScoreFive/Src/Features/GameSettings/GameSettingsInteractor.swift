@@ -20,6 +20,11 @@ protocol GameSettingsListener: AnyObject {
 
 final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentable>, GameSettingsInteractable, GameSettingsPresentableListener {
 
+    override init(presenter: GameSettingsPresentable) {
+        super.init(presenter: presenter)
+        presenter.listener = self
+    }
+    
     // MARK: - API
 
     weak var listener: GameSettingsListener?

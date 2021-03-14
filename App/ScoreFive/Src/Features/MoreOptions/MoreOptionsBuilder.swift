@@ -33,7 +33,6 @@ final class MoreOptionsBuilder: ComponentizedBuilder<MoreOptionsComponent, Prese
         let listener = dynamicBuildDependency
         let viewController = MoreOptionsViewController()
         let interactor = MoreOptionsInteractor(presenter: viewController)
-        viewController.listener = interactor
         interactor.listener = listener
         return interactor
     }

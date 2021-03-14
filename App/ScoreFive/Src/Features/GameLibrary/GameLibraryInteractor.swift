@@ -30,6 +30,7 @@ final class GameLibraryInteractor: PresentableInteractor<GameLibraryPresentable>
         self.gameStorageManager = gameStorageManager
         self.userSettingsProvider = userSettingsProvider
         super.init(presenter: presenter)
+        presenter.listener = self
     }
 
     // MARK: - API

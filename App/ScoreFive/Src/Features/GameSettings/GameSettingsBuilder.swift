@@ -33,7 +33,6 @@ final class GameSettingsBuilder: ComponentizedBuilder<GameSettingsComponent, Pre
         let listener = dynamicBuildDependency
         let viewController = GameSettingsViewController()
         let interactor = GameSettingsInteractor(presenter: viewController)
-        viewController.listener = interactor
         interactor.listener = listener
         return interactor
     }

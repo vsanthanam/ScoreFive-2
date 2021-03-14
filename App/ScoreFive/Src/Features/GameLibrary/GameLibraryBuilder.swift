@@ -38,7 +38,6 @@ final class GameLibraryBuilder: ComponentizedBuilder<GameLibraryComponent, Prese
         let interactor = GameLibraryInteractor(presenter: viewController,
                                                gameStorageManager: component.gameStorageManager,
                                                userSettingsProvider: component.userSettingsProvider)
-        viewController.listener = interactor
         interactor.listener = listener
         return interactor
     }
