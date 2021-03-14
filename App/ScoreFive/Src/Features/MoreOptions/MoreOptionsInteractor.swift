@@ -23,4 +23,10 @@ final class MoreOptionsInteractor: PresentableInteractor<MoreOptionsPresentable>
     // MARK: - API
 
     weak var listener: MoreOptionsListener?
+
+    // MARK: - MoreOptionsPresentableListener
+
+    func didTapClose() {
+        listener?.moreOptionsDidResign()
+    }
 }

@@ -11,15 +11,15 @@ import Foundation
 import XCTest
 
 final class NewGameViewControllerTests: TestCase {
-    
+
     let listener = NewGamePresentableListenerMock()
-    
+
     var viewController: NewGameViewController!
-    
+
     override func setUp() {
         super.setUp()
         viewController = .init()
         viewController.listener = listener
     }
-    
+
 }
