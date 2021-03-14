@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-import Foundation
 @testable import ScoreFive
 @testable import ShortRibs
 import XCTest
