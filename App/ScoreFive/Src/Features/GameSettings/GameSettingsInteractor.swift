@@ -28,4 +28,10 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
     // MARK: - API
 
     weak var listener: GameSettingsListener?
+
+    // MARK: - GameSettingsPresentableListener
+
+    func didTapClose() {
+        listener?.gameSettingsDidResign()
+    }
 }
