@@ -9,45 +9,40 @@
 
 ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
-Xcode projects are generated via [Tuist](https://tuist.io), and are not checked into the repository.
+Xcode projects are generated using the provided tooling, and are not checked into the repo.
 
-0. Install homebrew. More information is available at [https://brew.sh](https://brew.sh)
-
-1. ScoreFive uses [Needle](https://www.github.com/uber/needle) for type-safe, scoped dependency injection. Install the needle code generation tools from uber/needle through homebrew:
-
-```
-$ brew install needle
-```
-
-2. ScoreFive uses [Mockolo](https://www.github.com/uber/mockolo) for efficient Swift mock generation. Install the mockolo code generation tools from uber/mockolo through homebrew.
-
-```
-$ brew install mockolo
-```
-
-3. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation. Install tuist from the developers directly:
+1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation. Install tuist from the developers directly:
 
 ```
 $ bash <(curl -Ls https://install.tuist.io)
 $ tuist
 ```
 
-4. Rather than interfacing with the aformentioned tools directly. ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
+2. In addition to Tuist, ScoreFive uses `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
 
 ```
 $ cd path/to/repo
-$ swift build --package-path Tooling/sftool --configuration release
-$ cp Tooling/sftool/.build/release/sftool sftool
+$ cd swift build --package-path Tooling/sftool --configuration release
+$ cp Tooling/sftool/.build/release/sftool bin/sftool/sftool
+$ ln -s bin/sftool/sftool sftool
 ```
 
-4. Prepare the repository for development
+Alternatively, you can use the provided script to build sftool
+
+```
+$ cd path/to/repo
+$ ./update-sftool.sh
+```
+
+3. Prepare the repository for development
 
 ```
 $ cd path/to/repo
 $ ./sftool bootstrap
 ```
+> *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/` and right click on the included binaries and click "open". This will tell the OS that you're okay to run them.
 
-5. Finally, you can generate the Xcode projects with `./sftool`
+4. Finally, you can generate the Xcode projects with `./sftool`
 
 ```
 $ cd path/to/repo
@@ -79,13 +74,7 @@ You can also open the workspace with `./sftool develop` and run the unit tests f
 
 You can run switformat on the repo with the correct rules and files using `sftool`:
 
-1. Install `swiftformat` via homebrew
-
-```
-$ brew install swiftformat
-```
-
-2. Run `swiftformat` via `sftool`
+1. Run `swiftformat` via `sftool`
 
 ```
 $ cd path/to/repo
@@ -96,13 +85,7 @@ $ ./sftool format
 
 You can run switlint on the repo with the correct rules and files using `sftool`:
 
-1. Install `swiftlint` via homebrew
-
-```
-$ brew install swiftformat
-```
-
-2. Run `swiftlint` via `sftool`
+1. Run `swiftlint` via `sftool`
 
 ```
 $ cd path/to/repo
@@ -110,6 +93,8 @@ $ ./sftool lint
 ```
 
 ### Updating the DI Graph
+
+1. Run `needle` via `sftool`
 
 ```
 $ cd path/to/repo

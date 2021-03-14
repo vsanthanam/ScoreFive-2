@@ -66,7 +66,7 @@ struct SwiftFormatCommand: ParsableCommand {
             print(configToUse)
         }
         print("Formatting files...")
-        let command = "swiftformat " + root
+        let command = [Commands.swiftformat(on: root), root].joined(separator: " ")
         if verbose {
             print("Running command \(command)")
         }

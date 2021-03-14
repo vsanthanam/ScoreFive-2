@@ -67,9 +67,9 @@ struct SwiftLintCommand: ParsableCommand {
         }
         let echo = "echo \"\(yaml)\" >> \(root)/.swiftlint.yml"
         try shellOut(to: echo)
-        var command = "swiftlint"
+        var command = Commands.swiftlint(on: root)
         if fix {
-            command = [command, "autocorrect"].joined(separator: " ")
+            command = [command, "--fix"].joined(separator: " ")
         }
         let result = try shellOut(to: command)
         if warnings {

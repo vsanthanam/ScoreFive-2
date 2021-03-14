@@ -32,7 +32,7 @@ enum Commands {
             print("Output Path:")
             print(dependencyGraph)
         }
-        let command = "export SOURCEKIT_LOGGING=0 && needle generate \(dependencyGraph) \(needleInput)"
+        let command = "export SOURCEKIT_LOGGING=0 && \(needle(on: root)) generate \(dependencyGraph) \(needleInput)"
         if verbose {
             print("Running command \(command)")
         }
@@ -50,7 +50,7 @@ enum Commands {
             print("Output Path:")
             print(mocks)
         }
-        var command = "mockolo -s \(featureCode) \(libraryCode) -d \(mocks)"
+        var command = "\(mockolo(on: root)) -s \(featureCode) \(libraryCode) -d \(mocks)"
         if !testableImports.isEmpty {
             if verbose {
                 print("Adding Testable Imports")
@@ -111,6 +111,22 @@ enum Commands {
     static func openWorkspace(on root: String) throws {
         let path = root + "/ScoreFive.xcworkspace"
         try shellOut(to: "open \(path)")
+    }
+
+    static func swiftlint(on root: String) -> String {
+        root + "/bin/swiftlint/swiftlint"
+    }
+    
+    static func swiftformat(on root: String) -> String {
+        root + "/bin/swiftformat/swiftformat"
+    }
+    
+    fileprivate static func needle(on root: String) -> String {
+        root + "/bin/needle/needle"
+    }
+
+    fileprivate static func mockolo(on root: String) -> String {
+        root + "/bin/mockolo/mockolo"
     }
 
     @discardableResult
