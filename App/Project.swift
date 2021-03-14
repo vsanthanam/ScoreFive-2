@@ -12,8 +12,15 @@ let project = Project(name: "ScoreFive",
                                  product: .app,
                                  bundleId: "com.varunsanthanam.ScoreFive",
                                  infoPlist: "ScoreFive/Info.plist",
-                                 sources: ["ScoreFive/Src/**"],
-                                 resources: ["ScoreFive/Resources/**"],
+                                 sources: [
+                                     "ScoreFive/Src/**",
+                                 ],
+                                 resources: [
+                                     "ScoreFive/Resources/**",
+                                 ],
+                                 actions: [
+                                     .pre(script: "../sftool gen deps -r ../", name: "Generate DI Graph"),
+                                 ],
                                  dependencies: [
                                      .project(target: "Analytics", path: "../Libraries/Analytics"),
                                      .project(target: "FiveUI", path: "../Libraries/FiveUI"),
@@ -31,13 +38,20 @@ let project = Project(name: "ScoreFive",
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
                                                  defaultSettings: .recommended),
-                                 coreDataModels: [.init("ScoreFive/ScoreFive.xcdatamodeld", currentVersion: "ScoreFive")]),
+                                 coreDataModels: [
+                                     .init("ScoreFive/ScoreFive.xcdatamodeld", currentVersion: "ScoreFive"),
+                                 ]),
                           Target(name: "ScoreFiveTests",
                                  platform: .iOS,
                                  product: .unitTests,
                                  bundleId: "com.varunsanthanam.ScoreFiveTests",
                                  infoPlist: "ScoreFiveTests/Info.plist",
-                                 sources: ["ScoreFiveTests/**"],
+                                 sources: [
+                                     "ScoreFiveTests/**",
+                                 ],
+                                 actions: [
+                                     .pre(script: "../sftool gen mocks -r ../", name: "Generate Mocks"),
+                                 ],
                                  dependencies: [
                                      .target(name: "ScoreFive"),
                                      .project(target: "FBSnapshotTestCase", path: "../Vendor/FBSnapshotTestCase"),
