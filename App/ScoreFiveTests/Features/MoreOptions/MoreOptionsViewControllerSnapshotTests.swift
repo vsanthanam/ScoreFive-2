@@ -6,17 +6,20 @@
 //  Copyright © 2021 Varun Santhanam. All rights reserved.
 //
 
-import Foundation
+import FBSnapshotTestCase
 @testable import ScoreFive
-@testable import ShortRibs
-import XCTest
 
-final class MoreOptionsViewControllerTests: TestCase {
-
-    let listener = MoreOptionsPresentableListenerMock()
-    let viewController = MoreOptionsViewController()
+final class MoreOptionsViewControllerSnapshotTests: SnapshotTestCase {
 
     override func setUp() {
-        viewController.listener = listener
+        super.setUp()
+        recordMode = false
+    }
+
+    func test_rootViewController() {
+        let viewController = MoreOptionsViewController()
+        viewController.loadView()
+        viewController.viewDidLoad()
+        FBSnapshotVerifyViewController(viewController)
     }
 }

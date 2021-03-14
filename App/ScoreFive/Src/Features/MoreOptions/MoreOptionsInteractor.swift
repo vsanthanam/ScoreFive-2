@@ -24,7 +24,7 @@ final class MoreOptionsInteractor: PresentableInteractor<MoreOptionsPresentable>
         super.init(presenter: presenter)
         presenter.listener = self
     }
-    
+
     // MARK: - API
 
     weak var listener: MoreOptionsListener?

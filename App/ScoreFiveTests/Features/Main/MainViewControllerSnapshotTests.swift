@@ -8,7 +8,7 @@
 import FBSnapshotTestCase
 @testable import ScoreFive
 
-final class MainViewControllerSnapshotTests: FBSnapshotTestCase {
+final class MainViewControllerSnapshotTests: SnapshotTestCase {
 
     override func setUp() {
         super.setUp()

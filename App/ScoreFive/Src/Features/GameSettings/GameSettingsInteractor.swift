@@ -24,7 +24,7 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
         super.init(presenter: presenter)
         presenter.listener = self
     }
-    
+
     // MARK: - API
 
     weak var listener: GameSettingsListener?

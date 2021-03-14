@@ -9,7 +9,7 @@ import FBSnapshotTestCase
 @testable import ScoreFive
 import SnapKit
 
-final class HomeButtonSnapshotTests: FBSnapshotTestCase {
+final class HomeButtonSnapshotTests: SnapshotTestCase {
 
     override func setUp() {
         super.setUp()

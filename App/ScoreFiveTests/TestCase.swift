@@ -6,6 +6,7 @@
 //
 
 import Combine
+import FBSnapshotTestCase
 import Foundation
 import XCTest
 
@@ -24,3 +25,5 @@ extension Cancellable {
         store(in: &testCase.cancellables)
     }
 }
+
+typealias SnapshotTestCase = FBSnapshotTestCase
