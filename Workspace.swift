@@ -26,4 +26,4 @@ let workspace = Workspace(name: "ScoreFive",
                                                          arguments: .init(environment: ["FB_REFERENCE_IMAGE_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/ReferenceImages",
                                                                                         "IMAGE_DIFF_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/FailureDiffs"]))),
                           ],
-                          additionalFiles: [])
+                          additionalFiles: [".sftool-config"])
