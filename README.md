@@ -11,7 +11,7 @@ ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
 Xcode projects are generated using the provided tooling, and are not checked into the repo.
 
-1. In addition to Tuist, ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments and paths to use. The source code for this tool is included in the repo. Build the tool and move it to the root directory:
+1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments, paths & settings use. The source code for this tool is included in the repo. Build the latest version of the t=tool and move it to the root directory with the provided script.
 
 ```
 $ cd path/to/repo
@@ -24,7 +24,7 @@ $ ./update-sftool.sh
 $ cd path/to/repo
 $ ./sftool bootstrap
 ```
-> *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/` and right click on the included binaries and click "open". This will tell the OS that you're okay to run them.
+> *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/` and right click on the included binaries and click "open" on the offending binary. This will tell the OS that you're okay to run them.
 
 3. Finally, you can generate the Xcode projects with `./sftool`
 
@@ -65,6 +65,8 @@ $ cd path/to/repo
 $ ./sftool format
 ```
 
+You can add the `-v` flag to get a more verbose output. Behavior can be customized in `.sftool-config`.
+
 ### Running SwiftLint
 
 You can run switlint on the repo with the correct rules and files using `sftool`:
@@ -75,6 +77,8 @@ You can run switlint on the repo with the correct rules and files using `sftool`
 $ cd path/to/repo
 $ ./sftool lint
 ```
+
+You can add the `-w` flag to include warnings in addition to regular failures, and `-f` to try an fix correctable failures. You can also add the `-v` flag to get a more verbose output. Behavior can be customized in `.sftool-config`.
 
 ### Updating the DI Graph
 
@@ -101,6 +105,8 @@ Similarly, you can remove any currently active analytics configuration with `sft
 $ cd path/to/repo
 $ ./sftool analytics wipe
 ```
+
+To see the current status, run `./sftool analytics status`
 
 ### Configuring SFTool
 
