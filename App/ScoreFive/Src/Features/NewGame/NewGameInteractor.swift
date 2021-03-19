@@ -26,8 +26,7 @@ final class NewGameInteractor: PresentableInteractor<NewGamePresentable>, NewGam
     // MARK: - Initializers
 
     init(presenter: NewGamePresentable,
-         gameStorageManager: GameStorageManaging)
-    {
+         gameStorageManager: GameStorageManaging) {
         self.gameStorageManager = gameStorageManager
         super.init(presenter: presenter)
         presenter.listener = self

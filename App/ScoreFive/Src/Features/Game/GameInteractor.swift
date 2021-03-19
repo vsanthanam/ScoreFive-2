@@ -36,8 +36,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
          activeGameStream: ActiveGameStreaming,
          newRoundBuilder: NewRoundBuildable,
          scoreCardBuilder: ScoreCardBuildable,
-         gameSettingsBuilder: GameSettingsBuildable)
-    {
+         gameSettingsBuilder: GameSettingsBuildable) {
         self.gameStorageManager = gameStorageManager
         self.activeGameStream = activeGameStream
         self.newRoundBuilder = newRoundBuilder

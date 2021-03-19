@@ -5,7 +5,8 @@
                          "blankLinesAtStartOfScope",
                          "redundantNilInit",
                          "unusedArguments",
-                         "redundantParens"],
+                         "redundantParens",
+			 "wrapMultilineStatementBraces"],
         "excludeDirs": ["App/Derived"]
     },
     "mockolo": {

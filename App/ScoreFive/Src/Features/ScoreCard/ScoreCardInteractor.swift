@@ -29,8 +29,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
     init(presenter: ScoreCardPresentable,
          gameStorageProvider: GameStorageProviding,
          activeGameStream: ActiveGameStreaming,
-         userSettingsProvider: UserSettingsProviding)
-    {
+         userSettingsProvider: UserSettingsProviding) {
         self.gameStorageProvider = gameStorageProvider
         self.activeGameStream = activeGameStream
         self.userSettingsProvider = userSettingsProvider

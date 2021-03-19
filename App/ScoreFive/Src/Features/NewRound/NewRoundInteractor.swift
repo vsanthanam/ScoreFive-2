@@ -33,8 +33,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
          gameStorageProvider: GameStorageProviding,
          userSettingsProvider: UserSettingsProviding,
          replacingIndex: Int?,
-         round: Round)
-    {
+         round: Round) {
         self.activeGameStream = activeGameStream
         self.gameStorageProvider = gameStorageProvider
         self.userSettingsProvider = userSettingsProvider
@@ -148,8 +147,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         if let index = replacingIndex {
             if let identifier = activeGameStream.currentActiveGameIdentifier,
                let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
-               card.canReplaceRound(at: index, with: round)
-            {
+               card.canReplaceRound(at: index, with: round) {
                 listener?.newRoundDidReplaceRound(at: index, with: round)
             } else {
                 isSaving = false

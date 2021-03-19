@@ -20,8 +20,7 @@ protocol MainListener: AnyObject {}
 final class MainInteractor: PresentableInteractor<MainPresentable>, MainInteractable, MainPresentableListener {
 
     init(presenter: MainPresentable,
-         fiveBuilder: FiveBuildable)
-    {
+         fiveBuilder: FiveBuildable) {
         self.fiveBuilder = fiveBuilder
         super.init(presenter: presenter)
         presenter.listener = self

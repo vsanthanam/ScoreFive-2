@@ -21,8 +21,7 @@ final class RootInteractor: PresentableInteractor<RootPresentable>, RootInteract
 
     init(presenter: RootPresentable,
          analyticsManager: AnalyticsManaging,
-         mainBuilder: MainBuildable)
-    {
+         mainBuilder: MainBuildable) {
         self.analyticsManager = analyticsManager
         self.mainBuilder = mainBuilder
         super.init(presenter: presenter)

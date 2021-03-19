@@ -70,8 +70,7 @@ final class RootBuilder: ComponentizedRootBuilder<RootComponent, PresentableInte
     // MARK: - ComponentizedBuilder
 
     override final func build(with component: RootComponent,
-                              _ dynamicBuildDependency: RootDynamicBuildDependency) -> PresentableInteractable
-    {
+                              _ dynamicBuildDependency: RootDynamicBuildDependency) -> PresentableInteractable {
         let window = dynamicBuildDependency
         let viewController = RootViewController()
         let interactor = RootInteractor(presenter: viewController,
@@ -85,8 +84,7 @@ final class RootBuilder: ComponentizedRootBuilder<RootComponent, PresentableInte
 
     func build(onWindow window: UIWindow,
                persistentContainer: PersistentContaining,
-               analyticsManager: AnalyticsManaging) -> PresentableInteractable
-    {
+               analyticsManager: AnalyticsManaging) -> PresentableInteractable {
         build(withDynamicBuildDependency: window,
               dynamicComponentDependency: (persistentContainer,
                                            analyticsManager))

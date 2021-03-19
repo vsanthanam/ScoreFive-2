@@ -37,8 +37,7 @@ final class HomeInteractor: PresentableInteractor<HomePresentable>, HomeInteract
          gameStorageManager: GameStorageManaging,
          newGameBuilder: NewGameBuildable,
          moreOptionsBuilder: MoreOptionsBuildable,
-         gameLibraryBuilder: GameLibraryBuildable)
-    {
+         gameLibraryBuilder: GameLibraryBuildable) {
         self.gameStorageManager = gameStorageManager
         self.newGameBuilder = newGameBuilder
         self.moreOptionsBuilder = moreOptionsBuilder

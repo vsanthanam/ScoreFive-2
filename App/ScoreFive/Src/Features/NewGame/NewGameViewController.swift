@@ -156,8 +156,7 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
             if kind == UICollectionView.elementKindSectionHeader,
                let header = view.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                   withReuseIdentifier: .headerIdentifier,
-                                                                  for: indexPath) as? NewGameSectionHeaderView
-            {
+                                                                  for: indexPath) as? NewGameSectionHeaderView {
                 if indexPath.section == 0 {
                     header.title = "Score Limit"
                 }
@@ -165,8 +164,7 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
             } else if kind == UICollectionView.elementKindSectionFooter,
                       let footer = view.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
                                                                          withReuseIdentifier: .footerIdentifier,
-                                                                         for: indexPath) as? NewGameSectionFooterView
-            {
+                                                                         for: indexPath) as? NewGameSectionFooterView {
                 if indexPath.section == 1 {
                     footer.title = "Add between 2 and 8 players"
                 }
