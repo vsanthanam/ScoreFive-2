@@ -77,7 +77,7 @@ extension GameRecordMO: GameRecord {
             return dict
         }
         rankedPlayerIds = scoreCard.rankedPlayers.map(\.uuid)
-        activePlayerIds = scoreCard.activePlayers.map(\.uuid)
+        activePlayerIds = scoreCard.orderedActivePlayers.map(\.uuid)
         orderedPlayerIds = scoreCard.orderedPlayers.map(\.uuid)
         rawScoreLimit = Int64(scoreCard.scoreLimit)
     }

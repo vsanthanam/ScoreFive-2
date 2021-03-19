@@ -36,11 +36,11 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     public private(set) var scoreLimit: Int
 
     /// All the players in the game, in order of who goes firest
-    public let orderedPlayers: [Player]
+    public private(set) var orderedPlayers: [Player]
 
     /// All the players remaining in the game, in order of who goes first
-    public var activePlayers: [Player] {
-        activePlayers(at: rounds.count - 1)
+    public var orderedActivePlayers: [Player] {
+        orderedActivePlayers(at: rounds.count - 1)
     }
 
     /// All the players in the game, from winning to losing
@@ -55,7 +55,7 @@ public struct ScoreCard: Codable, Equatable, Hashable {
 
     /// Whether or not the game is in progress and can accept new rounds
     public var canAddRounds: Bool {
-        activePlayers.count > 1
+        orderedActivePlayers.count > 1
     }
 
     /// The number of rounds in this score card
@@ -91,7 +91,7 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     /// Active players in the game, at a given index, in order if player order
     /// - Parameter index: The index
     /// - Returns: The active players at the given index
-    public func activePlayers(at index: Int) -> [Player] {
+    public func orderedActivePlayers(at index: Int) -> [Player] {
         orderedPlayers
             .filter {
                 totalScore(for: $0,
@@ -113,7 +113,7 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     /// - Parameter index: The Index
     /// - Returns: The active players in the game, ranked.
     public func rankedActivePlayers(at index: Int) -> [Player] {
-        activePlayers(at: index)
+        orderedActivePlayers(at: index)
             .sorted { lhs, rhs -> Bool in
                 totalScore(for: lhs, at: index) < totalScore(for: rhs, at: index)
             }
@@ -144,13 +144,13 @@ public struct ScoreCard: Codable, Equatable, Hashable {
             return true
         }
         var copy = self
-        let activePlayers = copy.activePlayers
+        let activePlayers = copy.orderedActivePlayers
         if let newRound = newRound {
             copy.rounds[index] = newRound
         } else {
             copy.rounds.remove(at: index)
         }
-        return activePlayers == copy.activePlayers
+        return activePlayers == copy.orderedActivePlayers
     }
 
     /// Whether or not a round can be safely removed.
@@ -172,9 +172,9 @@ public struct ScoreCard: Codable, Equatable, Hashable {
         if index == (rounds.count - 1) {
             rounds.remove(at: index)
         } else {
-            let previouslyActivePlayers = activePlayers
+            let previouslyActivePlayers = orderedActivePlayers
             rounds.remove(at: index)
-            precondition(previouslyActivePlayers == activePlayers, "Round removal must not change active players")
+            precondition(previouslyActivePlayers == orderedActivePlayers, "Round removal must not change active players")
         }
     }
 
@@ -233,21 +233,54 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     public mutating func addRound(_ round: Round) {
         precondition(round.isComplete, "This round is missing scores and cannot be added until it has a score for every player")
         precondition(canAddRounds, "This game cannot accept rounds unless its score limit is increased or existing rounds are removed")
-        precondition(Set(round.playerIds) == Set(activePlayers.map(\.uuid)), "Round players do not match currently active players")
+        precondition(Set(round.playerIds) == Set(orderedActivePlayers.map(\.uuid)), "Round players do not match currently active players")
         let zeros = round.containedScores.filter { score in score == 0 }
         precondition(zeros.count >= 1, "Round must contain at least 1 winner before being added")
         precondition(zeros.count < round.playerIds.count, "Round must contain 1 loser before being added")
         rounds.append(round)
-        precondition(activePlayers.count >= 1, "Round must leave at least one player standing after being added")
+        precondition(orderedActivePlayers.count >= 1, "Round must leave at least one player standing after being added")
+    }
+
+    /// Create a card with a new round
+    /// - Parameter round: The round
+    /// - Returns: The new cardd
+    public func cardByAddingRound(_ round: Round) -> ScoreCard {
+        var copy = self
+        copy.addRound(round)
+        return copy
     }
 
     /// Create a new round with the correct players for the next round
     /// - Returns: The new round, with no scores
     public func newRound() -> Round {
-        guard activePlayers.count >= 2 else {
+        guard orderedActivePlayers.count >= 2 else {
             fatalError()
         }
-        return .init(players: activePlayers)
+        return .init(players: orderedActivePlayers)
+    }
+
+    /// Whether or not the players can replace the existing players
+    /// - Parameter orderedPlayers: The new players
+    /// - Returns: `true` If the players can be replaced with the provided ones, otherwise `false`
+    public func canReplacePlayers(with orderedPlayers: [Player]) -> Bool {
+        Set(self.orderedPlayers.map(\.id)) == Set(orderedPlayers.map(\.id))
+    }
+
+    /// Replace the existing players in the round
+    /// - Parameter orderedPlayers: The new players
+    /// - Note: This method produces a run-time failure if the new players don't have the same UUIDs at the old ones.
+    public mutating func replacePlayers(with orderedPlayers: [Player]) {
+        precondition(canReplacePlayers(with: orderedPlayers), "The new list of players must have the same identifiers!")
+        self.orderedPlayers = orderedPlayers
+    }
+
+    /// Create a new card with by replacing the players
+    /// - Parameter orderPlayers: The new players
+    /// - Returns: The new card
+    public func cardByReplacingPlayers(with orderPlayers: [Player]) -> ScoreCard {
+        var copy = self
+        copy.replacePlayers(with: orderedPlayers)
+        return copy
     }
 
     // MARK: - Subscript

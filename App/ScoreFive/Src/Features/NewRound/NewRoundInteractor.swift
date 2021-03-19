@@ -59,7 +59,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             return
         }
 
-        players = card.activePlayers(at: replacingIndex ?? card.rounds.count - 1)
+        players = card.orderedActivePlayers(at: replacingIndex ?? card.rounds.count - 1)
 
         guard Set(players.map(\.uuid)) == Set(round.playerIds) else {
             listener?.newRoundDidResign()

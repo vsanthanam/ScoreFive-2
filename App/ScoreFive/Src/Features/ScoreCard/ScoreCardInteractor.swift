@@ -102,7 +102,7 @@ private extension ScoreCard {
         if index == 0 {
             return orderedPlayers[index % orderedPlayers.count]
         } else {
-            let active = activePlayers(at: index - 1)
+            let active = orderedActivePlayers(at: index - 1)
 
             if Set(active) == Set(orderedPlayers) {
                 return orderedPlayers[index % orderedPlayers.count]
