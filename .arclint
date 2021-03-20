@@ -1,0 +1,7 @@
+{
+	"linters": {
+		"sftool-config": {
+			"type": "json"
+		}
+	}
+}

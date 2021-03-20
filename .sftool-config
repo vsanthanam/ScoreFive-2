@@ -6,7 +6,7 @@
                          "redundantNilInit",
                          "unusedArguments",
                          "redundantParens",
-			 "wrapMultilineStatementBraces"],
+		 	"wrapMultilineStatementBraces"],
         "excludeDirs": ["App/Derived"]
     },
     "mockolo": {
