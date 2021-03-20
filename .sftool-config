@@ -6,8 +6,9 @@
                          "redundantNilInit",
                          "unusedArguments",
                          "redundantParens",
-		 	"wrapMultilineStatementBraces"],
-        "excludeDirs": ["App/Derived"]
+                         "wrapMultilineStatementBraces"],
+        "excludeDirs": ["App/Derived",
+                        "bin/tuist"]
     },
     "mockolo": {
         "testableImports": ["ShortRibs",

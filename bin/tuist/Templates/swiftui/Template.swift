@@ -1,8 +1,3 @@
-//
-// ScoreFive
-// Varun Santhanam
-//
-
 import ProjectDescription
 
 let nameAttribute: Template.Attribute = .required("name")
