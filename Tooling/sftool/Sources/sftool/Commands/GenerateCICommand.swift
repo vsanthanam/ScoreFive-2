@@ -21,20 +21,35 @@ struct GenerateCICommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
+    
+    @Flag(name: .shortAndLong, help: "Use pretty results")
+    var pretty: Bool = false
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)
         let device = configuration.testConfig.device
         let os = configuration.testConfig.os
-        let script = """
-        #! /bin/sh
-        ./sftool analytics wipe
-        ./sftool gen deps
-        ./sftool gen mocks
-        ./sftool develop -d
-        set -euo pipefail
-        xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
-        """
+        let script: String
+        if pretty {
+            script = """
+            #! /bin/sh
+            ./sftool analytics wipe
+            ./sftool gen deps
+            ./sftool gen mocks
+            ./sftool develop -d
+            set -euo pipefail
+            xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
+            """
+        } else {
+            script = """
+            #! /bin/sh
+            ./sftool analytics wipe
+            ./sftool gen deps
+            ./sftool gen mocks
+            ./sftool develop -d
+            xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test
+            """
+        }
         print(script)
     }
 }

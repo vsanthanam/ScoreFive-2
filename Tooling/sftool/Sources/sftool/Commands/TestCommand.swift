@@ -39,7 +39,7 @@ struct TestCommand: ParsableCommand {
         print("Running tests on \(device) running \(os)")
         print("This might take a few minutes")
         do {
-            let results = try Commands.runTests(root, name: device, os: os, verbose: verbose)
+            let results = try Commands.runTests(root, name: device, os: os)
             print(results)
             print("Tests Complete! 🍻")
         } catch {

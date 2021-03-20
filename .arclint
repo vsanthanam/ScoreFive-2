@@ -1,7 +1,8 @@
 {
 	"linters": {
 		"sftool-config": {
-			"type": "json"
+			"type": "json",
+			"include": ["(\\.sftool-config)"]
 		}
 	}
 }
