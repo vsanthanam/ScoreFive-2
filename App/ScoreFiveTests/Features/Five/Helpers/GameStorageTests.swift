@@ -1,8 +1,6 @@
 //
-//  GameStorageManagerTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 1/12/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import CoreData

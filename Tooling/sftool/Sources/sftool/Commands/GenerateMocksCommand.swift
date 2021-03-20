@@ -1,8 +1,6 @@
 //
-//  Mocks.swift
-//
-//
-//  Created by Varun Santhanam on 1/9/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import ArgumentParser

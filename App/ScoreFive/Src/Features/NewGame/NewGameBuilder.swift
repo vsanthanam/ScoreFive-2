@@ -1,8 +1,6 @@
 //
-//  NewGameBuilder.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 12/29/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

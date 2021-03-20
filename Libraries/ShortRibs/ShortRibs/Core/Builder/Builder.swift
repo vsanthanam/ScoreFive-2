@@ -1,8 +1,6 @@
 //
-//  Builder.swift
-//  ShortRibs
-//
-//  Created by Varun Santhanam on 12/27/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

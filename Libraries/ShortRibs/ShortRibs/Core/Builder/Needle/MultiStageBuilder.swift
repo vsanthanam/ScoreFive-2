@@ -1,8 +1,6 @@
 //
-//  MultiStageBuilder.swift
-//  ShortRibs
-//
-//  Created by Varun Santhanam on 12/7/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

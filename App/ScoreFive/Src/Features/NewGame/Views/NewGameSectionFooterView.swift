@@ -1,8 +1,6 @@
 //
-//  NewGameSectionFooterView.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 1/3/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

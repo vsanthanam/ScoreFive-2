@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by Varun Santhanam on 3/13/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import ArgumentParser
@@ -21,7 +19,7 @@ struct GenerateCICommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
-    
+
     @Flag(name: .shortAndLong, help: "Use pretty results")
     var pretty: Bool = false
 

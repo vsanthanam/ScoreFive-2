@@ -1,8 +1,6 @@
 //
-//  ScoreCardStatistics.swift
-//  ScoreKeeping
-//
-//  Created by Varun Santhanam on 2/26/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

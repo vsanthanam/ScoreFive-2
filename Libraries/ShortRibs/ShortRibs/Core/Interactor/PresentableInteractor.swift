@@ -1,8 +1,6 @@
 //
-//  PresentableInteractor.swift
-//  ShortRibs
-//
-//  Created by Varun Santhanam on 12/6/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

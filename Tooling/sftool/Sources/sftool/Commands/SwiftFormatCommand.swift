@@ -1,8 +1,6 @@
 //
-//  SwiftFormatCommand.swift
-//
-//
-//  Created by Varun Santhanam on 1/10/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import ArgumentParser
@@ -57,6 +55,13 @@ struct SwiftFormatCommand: ParsableCommand {
             configComponents.append(component)
         }
 
+        let header = """
+        //
+        // ScoreFive
+        // Varun Santhanam
+        //
+        """
+        let headerCommand = "--header \"\(header)\""
         let swiftformat = configComponents.joined(separator: "\n")
         let echo = "echo \"\(swiftformat)\" >> \(root)/.swiftformat"
         try shellOut(to: echo)
@@ -66,7 +71,7 @@ struct SwiftFormatCommand: ParsableCommand {
             print(configToUse)
         }
         print("Formatting files...")
-        let command = [Commands.swiftformat(on: root), root].joined(separator: " ")
+        let command = [Commands.swiftformat(on: root), root, headerCommand].joined(separator: " ")
         if verbose {
             print("Running command \(command)")
         }

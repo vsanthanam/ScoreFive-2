@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by Varun Santhanam on 2/20/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import ArgumentParser

@@ -1,8 +1,6 @@
 //
-//  SceneDelegate.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 12/25/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Analytics

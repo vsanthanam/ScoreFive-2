@@ -1,8 +1,6 @@
 //
-//  File.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 2/21/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Combine

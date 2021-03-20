@@ -1,9 +1,6 @@
 //
-//  GameSettingsInteractorTests.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 3/14/21.
-//  Copyright © 2021 Varun Santhanam. All rights reserved.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

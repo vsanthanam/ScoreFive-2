@@ -1,8 +1,6 @@
 //
-//  RootBuilder.swift
-//  ShortRibs
-//
-//  Created by Varun Santhanam on 1/16/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

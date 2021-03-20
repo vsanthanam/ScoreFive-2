@@ -1,8 +1,6 @@
 //
-//  NewGameViewControllerSnapshotTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 2/6/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import FBSnapshotTestCase

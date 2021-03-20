@@ -1,3 +1,8 @@
+//
+// ScoreFive
+// Varun Santhanam
+//
+
 import ArgumentParser
 import Foundation
 import ShellOut

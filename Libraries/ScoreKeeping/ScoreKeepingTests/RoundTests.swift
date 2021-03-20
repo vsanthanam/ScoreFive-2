@@ -1,8 +1,6 @@
 //
-//  RoundTests.swift
-//  ScoreKeepingTests
-//
-//  Created by Varun Santhanam on 12/28/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 @testable import ScoreKeeping

@@ -1,8 +1,6 @@
 //
-//  SymbolButton.swift
-//  FiveUI
-//
-//  Created by Varun Santhanam on 1/1/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

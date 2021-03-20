@@ -1,8 +1,6 @@
 //
-//  Configuration.swift
-//  Analytics
-//
-//  Created by Varun Santhanam on 1/31/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Countly

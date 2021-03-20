@@ -1,8 +1,6 @@
 //
-//  RoundCellModel.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 3/7/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

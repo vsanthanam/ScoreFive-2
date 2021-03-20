@@ -1,8 +1,6 @@
 //
-//  NewRoundInteractorTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 2/26/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Combine

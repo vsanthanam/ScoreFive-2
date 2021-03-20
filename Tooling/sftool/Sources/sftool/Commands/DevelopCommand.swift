@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by Varun Santhanam on 3/13/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

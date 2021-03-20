@@ -1,8 +1,6 @@
 //
-//  ViewController.swift
-//  ShortRibs
-//
-//  Created by Varun Santhanam on 12/8/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Combine

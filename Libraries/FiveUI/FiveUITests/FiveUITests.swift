@@ -1,8 +1,6 @@
 //
-//  FiveUITests.swift
-//  FiveUITests
-//
-//  Created by Varun Santhanam on 12/30/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 @testable import FiveUI

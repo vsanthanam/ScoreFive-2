@@ -1,8 +1,6 @@
 //
-//  NewRoundViewControllerTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 3/1/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Combine

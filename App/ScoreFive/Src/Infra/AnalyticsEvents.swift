@@ -1,8 +1,6 @@
 //
-//  Events.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 3/1/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Analytics

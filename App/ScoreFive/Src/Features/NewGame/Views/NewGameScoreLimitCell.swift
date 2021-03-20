@@ -1,8 +1,6 @@
 //
-//  ScoreLimitCell.swift
-//  ScoreFive
-//
-//  Created by Varun Santhanam on 12/30/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 import FiveUI

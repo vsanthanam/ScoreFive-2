@@ -1,8 +1,6 @@
 //
-//  Logging.swift
-//  Logging
-//
-//  Created by Varun Santhanam on 2/28/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

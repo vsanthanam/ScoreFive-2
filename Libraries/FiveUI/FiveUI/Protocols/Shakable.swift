@@ -1,8 +1,6 @@
 //
-//  Shakable.swift
-//  FiveUI
-//
-//  Created by Varun Santhanam on 2/13/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

@@ -1,8 +1,6 @@
 //
-//  ShortRibsTests.swift
-//  ShortRibsTests
-//
-//  Created by Varun Santhanam on 12/27/20.
+// ScoreFive
+// Varun Santhanam
 //
 
 @testable import ShortRibs

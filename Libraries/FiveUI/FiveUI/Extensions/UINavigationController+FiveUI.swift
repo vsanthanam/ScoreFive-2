@@ -1,8 +1,6 @@
 //
-//  UINavigationController+FiveUI.swift
-//  FiveUI
-//
-//  Created by Varun Santhanam on 1/18/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

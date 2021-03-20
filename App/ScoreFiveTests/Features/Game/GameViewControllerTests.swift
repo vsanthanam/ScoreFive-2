@@ -1,8 +1,6 @@
 //
-//  GameViewControllerTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 3/11/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import Foundation

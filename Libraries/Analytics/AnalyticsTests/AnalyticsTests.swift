@@ -1,8 +1,6 @@
 //
-//  AnalyticsTests.swift
-//  AnalyticsTests
-//
-//  Created by Varun Santhanam on 1/31/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 @testable import Analytics

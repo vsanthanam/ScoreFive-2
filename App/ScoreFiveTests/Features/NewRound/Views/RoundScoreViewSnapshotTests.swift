@@ -1,8 +1,6 @@
 //
-//  RoundScoreViewSnapshotTests.swift
-//  ScoreFiveTests
-//
-//  Created by Varun Santhanam on 2/27/21.
+// ScoreFive
+// Varun Santhanam
 //
 
 import FBSnapshotTestCase
