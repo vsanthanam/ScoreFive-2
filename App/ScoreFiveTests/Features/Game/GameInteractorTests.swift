@@ -219,7 +219,7 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
         XCTAssertEqual(gameStorageManager.saveCallCount, 0)
 
-        interactor.gameSettignsDidUpdatePlayers(brokenPlayers)
+        interactor.gameSettingsDidUpdatePlayers(brokenPlayers)
 
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
         XCTAssertEqual(gameStorageManager.saveCallCount, 0)
@@ -246,7 +246,7 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
         XCTAssertEqual(gameStorageManager.saveCallCount, 0)
 
-        interactor.gameSettignsDidUpdatePlayers(newPlayers)
+        interactor.gameSettingsDidUpdatePlayers(newPlayers)
 
         XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
         XCTAssertEqual(gameStorageManager.saveCallCount, 1)

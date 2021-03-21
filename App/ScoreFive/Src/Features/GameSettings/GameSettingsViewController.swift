@@ -15,6 +15,7 @@ protocol GameSettingsViewControllable: ViewControllable {}
 protocol GameSettingsPresentableListener: AnyObject {
     func didTapClose()
     func didUpdatePlayers(_ players: [Player])
+    func didUpdateIndexByPlayer(_ on: Bool)
 }
 
 final class GameSettingsViewController: ScopeViewController, GameSettingsPresentable, GameSettingsViewControllable, UINavigationBarDelegate, UICollectionViewDelegate {
@@ -34,21 +35,37 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
         self.players = players
     }
 
+    func updateIndexByPlayer(_ on: Bool) {
+        indexByPlayer = on
+    }
+
     // MARK: - UINavigationBarDelegate
 
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         .topAttached
     }
 
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
+
     // MARK: - Private
 
     private enum SectionModel: Equatable, Hashable {
         case players
+        case settings
 
         static func == (lhs: SectionModel, rhs: SectionModel) -> Bool {
             switch (lhs, rhs) {
             case (.players, .players):
                 return true
+            case (.settings, .settings):
+                return true
+            case (.players, _),
+                 (.settings, _):
+                return false
             }
         }
 
@@ -56,17 +73,24 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
             switch self {
             case .players:
                 hasher.combine(#line)
+            case .settings:
+                hasher.combine(#line)
             }
         }
     }
 
     private enum RowModel: Equatable, Hashable {
         case player(name: String, uuid: UUID)
+        case indexByPlayer(on: Bool)
 
         static func == (lhs: RowModel, rhs: RowModel) -> Bool {
             switch (lhs, rhs) {
             case let (.player(leftName, leftIdentifier), .player(rightName, rightIdentifier)):
                 return leftName == rightName && leftIdentifier == rightIdentifier
+            case let (.indexByPlayer(left), .indexByPlayer(right)):
+                return left == right
+            case (.player, _), (.indexByPlayer, _):
+                return false
             }
         }
 
@@ -76,6 +100,9 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
                 hasher.combine(#line)
                 hasher.combine(name)
                 hasher.combine(identifier)
+            case let .indexByPlayer(on):
+                hasher.combine(#line)
+                hasher.combine(on)
             }
         }
     }
@@ -85,6 +112,14 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
     private var players: [Player] = [] {
         didSet {
             if players != oldValue {
+                refreshDataSource()
+            }
+        }
+    }
+
+    private var indexByPlayer: Bool = false {
+        didSet {
+            if indexByPlayer != oldValue {
                 refreshDataSource()
             }
         }
@@ -110,9 +145,30 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
             cell.accessories = [.reorder()]
         }
 
+        let boolSettingRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, RowModel> { [listener] cell, _, model in
+            guard case let .indexByPlayer(on) = model else {
+                fatalError()
+            }
+            var config = cell.defaultContentConfiguration()
+            config.text = "Index By Player"
+            cell.contentConfiguration = config
+            let controlSwitch = UISwitch()
+            controlSwitch.isOn = on
+            controlSwitch.addAction(.init(handler: { [weak controlSwitch] _ in
+                listener?.didUpdateIndexByPlayer(controlSwitch?.isOn ?? false)
+            }), for: .valueChanged)
+            cell.accessories = [.customView(configuration: .init(customView: controlSwitch, placement: .trailing()))]
+        }
+
         let dataSource = UICollectionViewDiffableDataSource<SectionModel, RowModel>(collectionView: collectionView,
                                                                                     cellProvider: { view, indexPath, model in
-                                                                                        view.dequeueConfiguredReusableCell(using: playerRegistration, for: indexPath, item: model)
+                                                                                        switch model {
+                                                                                        case .indexByPlayer:
+                                                                                            return view.dequeueConfiguredReusableCell(using: boolSettingRegistration, for: indexPath, item: model)
+                                                                                        case .player:
+                                                                                            return view.dequeueConfiguredReusableCell(using: playerRegistration, for: indexPath, item: model)
+                                                                                        }
+
                                                                                     })
         dataSource.reorderingHandlers.canReorderItem = { model in
             if case .player = model {
@@ -127,6 +183,8 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
                 switch model {
                 case let .player(name, identifier):
                     return Player(name: name, uuid: identifier)
+                default:
+                    return nil
                 }
             }
             listener?.didUpdatePlayers(players)
@@ -192,8 +250,9 @@ final class GameSettingsViewController: ScopeViewController, GameSettingsPresent
 
     private func refreshDataSource() {
         var snapshot = NSDiffableDataSourceSnapshot<SectionModel, RowModel>()
-        snapshot.appendSections([.players])
+        snapshot.appendSections([.players, .settings])
         snapshot.appendItems(players.map { .player(name: $0.name, uuid: $0.id) }, toSection: .players)
+        snapshot.appendItems([.indexByPlayer(on: indexByPlayer)], toSection: .settings)
         dataSource.apply(snapshot)
     }
 

@@ -146,7 +146,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
         routeAwayFromGameSettings()
     }
 
-    func gameSettignsDidUpdatePlayers(_ players: [Player]) {
+    func gameSettingsDidUpdatePlayers(_ players: [Player]) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
               var card = try? gameStorageManager.fetchScoreCard(for: identifier),
               card.canReplacePlayers(with: players) else {

@@ -32,12 +32,12 @@ final class RootComponent: BootstrapComponent, RootDependencyProviding {
         dynamicDependency.analyticsManager
     }
 
-    var userSettingManager: UserSettingsManaging {
+    var userSettingsManager: UserSettingsManaging {
         shared { UserSettingsManager() }
     }
 
     var userSettingsProvider: UserSettingsProviding {
-        userSettingManager
+        userSettingsManager
     }
 
     // MARK: - Children

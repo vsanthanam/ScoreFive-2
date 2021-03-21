@@ -13,21 +13,24 @@ import ShortRibs
 protocol GameSettingsPresentable: GameSettingsViewControllable {
     var listener: GameSettingsPresentableListener? { get set }
     func updatePlayers(_ players: [Player])
+    func updateIndexByPlayer(_ on: Bool)
 }
 
 /// @mockable
 protocol GameSettingsListener: AnyObject {
     func gameSettingsDidResign()
-    func gameSettignsDidUpdatePlayers(_ players: [Player])
+    func gameSettingsDidUpdatePlayers(_ players: [Player])
 }
 
 final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentable>, GameSettingsInteractable, GameSettingsPresentableListener {
 
     init(presenter: GameSettingsPresentable,
          activeGameStream: ActiveGameStreaming,
-         gameStorageProvider: GameStorageProviding) {
+         gameStorageProvider: GameStorageProviding,
+         userSettingsManager: UserSettingsManaging) {
         self.activeGameStream = activeGameStream
         self.gameStorageProvider = gameStorageProvider
+        self.userSettingsManager = userSettingsManager
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -40,7 +43,14 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        updatePlayers()
+        guard let identifier = activeGameStream.currentActiveGameIdentifier,
+              let card = try? gameStorageProvider.fetchScoreCard(for: identifier) else {
+            listener?.gameSettingsDidResign()
+            return
+        }
+        presenter.updatePlayers(card.orderedPlayers)
+        presenter.updateIndexByPlayer(userSettingsManager.indexByPlayer)
+
     }
 
     // MARK: - GameSettingsPresentableListener
@@ -50,20 +60,16 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
     }
 
     func didUpdatePlayers(_ players: [Player]) {
-        listener?.gameSettignsDidUpdatePlayers(players)
+        listener?.gameSettingsDidUpdatePlayers(players)
+    }
+
+    func didUpdateIndexByPlayer(_ on: Bool) {
+        userSettingsManager.indexByPlayer = on
     }
 
     // MARK: - Private
 
     private let activeGameStream: ActiveGameStreaming
     private let gameStorageProvider: GameStorageProviding
-
-    private func updatePlayers() {
-        guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              let card = try? gameStorageProvider.fetchScoreCard(for: identifier) else {
-            listener?.gameSettingsDidResign()
-            return
-        }
-        presenter.updatePlayers(card.orderedPlayers)
-    }
+    private let userSettingsManager: UserSettingsManaging
 }
