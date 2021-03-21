@@ -7,7 +7,10 @@ import Foundation
 import NeedleFoundation
 import ShortRibs
 
-protocol GameSettingsDependency: Dependency {}
+protocol GameSettingsDependency: Dependency {
+    var activeGameStream: ActiveGameStreaming { get }
+    var gameStorageProvider: GameStorageProviding { get }
+}
 
 class GameSettingsComponent: Component<GameSettingsDependency> {}
 
@@ -30,7 +33,9 @@ final class GameSettingsBuilder: ComponentizedBuilder<GameSettingsComponent, Pre
     override final func build(with component: GameSettingsComponent, _ dynamicBuildDependency: GameSettingsDynamicBuildDependency) -> PresentableInteractable {
         let listener = dynamicBuildDependency
         let viewController = GameSettingsViewController()
-        let interactor = GameSettingsInteractor(presenter: viewController)
+        let interactor = GameSettingsInteractor(presenter: viewController,
+                                                activeGameStream: component.activeGameStream,
+                                                gameStorageProvider: component.gameStorageProvider)
         interactor.listener = listener
         return interactor
     }

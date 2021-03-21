@@ -53,7 +53,7 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let item = dataSource.itemIdentifier(for: indexPath), case NewGameCellModel.button = item {
+        if let item = dataSource.itemIdentifier(for: indexPath), case .button = item {
             addPlayer()
         }
     }
@@ -78,6 +78,44 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
 
     // MARK: - Private
 
+    private enum SectionModel: Hashable {
+        case limitSection
+        case playerSection
+        case addSection
+
+        func hash(into hasher: inout Hasher) {
+            switch self {
+            case .limitSection:
+                hasher.combine(#line)
+            case .playerSection:
+                hasher.combine(#line)
+            case .addSection:
+                hasher.combine(#line)
+            }
+        }
+    }
+
+    private enum CellModel: Equatable, Hashable {
+        case limit(value: String?)
+        case player(name: String?, id: UUID)
+        case button(title: String)
+
+        func hash(into hasher: inout Hasher) {
+            switch self {
+            case let .limit(value):
+                hasher.combine(#line)
+                hasher.combine(value)
+            case let .player(name, id):
+                hasher.combine(#line)
+                hasher.combine(name)
+                hasher.combine(id)
+            case let .button(title):
+                hasher.combine(#line)
+                hasher.combine(title)
+            }
+        }
+    }
+
     private let header = UINavigationBar()
     private let newGameButton = NewGameButton()
 
@@ -101,10 +139,10 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
         return collectionView
     }()
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<NewGameSectionModel, NewGameCellModel> = {
+    private lazy var dataSource: UICollectionViewDiffableDataSource<SectionModel, CellModel> = {
 
-        let limitRegistration = UICollectionView.CellRegistration<NewGameScoreLimitCell, NewGameCellModel> { cell, _, model in
-            guard case let NewGameCellModel.limit(value) = model else {
+        let limitRegistration = UICollectionView.CellRegistration<NewGameScoreLimitCell, CellModel> { cell, _, model in
+            guard case let .limit(value) = model else {
                 fatalError()
             }
             var config = NewGameScoreLimitCell.newConfiguration()
@@ -113,8 +151,8 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
             cell.contentConfiguration = config
         }
 
-        let playerRegistration = UICollectionView.CellRegistration<NewGamePlayerNameCell, NewGameCellModel> { cell, indexPath, model in
-            guard case let NewGameCellModel.player(name, index) = model else {
+        let playerRegistration = UICollectionView.CellRegistration<NewGamePlayerNameCell, CellModel> { cell, indexPath, model in
+            guard case let .player(name, index) = model else {
                 fatalError()
             }
             var config = NewGamePlayerNameCell.newConfiguration()
@@ -124,8 +162,8 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
             cell.contentConfiguration = config
         }
 
-        let addRegistration = UICollectionView.CellRegistration<NewGameAddPlayerCell, NewGameCellModel> { cell, _, model in
-            guard case let NewGameCellModel.button(title) = model else {
+        let addRegistration = UICollectionView.CellRegistration<NewGameAddPlayerCell, CellModel> { cell, _, model in
+            guard case let .button(title) = model else {
                 fatalError()
             }
             var config = NewGameAddPlayerCell.newConfiguration()
@@ -133,23 +171,23 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
             cell.contentConfiguration = config
         }
 
-        let dataSource = UICollectionViewDiffableDataSource<NewGameSectionModel, NewGameCellModel>(collectionView: collectionView,
-                                                                                                   cellProvider: { view, indexPath, model in
-                                                                                                       switch model {
-                                                                                                       case .limit:
-                                                                                                           return view.dequeueConfiguredReusableCell(using: limitRegistration,
-                                                                                                                                                     for: indexPath,
-                                                                                                                                                     item: model)
-                                                                                                       case .player:
-                                                                                                           return view.dequeueConfiguredReusableCell(using: playerRegistration,
-                                                                                                                                                     for: indexPath,
-                                                                                                                                                     item: model)
-                                                                                                       case .button:
-                                                                                                           return view.dequeueConfiguredReusableCell(using: addRegistration,
-                                                                                                                                                     for: indexPath,
-                                                                                                                                                     item: model)
-                                                                                                       }
-                                                                                                   })
+        let dataSource = UICollectionViewDiffableDataSource<SectionModel, CellModel>(collectionView: collectionView,
+                                                                                     cellProvider: { view, indexPath, model in
+                                                                                         switch model {
+                                                                                         case .limit:
+                                                                                             return view.dequeueConfiguredReusableCell(using: limitRegistration,
+                                                                                                                                       for: indexPath,
+                                                                                                                                       item: model)
+                                                                                         case .player:
+                                                                                             return view.dequeueConfiguredReusableCell(using: playerRegistration,
+                                                                                                                                       for: indexPath,
+                                                                                                                                       item: model)
+                                                                                         case .button:
+                                                                                             return view.dequeueConfiguredReusableCell(using: addRegistration,
+                                                                                                                                       for: indexPath,
+                                                                                                                                       item: model)
+                                                                                         }
+                                                                                     })
         dataSource.supplementaryViewProvider = { view, kind, indexPath in
             if kind == UICollectionView.elementKindSectionHeader,
                let header = view.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
@@ -311,11 +349,11 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
     }
 
     private func update() {
-        var snapshot = NSDiffableDataSourceSnapshot<NewGameSectionModel, NewGameCellModel>()
+        var snapshot = NSDiffableDataSourceSnapshot<SectionModel, CellModel>()
         snapshot.appendSections([.limitSection])
         snapshot.appendItems([.limit(value: enteredScoreLimit)], toSection: .limitSection)
         snapshot.appendSections([.playerSection])
-        var players = [NewGameCellModel]()
+        var players = [CellModel]()
         for i in 0 ..< enteredPlayerNames.count {
             players.append(.player(name: enteredPlayerNames[i], id: .init()))
         }
@@ -342,42 +380,4 @@ final class NewGameViewController: ScopeViewController, NewGamePresentable, NewG
 private extension String {
     static var headerIdentifier: String { "header-identifier" }
     static var footerIdentifier: String { "footer-identifier" }
-}
-
-private enum NewGameSectionModel: Hashable {
-    case limitSection
-    case playerSection
-    case addSection
-
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .limitSection:
-            hasher.combine(#line)
-        case .playerSection:
-            hasher.combine(#line)
-        case .addSection:
-            hasher.combine(#line)
-        }
-    }
-}
-
-private enum NewGameCellModel: Equatable, Hashable {
-    case limit(value: String?)
-    case player(name: String?, id: UUID)
-    case button(title: String)
-
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case let .limit(value):
-            hasher.combine(#line)
-            hasher.combine(value)
-        case let .player(name, id):
-            hasher.combine(#line)
-            hasher.combine(name)
-            hasher.combine(id)
-        case let .button(title):
-            hasher.combine(#line)
-            hasher.combine(title)
-        }
-    }
 }

@@ -127,8 +127,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func newRoundDidReplaceRound(at index: Int, with round: Round) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
-        else {
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
             presenter.showOperationFailure("Couldn't read current game data from disk")
             return
         }
@@ -145,6 +144,16 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func gameSettingsDidResign() {
         routeAwayFromGameSettings()
+    }
+
+    func gameSettignsDidUpdatePlayers(_ players: [Player]) {
+        guard let identifier = activeGameStream.currentActiveGameIdentifier,
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier),
+              card.canReplacePlayers(with: players) else {
+            return
+        }
+        card.replacePlayers(with: players)
+        try? gameStorageManager.save(scoreCard: card, with: identifier)
     }
 
     // MARK: - Private

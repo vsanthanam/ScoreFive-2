@@ -11,12 +11,16 @@ final class GameSettingsInteractorTests: TestCase {
 
     let presenter = GameSettingsPresentableMock()
     let listener = GameSettingsListenerMock()
+    let activeGameStream = ActiveGameStreamingMock()
+    let gameStorageProvider = GameStorageProvidingMock()
 
     var interactor: GameSettingsInteractor!
 
     override func setUp() {
         super.setUp()
-        interactor = .init(presenter: presenter)
+        interactor = .init(presenter: presenter,
+                           activeGameStream: activeGameStream,
+                           gameStorageProvider: gameStorageProvider)
         interactor.listener = listener
     }
 
