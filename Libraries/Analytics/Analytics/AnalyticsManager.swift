@@ -47,6 +47,11 @@ public final class AnalyticsManager: AnalyticsManaging {
         guard let appKey = config.appKey,
               let host = config.host
         else {
+            guard AnalyticsEnvironment[.allowAnonymousAnalytics] == true else {
+                fatalError("""
+                Empty or invalid analytics configuration! Run `./sftool analytics install` or run the app with EV `AN_ALLOW_ANONYMOUS_ANALYTICS` as `YES`
+                """)
+            }
             isStarted = true
             return
         }

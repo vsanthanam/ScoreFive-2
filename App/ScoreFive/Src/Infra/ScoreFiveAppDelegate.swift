@@ -67,7 +67,10 @@ class ScoreFiveAppDelegate: UIResponder, UIApplicationDelegate {
     private func startAnalytics() {
         do {
             guard let file = Bundle.main.url(forResource: "analytics_config", withExtension: "json") else {
-                fatalError("Fatal: Invalid Analytics Configuration Resource")
+                fatalError("""
+                Fatal: Invalid Analytics Configuration Resource
+                Run `./sftool bootstrap` and regenerate the project
+                """)
             }
             let data = try Data(contentsOf: file)
             let config = try JSONDecoder().decode(AnalyticsConfig.self, from: data)

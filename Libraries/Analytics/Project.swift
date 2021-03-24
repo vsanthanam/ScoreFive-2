@@ -24,6 +24,7 @@ let project = Project(name: "Analytics",
                                  dependencies: [
                                      .project(target: "Logging", path: "../Logging"),
                                      .project(target: "Countly", path: "../../Vendor/Countly"),
+                                     .project(target: "AppFoundation", path: "../AppFoundation"),
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/Analytics.xcconfig")),
