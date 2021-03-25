@@ -149,6 +149,18 @@ public enum BaseEnvironment<T> where T: EnvironmentVariable {
             self.init(ambiguousValue: String(value))
         }
 
+        // MARK: - Hashable
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(ambiguousValue)
+        }
+
+        // MARK: - Equatable
+
+        public static func == (lhs: Value, rhs: Value) -> Bool {
+            lhs.ambiguousValue == rhs.ambiguousValue
+        }
+
         // MARK: - Comparable
 
         public static func < (lhs: Value, rhs: Value) -> Bool {

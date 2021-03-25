@@ -6,7 +6,7 @@
 import Combine
 import Foundation
 
-extension Notification.Name {
+public extension Notification.Name {
 
     func asPublisher<T>(object: T?) -> AnyPublisher<Notification, Never> where T: AnyObject {
         NotificationCenter.default.publisher(for: self, object: object).eraseToAnyPublisher()
