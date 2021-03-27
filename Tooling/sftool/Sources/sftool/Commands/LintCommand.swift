@@ -18,6 +18,10 @@ struct LintCommand: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: "lint", abstract: "Lint swift code")
 
     func run() throws {
+        if ci {
+            precondition(!fix)
+            precondition(!arclint)
+        }
         let configuration = try fetchConfiguration(on: root)
         do {
             try runSwiftFormat(with: configuration)
@@ -27,7 +31,7 @@ struct LintCommand: ParsableCommand {
                 print("🍻 No Errors!")
             }
         } catch {
-            if fix {
+            if fix || ci {
                 throw error
             } else {
                 let message = (error as! ShellOutError).message
@@ -59,6 +63,9 @@ struct LintCommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "File or directory to lint")
     var input: String?
+
+    @Flag(name: .shortAndLong, help: "Run in CI")
+    var ci: Bool = false
 
     private func runSwiftFormat(with configuration: ToolConfiguration) throws {
         var configComponents: [String] = .init()
@@ -93,7 +100,7 @@ struct LintCommand: ParsableCommand {
         let echo = "echo \"\(swiftformat)\" >> \(root)/.swiftformat"
         try shellOut(to: echo)
         let configToUse = try shellOut(to: .readFile(at: root + "/.swiftformat"))
-        if verbose, fix {
+        if verbose, !arclint {
             print("SwiftFormat config:")
             print(configToUse)
         }
@@ -102,6 +109,9 @@ struct LintCommand: ParsableCommand {
             command = [Commands.swiftformat(on: root), input ?? root, headerCommand].joined(separator: " ")
         } else {
             command = [Commands.swiftformat(on: root), "--lint", input ?? root, headerCommand].joined(separator: " ")
+        }
+        if verbose {
+            print("Running Command: \(command)")
         }
         try shellOut(to: command)
         try shellOut(to: .removeFile(from: root + "/.swiftformat"))

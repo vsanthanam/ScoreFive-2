@@ -31,6 +31,7 @@ struct GenerateCICommand: ParsableCommand {
         if pretty {
             script = """
             #! /bin/sh
+            ./sftool lint --ci
             ./sftool analytics wipe
             ./sftool gen deps
             ./sftool gen mocks
@@ -41,6 +42,7 @@ struct GenerateCICommand: ParsableCommand {
         } else {
             script = """
             #! /bin/sh
+            ./sftool lint --ci
             ./sftool analytics wipe
             ./sftool gen deps
             ./sftool gen mocks
