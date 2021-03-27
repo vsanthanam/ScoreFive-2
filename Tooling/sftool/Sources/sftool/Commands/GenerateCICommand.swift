@@ -31,17 +31,18 @@ struct GenerateCICommand: ParsableCommand {
         if pretty {
             script = """
             #! /bin/sh
+            set -euo pipefail
             ./sftool lint --ci
             ./sftool analytics wipe
             ./sftool gen deps
             ./sftool gen mocks
             ./sftool develop -d
-            set -euo pipefail
             xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
             """
         } else {
             script = """
             #! /bin/sh
+            set -euo pipefail
             ./sftool lint --ci
             ./sftool analytics wipe
             ./sftool gen deps
