@@ -3,6 +3,11 @@
 		"sftool-config": {
 			"type": "json",
 			"include": ["(\\.sftool-config)"]
+		},
+		"project-parse": {
+			"type": "script-and-regex",
+			"script-and-regex.script": "./sftool develop -f",
+          	"script-and-regex.regex": "/^(?P<message>.*)$/m"
 		}
 	}
 }
