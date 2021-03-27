@@ -36,6 +36,6 @@ extension Publisher {
 
 extension Collection where Element: OptionalType {
     func filterNil() -> [Element.Wrapped] {
-        compactMap { $0.asOptional }
+        compactMap(\.asOptional)
     }
 }

@@ -58,9 +58,6 @@ struct ToolConfiguration: Codable {
     /// SwiftFormat configuration
     let swiftformat: SwiftFormatConfiguration
 
-    /// SwiftLint configuration
-    let swiftlint: SwiftLintConfiguration
-
     /// Mockolo configuration
     let mockolo: MockoloConfiguration
 
@@ -97,16 +94,9 @@ struct SwiftFormatConfiguration: Codable {
 
     /// Directories to exclude
     let excludeDirs: [String]
-}
 
-struct SwiftLintConfiguration: Codable {
-
-    /// Directories to exclude
-    let excludeDirs: [String]
-
-    let disabledRules: [String]
-
-    let optInRules: [String]
+    /// Swift version
+    let swiftVersion: String
 }
 
 /// Mockolo Configuration

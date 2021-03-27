@@ -8,22 +8,13 @@
                          "redundantParens",
                          "wrapMultilineStatementBraces"],
         "excludeDirs": ["App/Derived",
-                        "bin/tuist"]
+                        "bin/tuist"],
+	"swiftVersion": "5.4"
     },
     "mockolo": {
         "testableImports": ["ShortRibs",
                             "ScoreFive",
 			    "Analytics"]
-    },
-    "swiftlint": {
-        "excludeDirs": ["App/Derived"],
-        "disabledRules": ["line_length",
-                          "nesting",
-                          "function_body_length",
-                          "identifier_name",
-                          "redundant_optional_initialization",
-                          "type_body_length"],
-        "optInRules": []
     },
     "testConfig": {
         "device": "iPhone 8 Plus",

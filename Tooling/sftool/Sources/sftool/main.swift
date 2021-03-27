@@ -17,9 +17,8 @@ struct sftool: ParsableCommand {
 
     static let configuration = CommandConfiguration(
         abstract: "A command line utility for the ScoreFive iOS repo",
-        subcommands: [SwiftFormatCommand.self,
-                      GenerateCommand.self,
-                      SwiftLintCommand.self,
+        subcommands: [GenerateCommand.self,
+                      LintCommand.self,
                       BootstrapCommand.self,
                       AnalyticsCommand.self,
                       TestCommand.self,

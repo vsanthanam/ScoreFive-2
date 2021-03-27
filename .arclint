@@ -8,6 +8,12 @@
 			"type": "script-and-regex",
 			"script-and-regex.script": "./sftool develop -f",
           	"script-and-regex.regex": "/^(?P<message>.*)$/m"
+		},
+		"swift-lint": {
+			"type": "script-and-regex",
+			"script-and-regex.script": "./sftool lint --arclint --input",
+          	"script-and-regex.regex": "/^(?P<severity>warning|error):(?P<line>\\d+) (?P<message>.*)$/m",
+			"include": ["(\\.swift)"]
 		}
 	}
 }

@@ -28,7 +28,7 @@ struct DevelopCommand: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "The file to check")
     var fileCondition: String?
-    
+
     func run() throws {
         if let fileCondition = fileCondition {
             if fileCondition.contains("Project.swift") || fileCondition.contains("Workspace.swift") {

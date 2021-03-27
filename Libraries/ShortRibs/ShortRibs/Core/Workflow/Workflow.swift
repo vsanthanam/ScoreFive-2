@@ -48,7 +48,7 @@ open class Workflow<ActionableItemType> {
     private let subject = PassthroughSubject<(ActionableItemType, Void), Error>()
 
     fileprivate var compositeCancellable = Set<AnyCancellable>()
-    fileprivate var didInvokeComplete = false
+    private var didInvokeComplete = false
 
     fileprivate func didCompleteIfNotYet() {
         // Since a workflow may be forked to produce multiple subscribed combinee chains, we should
