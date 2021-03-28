@@ -15,7 +15,7 @@ final class NewRoundInteractorTests: TestCase {
     let presenter = NewRoundPresentableMock()
     let listener = NewRoundListenerMock()
     let activeGameStream = ActiveGameStreamingMock()
-    let gameStorageProvider = GameStorageProvidingMock()
+    let gameStorageManager = GameStorageManagingMock()
     let userSettingsProvider = UserSettingsProvidingMock()
 
     var interactor: NewRoundInteractor!
@@ -31,7 +31,7 @@ final class NewRoundInteractorTests: TestCase {
         let round = card.newRound()
         let identifier = UUID()
         activeGameStream.currentActiveGameIdentifier = identifier
-        gameStorageProvider.fetchScoreCardHandler = { id in
+        gameStorageManager.fetchScoreCardHandler = { id in
             XCTAssertEqual(id, id)
             return card
         }
@@ -42,13 +42,13 @@ final class NewRoundInteractorTests: TestCase {
             XCTAssertEqual(name, "Player 1")
         }
 
-        XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 0)
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
         XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
 
         interactor.activate()
 
-        XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 1)
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 1)
         XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
     }
@@ -57,20 +57,20 @@ final class NewRoundInteractorTests: TestCase {
         let card = ScoreCard(orderedPlayers: [.testPlayer(), .testPlayer()])
         let identifier = UUID()
         activeGameStream.currentActiveGameIdentifier = identifier
-        gameStorageProvider.fetchScoreCardHandler = { id in
+        gameStorageManager.fetchScoreCardHandler = { id in
             XCTAssertEqual(id, id)
             return card
         }
 
         buildInteractor(round: Round())
 
-        XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 0)
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
         XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
 
         interactor.activate()
 
-        XCTAssertEqual(gameStorageProvider.fetchScoreCardCallCount, 1)
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
         XCTAssertEqual(presenter.setPlayerNameCallCount, 0)
         XCTAssertEqual(listener.newRoundDidResignCallCount, 1)
     }
@@ -85,7 +85,7 @@ final class NewRoundInteractorTests: TestCase {
         let card = ScoreCard(orderedPlayers: [.testPlayer(), .testPlayer()])
         let round = card.newRound()
         activeGameStream.currentActiveGameIdentifier = .init()
-        gameStorageProvider.fetchScoreCardHandler = { _ in
+        gameStorageManager.fetchScoreCardHandler = { _ in
             card
         }
 
@@ -104,12 +104,66 @@ final class NewRoundInteractorTests: TestCase {
         XCTAssertEqual(presenter.setVisibleScoreCallCount, 2)
     }
 
+    func test_inputFinalScores_savesNewRound() {
+        let player1 = Player.testPlayer()
+        let player2 = Player.testPlayer()
+        let player3 = Player.testPlayer()
+        let card = ScoreCard(orderedPlayers: [player1, player2, player3])
+        let round = card.newRound()
+        let identifier = UUID()
+        activeGameStream.currentActiveGameIdentifier = identifier
+        gameStorageManager.fetchScoreCardHandler = { id in
+            XCTAssertEqual(id, identifier)
+            return card
+        }
+
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
+
+        presenter.setPlayerNameHandler = { name in
+            XCTAssertEqual(name, player1.name)
+        }
+
+        buildInteractor(round: round)
+        interactor.activate()
+
+        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
+        XCTAssertEqual(presenter.setPlayerNameCallCount, 1)
+
+        interactor.didSaveScore(0)
+
+        presenter.setPlayerNameHandler = { name in
+            XCTAssertEqual(name, player2.name)
+        }
+
+        XCTAssertEqual(presenter.setPlayerNameCallCount, 2)
+
+        presenter.setPlayerNameHandler = { name in
+            XCTAssertEqual(name, player3.name)
+        }
+
+        interactor.didSaveScore(0)
+
+        XCTAssertEqual(presenter.setPlayerNameCallCount, 3)
+
+        gameStorageManager.saveHandler = { card, id in
+            XCTAssertEqual(id, identifier)
+            XCTAssertEqual(card.rounds.count, 1)
+        }
+
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 0)
+        XCTAssertEqual(gameStorageManager.saveCallCount, 0)
+
+        interactor.didSaveScore(23)
+
+        XCTAssertEqual(listener.newRoundDidResignCallCount, 1)
+        XCTAssertEqual(gameStorageManager.saveCallCount, 1)
+    }
+
     private func buildInteractor(round: Round,
-                                 index: Int? = nil)
-    {
+                                 index: Int? = nil) {
         interactor = .init(presenter: presenter,
                            activeGameStream: activeGameStream,
-                           gameStorageProvider: gameStorageProvider,
+                           gameStorageManager: gameStorageManager,
                            userSettingsProvider: userSettingsProvider,
                            replacingIndex: index,
                            round: round)

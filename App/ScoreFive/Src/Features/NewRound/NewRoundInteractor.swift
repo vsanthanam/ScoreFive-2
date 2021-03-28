@@ -18,8 +18,6 @@ protocol NewRoundPresentable: NewRoundViewControllable {
 /// @mockable
 protocol NewRoundListener: AnyObject {
     func newRoundDidResign()
-    func newRoundDidAddRound(_ round: Round)
-    func newRoundDidReplaceRound(at index: Int, with round: Round)
 }
 
 final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewRoundInteractable, NewRoundPresentableListener {
@@ -28,12 +26,12 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
 
     init(presenter: NewRoundPresentable,
          activeGameStream: ActiveGameStreaming,
-         gameStorageProvider: GameStorageProviding,
+         gameStorageManager: GameStorageManaging,
          userSettingsProvider: UserSettingsProviding,
          replacingIndex: Int?,
          round: Round) {
         self.activeGameStream = activeGameStream
-        self.gameStorageProvider = gameStorageProvider
+        self.gameStorageManager = gameStorageManager
         self.userSettingsProvider = userSettingsProvider
         self.replacingIndex = replacingIndex
         self.round = round
@@ -51,13 +49,13 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     override func didBecomeActive() {
         super.didBecomeActive()
         guard let id = activeGameStream.currentActiveGameIdentifier,
-              let card = try? gameStorageProvider.fetchScoreCard(for: id)
+              let card = try? gameStorageManager.fetchScoreCard(for: id)
         else {
             listener?.newRoundDidResign()
             return
         }
 
-        players = card.orderedActivePlayers(at: replacingIndex ?? card.rounds.count - 1)
+        players = card.orderedActivePlayers(at: (replacingIndex ?? card.rounds.count) - 1)
 
         guard Set(players.map(\.uuid)) == Set(round.playerIds) else {
             listener?.newRoundDidResign()
@@ -142,11 +140,16 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             return
         }
 
+        guard let identifier = activeGameStream.currentActiveGameIdentifier,
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
+            return
+        }
+
         if let index = replacingIndex {
-            if let identifier = activeGameStream.currentActiveGameIdentifier,
-               let card = try? gameStorageProvider.fetchScoreCard(for: identifier),
-               card.canReplaceRound(at: index, with: round) {
-                listener?.newRoundDidReplaceRound(at: index, with: round)
+            if card.canReplaceRound(at: index, with: round) {
+                card.replaceRound(at: index, with: round)
+                try? gameStorageManager.save(scoreCard: card, with: identifier)
+                listener?.newRoundDidResign()
             } else {
                 isSaving = false
                 currentPlayerIndex = 0
@@ -156,7 +159,9 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
                 presenter.setPlayerName(players[currentPlayerIndex].name)
             }
         } else {
-            listener?.newRoundDidAddRound(round)
+            card.addRound(round)
+            try? gameStorageManager.save(scoreCard: card, with: identifier)
+            listener?.newRoundDidResign()
         }
     }
 
@@ -178,7 +183,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
     // MARK: - Private
 
     private let activeGameStream: ActiveGameStreaming
-    private let gameStorageProvider: GameStorageProviding
+    private let gameStorageManager: GameStorageManaging
     private let userSettingsProvider: UserSettingsProviding
 
     private let replacingIndex: Int?

@@ -13,7 +13,6 @@ protocol GamePresentable: GameViewControllable {
     func showScoreCard(_ viewController: ScoreCardViewControllable)
     func updateHeaderTitles(_ titles: [String])
     func updateTotalScores(_ scores: [String], min: String, max: String)
-    func showOperationFailure(_ message: String)
     func showNewRound(_ viewController: ViewControllable)
     func closeNewRound()
     func showGameSettings(_ viewController: ViewControllable)
@@ -81,17 +80,11 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
 
     func scoreCardDidDeleteRound(at index: Int) {
         guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
-        else {
-            presenter.showOperationFailure("Couldn't read current game data from disk")
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
             return
         }
-        do {
-            card.removeRound(at: index)
-            try gameStorageManager.save(scoreCard: card, with: identifier)
-        } catch {
-            presenter.showOperationFailure("Couldn't write game data to disk")
-        }
+        card.removeRound(at: index)
+        try? gameStorageManager.save(scoreCard: card, with: identifier)
     }
 
     func scoreCardWantToEditRound(at index: Int) {
@@ -106,37 +99,6 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
     // MARK: - NewRoundListener
 
     func newRoundDidResign() {
-        routeAwayFromNewRound()
-    }
-
-    func newRoundDidAddRound(_ round: Round) {
-        guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              var card = try? gameStorageManager.fetchScoreCard(for: identifier)
-        else {
-            presenter.showOperationFailure("Couldn't read current game data from disk")
-            return
-        }
-        do {
-            card.addRound(round)
-            try gameStorageManager.save(scoreCard: card, with: identifier)
-        } catch {
-            presenter.showOperationFailure("Couldn't write game data to disk")
-        }
-        routeAwayFromNewRound()
-    }
-
-    func newRoundDidReplaceRound(at index: Int, with round: Round) {
-        guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
-            presenter.showOperationFailure("Couldn't read current game data from disk")
-            return
-        }
-        do {
-            card.replaceRound(at: index, with: round)
-            try gameStorageManager.save(scoreCard: card, with: identifier)
-        } catch {
-            presenter.showOperationFailure("Couldn't write game data to disk")
-        }
         routeAwayFromNewRound()
     }
 

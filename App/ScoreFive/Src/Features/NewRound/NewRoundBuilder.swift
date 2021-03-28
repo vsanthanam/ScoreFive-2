@@ -10,7 +10,7 @@ import ShortRibs
 
 protocol NewRoundDependency: Dependency {
     var activeGameStream: ActiveGameStreaming { get }
-    var gameStorageProvider: GameStorageProviding { get }
+    var gameStorageManager: GameStorageManaging { get }
     var userSettingsProvider: UserSettingsProviding { get }
 }
 
@@ -45,7 +45,7 @@ final class NewRoundBuilder: ComponentizedBuilder<NewRoundComponent, Presentable
         let viewController = NewRoundViewController(replacing: replacingIndex != nil)
         let interactor = NewRoundInteractor(presenter: viewController,
                                             activeGameStream: component.activeGameStream,
-                                            gameStorageProvider: component.gameStorageProvider,
+                                            gameStorageManager: component.gameStorageManager,
                                             userSettingsProvider: component.userSettingsProvider,
                                             replacingIndex: replacingIndex,
                                             round: round)

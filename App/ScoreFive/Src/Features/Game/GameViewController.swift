@@ -108,13 +108,6 @@ final class GameViewController: ScopeViewController, GamePresentable, GameViewCo
         gameFooter.apply(scores: scores, positiveLabel: min, negativeLabel: max)
     }
 
-    func showOperationFailure(_ message: String) {
-        let alertController = UIAlertController(title: "Operation Failed", message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(action)
-        present(alertController, animated: true, completion: nil)
-    }
-
     // MARK: - Private
 
     private let bottomSpacer = ScopeView()

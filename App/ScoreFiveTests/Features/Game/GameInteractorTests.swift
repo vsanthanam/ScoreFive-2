@@ -149,61 +149,6 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(newRoundBuilder.buildCallCount, 1)
     }
 
-    func test_saveNewRound() {
-        let id = UUID()
-        let card = ScoreCard(orderedPlayers: ["Player 1", "Player 2"].map(Player.init))
-        var round = card.newRound()
-        activeGameStream.currentActiveGameIdentifier = id
-        gameStorageManager.fetchScoreCardHandler = { identifier in
-            XCTAssertEqual(identifier, id)
-            return card
-        }
-
-        let newRound = PresentableInteractableMock()
-
-        newRoundBuilder.buildHandler = { listener, roundDep, _ in
-            XCTAssertEqual(round, roundDep)
-            XCTAssertTrue(listener === self.interactor)
-            return newRound
-        }
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
-        XCTAssertEqual(interactor.children.count, 0)
-        XCTAssertEqual(presenter.showNewRoundCallCount, 0)
-        XCTAssertEqual(presenter.closeNewRoundCallCount, 0)
-        XCTAssertEqual(newRoundBuilder.buildCallCount, 0)
-
-        interactor.wantNewRound()
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
-        XCTAssertEqual(interactor.children.count, 1)
-        XCTAssertEqual(presenter.showNewRoundCallCount, 1)
-        XCTAssertEqual(presenter.closeNewRoundCallCount, 0)
-        XCTAssertEqual(newRoundBuilder.buildCallCount, 1)
-
-        newRound.isActive = true
-
-        XCTAssertEqual(card.rounds.count, 0)
-
-        for i in 0 ..< card.orderedPlayers.count {
-            round[card.orderedPlayers[i].id] = i
-        }
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 0)
-
-        interactor.newRoundDidAddRound(round)
-        interactor.newRoundDidResign()
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 2)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 1)
-
-        XCTAssertEqual(interactor.children.count, 0)
-        XCTAssertEqual(presenter.showNewRoundCallCount, 1)
-        XCTAssertEqual(presenter.closeNewRoundCallCount, 1)
-        XCTAssertEqual(newRoundBuilder.buildCallCount, 1)
-    }
-
     func test_gameSettingsDidUpdatePlayer_invalidPlayers_doesntSave() {
         let players = ["P1", "P2", "P3"].map(Player.init)
         let card = ScoreCard(orderedPlayers: players)
