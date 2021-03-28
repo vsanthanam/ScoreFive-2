@@ -54,31 +54,24 @@ $ ./sftool test
 ```
 You can also open the workspace with `./sftool develop` and run the unit tests from within Xcode.
 
-### Running SwiftFormat
+### Linting
 
-You can run switformat on the repo with the correct rules and files using `sftool`:
+ScoreFive uses `swiftformat` and `swiftlint` to lint swift source files. The correct versions are bundled in the repo.
 
-1. Run `swiftformat` via `sftool`
-
-```
-$ cd path/to/repo
-$ ./sftool format
-```
-
-You can add the `-v` flag to get a more verbose output. Behavior can be customized in `.sftool-config`.
-
-### Running SwiftLint
-
-You can run switlint on the repo with the correct rules and files using `sftool`:
-
-1. Run `swiftlint` via `sftool`
+To see a list of outstanding violations, use the lint command
 
 ```
 $ cd path/to/repo
 $ ./sftool lint
 ```
 
-You can add the `-w` flag to include warnings in addition to regular failures, and `-f` to try an fix correctable failures. You can also add the `-v` flag to get a more verbose output. Behavior can be customized in `.sftool-config`.
+Some violations and formatting errors can be fixed automatically. To do this, add the `--fix` flag. 
+
+The lint command always succeeds, even if there are outstanding violations. To have the command succeed only if there are no outstanding violations, add the `--test` flag. This flag should not be used with `--fix`. `--test` can be useful in CI jobs, if you want to prevent offending code from building
+You can configure the rules and options in `.sftool-config`
+
+By default ,`./sftool lint` runs on the entire repo, but you can provide a specific path to lint using the `--input` option.
+You can also lint changed files only using `arc lint`
 
 ### Updating the DI Graph
 

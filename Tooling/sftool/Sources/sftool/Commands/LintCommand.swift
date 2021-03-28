@@ -43,9 +43,11 @@ struct LintCommand: ParsableCommand {
                 .map { output in
                     if arclint {
                         let comps = output.split(separator: ":")
-                        return "warning:\(comps[1]) \(comps[4])(swiftformat)"
+                        let flag = comps[3].dropFirst()
+                        let message = comps[4].dropFirst()
+                        return "\(flag):\(comps[1]):\(comps[2]) \(message) [swiftformat]"
                     } else {
-                        return String(output) + "(swiftformat)"
+                        return String(output) + " [swiftformat]"
                     }
                 }
                 .forEach { line in
@@ -64,9 +66,11 @@ struct LintCommand: ParsableCommand {
                 .map { output in
                     if arclint {
                         let comps = output.split(separator: ":")
-                        return "warning:\(comps[1]) \(comps[4])(swiftlint)"
+                        let flag = comps[3].dropFirst()
+                        let message = comps[4].dropFirst()
+                        return "\(flag):\(comps[1]):\(comps[2]) \(message) [swiftlint]"
                     } else {
-                        return String(output) + "(swiftlint)"
+                        return String(output) + " [swiftlint]"
                     }
                 }
                 .forEach { line in
@@ -96,7 +100,7 @@ struct LintCommand: ParsableCommand {
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
 
-    @Flag(name: .shortAndLong, help: "Arc Lint")
+    @Flag(name: .shortAndLong, help: "For internal use by arcanist. Do not use.")
     var arclint: Bool = false
 
     @Option(name: .shortAndLong, help: "File or directory to lint")

@@ -7,7 +7,8 @@
                          "unusedArguments",
                          "redundantParens",
                          "wrapMultilineStatementBraces",
-                         "trailingCommas"],
+                         "trailingCommas",
+                         "braces"],
         "excludeDirs": ["App/Derived",
                         "bin/tuist"],
 	"swiftVersion": "5.4"
