@@ -7,15 +7,15 @@ import Foundation
 @testable import ScoreFive
 import XCTest
 
-final class GameSettingsInteractorTests: TestCase {
+final class GameSettingsHomeInteractorTests: TestCase {
 
-    let presenter = GameSettingsPresentableMock()
-    let listener = GameSettingsListenerMock()
+    let presenter = GameSettingsHomePresentableMock()
+    let listener = GameSettingsHomeListenerMock()
     let activeGameStream = ActiveGameStreamingMock()
     let gameStorageProvider = GameStorageProvidingMock()
     let userSettingsManager = UserSettingsManagingMock()
 
-    var interactor: GameSettingsInteractor!
+    var interactor: GameSettingsHomeInteractor!
 
     override func setUp() {
         super.setUp()
@@ -31,15 +31,15 @@ final class GameSettingsInteractorTests: TestCase {
     }
 
     func test_didTapClose_callsListener() {
-        XCTAssertEqual(listener.gameSettingsDidResignCallCount, 0)
+        XCTAssertEqual(listener.gameSettingsHomeDidResignCallCount, 0)
         interactor.didTapClose()
-        XCTAssertEqual(listener.gameSettingsDidResignCallCount, 1)
+        XCTAssertEqual(listener.gameSettingsHomeDidResignCallCount, 1)
     }
 
     func test_didUpdatePlayers_callsListener() {
-        XCTAssertEqual(listener.gameSettingsDidUpdatePlayersCallCount, 0)
+        XCTAssertEqual(listener.gameSettingsHomeDidUpdatePlayersCallCount, 0)
         interactor.didUpdatePlayers([])
-        XCTAssertEqual(listener.gameSettingsDidUpdatePlayersCallCount, 1)
+        XCTAssertEqual(listener.gameSettingsHomeDidUpdatePlayersCallCount, 1)
     }
 
 }

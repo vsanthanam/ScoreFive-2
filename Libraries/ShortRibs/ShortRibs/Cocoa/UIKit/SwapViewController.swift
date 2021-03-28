@@ -22,42 +22,52 @@ open class ParentNavigationController: ScopeViewController {
 
     // MARK: - API
 
+    public var parentBar: UINavigationBar {
+        nav.navigationBar
+    }
+
+    public func setBarColor(_ color: UIColor) {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        let style = NSMutableParagraphStyle()
+        style.firstLineHeadIndent = 10 // This is added to the default margin
+        appearance.backgroundColor = color
+        nav.navigationBar.standardAppearance = appearance
+        nav.navigationBar.compactAppearance = appearance
+        nav.navigationBar.scrollEdgeAppearance = appearance
+    }
+
     open func embedActiveChild(_ viewController: ViewControllable, with direction: Direction) {
-        guard !internalNavigationController.viewControllers.contains(viewController.uiviewController) else {
+        guard !nav.viewControllers.contains(viewController.uiviewController) else {
             return
         }
         switch direction {
         case .pop:
-            internalNavigationController.setViewControllers([viewController.uiviewController] + internalNavigationController.viewControllers, animated: false)
-            internalNavigationController.popToViewController(viewController.uiviewController, animated: true)
+            nav.setViewControllers([viewController.uiviewController] + nav.viewControllers, animated: false)
+            nav.popToViewController(viewController.uiviewController, animated: true)
         case .push:
-            internalNavigationController.pushViewController(viewController: viewController.uiviewController, animated: true) { [weak internalNavigationController] in
-                internalNavigationController?.viewControllers = [viewController.uiviewController]
+            nav.pushViewController(viewController: viewController.uiviewController, animated: true) { [weak nav] in
+                nav?.viewControllers = [viewController.uiviewController]
             }
         }
     }
 
     // MARK: - Private
 
-    private let internalNavigationController = UINavigationController()
+    private let nav = UINavigationController()
 
     private func setUp() {
-        addChild(internalNavigationController)
-        view.addSubview(internalNavigationController.view)
-        internalNavigationController.view.snp.makeConstraints { make in
+        addChild(nav)
+        view.addSubview(nav.view)
+        nav.view.snp.makeConstraints { make in
             make
                 .edges
                 .equalToSuperview()
         }
-        internalNavigationController.didMove(toParent: self)
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        let style = NSMutableParagraphStyle()
-        style.firstLineHeadIndent = 10 // This is added to the default margin
-        appearance.largeTitleTextAttributes = [.paragraphStyle: style]
-        internalNavigationController.navigationBar.standardAppearance = appearance
-        internalNavigationController.navigationBar.isTranslucent = false
-        internalNavigationController.navigationBar.prefersLargeTitles = true
+        nav.didMove(toParent: self)
+        setBarColor(.white)
+        nav.navigationBar.isTranslucent = false
+        nav.navigationBar.prefersLargeTitles = true
     }
 }
 

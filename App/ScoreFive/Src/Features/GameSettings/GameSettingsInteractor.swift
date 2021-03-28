@@ -3,8 +3,6 @@
 // Varun Santhanam
 //
 
-import Combine
-import CombineSchedulers
 import Foundation
 import ScoreKeeping
 import ShortRibs
@@ -12,27 +10,26 @@ import ShortRibs
 /// @mockable
 protocol GameSettingsPresentable: GameSettingsViewControllable {
     var listener: GameSettingsPresentableListener? { get set }
-    func updatePlayers(_ players: [Player])
-    func updateIndexByPlayer(_ on: Bool)
+    func showGameSettingsHome(_ viewController: ViewControllable)
 }
 
 /// @mockable
 protocol GameSettingsListener: AnyObject {
     func gameSettingsDidResign()
-    func gameSettingsDidUpdatePlayers(_ players: [Player])
 }
 
 final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentable>, GameSettingsInteractable, GameSettingsPresentableListener {
 
+    // MARK: - Initializers
+
     init(presenter: GameSettingsPresentable,
+         gameSettingsHomeBuilder: GameSettingsHomeBuildable,
          activeGameStream: ActiveGameStreaming,
-         gameStorageProvider: GameStorageProviding,
-         userSettingsManager: UserSettingsManaging) {
+         gameStorageManager: GameStorageManaging) {
+        self.gameSettingsHomeBuilder = gameSettingsHomeBuilder
         self.activeGameStream = activeGameStream
-        self.gameStorageProvider = gameStorageProvider
-        self.userSettingsManager = userSettingsManager
+        self.gameStorageManager = gameStorageManager
         super.init(presenter: presenter)
-        presenter.listener = self
     }
 
     // MARK: - API
@@ -43,33 +40,36 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              let card = try? gameStorageProvider.fetchScoreCard(for: identifier) else {
-            listener?.gameSettingsDidResign()
-            return
-        }
-        presenter.updatePlayers(card.orderedPlayers)
-        presenter.updateIndexByPlayer(userSettingsManager.indexByPlayer)
-
+        routeToGameSettingsHome()
     }
 
-    // MARK: - GameSettingsPresentableListener
+    // MARK: - GameSettingsHomeListener
 
-    func didTapClose() {
+    func gameSettingsHomeDidResign() {
         listener?.gameSettingsDidResign()
     }
 
-    func didUpdatePlayers(_ players: [Player]) {
-        listener?.gameSettingsDidUpdatePlayers(players)
-    }
-
-    func didUpdateIndexByPlayer(_ on: Bool) {
-        userSettingsManager.indexByPlayer = on
+    func gameSettingsHomeDidUpdatePlayers(_ players: [Player]) {
+        guard let identifier = activeGameStream.currentActiveGameIdentifier,
+              var card = try? gameStorageManager.fetchScoreCard(for: identifier),
+              card.canReplacePlayers(with: players) else {
+            return
+        }
+        card.replacePlayers(with: players)
+        try? gameStorageManager.save(scoreCard: card, with: identifier)
     }
 
     // MARK: - Private
 
+    private let gameSettingsHomeBuilder: GameSettingsHomeBuildable
     private let activeGameStream: ActiveGameStreaming
-    private let gameStorageProvider: GameStorageProviding
-    private let userSettingsManager: UserSettingsManaging
+    private let gameStorageManager: GameStorageManaging
+
+    private var currentGameSettingsHome: PresentableInteractable?
+
+    private func routeToGameSettingsHome() {
+        let interactor = currentGameSettingsHome ?? gameSettingsHomeBuilder.build(withListener: self)
+        attach(child: interactor)
+        presenter.showGameSettingsHome(interactor.viewControllable)
+    }
 }

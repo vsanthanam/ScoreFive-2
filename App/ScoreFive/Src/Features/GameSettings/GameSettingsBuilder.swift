@@ -9,14 +9,19 @@ import ShortRibs
 
 protocol GameSettingsDependency: Dependency {
     var activeGameStream: ActiveGameStreaming { get }
-    var gameStorageProvider: GameStorageProviding { get }
-    var userSettingsManager: UserSettingsManaging { get }
+    var gameStorageManager: GameStorageManaging { get }
 }
 
-class GameSettingsComponent: Component<GameSettingsDependency> {}
+class GameSettingsComponent: Component<GameSettingsDependency> {
+
+    fileprivate var gameSettingsHomeBuilder: GameSettingsHomeBuildable {
+        GameSettingsHomeBuilder { GameSettingsHomeComponent(parent: self) }
+    }
+
+}
 
 /// @mockable
-protocol GameSettingsInteractable: PresentableInteractable {}
+protocol GameSettingsInteractable: PresentableInteractable, GameSettingsHomeListener {}
 
 typealias GameSettingsDynamicBuildDependency = (
     GameSettingsListener
@@ -35,9 +40,10 @@ final class GameSettingsBuilder: ComponentizedBuilder<GameSettingsComponent, Pre
         let listener = dynamicBuildDependency
         let viewController = GameSettingsViewController()
         let interactor = GameSettingsInteractor(presenter: viewController,
+                                                gameSettingsHomeBuilder: component.gameSettingsHomeBuilder,
                                                 activeGameStream: component.activeGameStream,
-                                                gameStorageProvider: component.gameStorageProvider,
-                                                userSettingsManager: component.userSettingsManager)
+                                                gameStorageManager: component.gameStorageManager)
+        viewController.listener = interactor
         interactor.listener = listener
         return interactor
     }

@@ -80,7 +80,7 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(presenter.updateTotalScoresCallCount, 1)
     }
 
-    func test_routeToGameSettings() {
+    func test_routeToGameSettingsHome() {
         let gameSettings = PresentableInteractableMock()
         gameSettingsBuilder.buildHandler = { listener in
             XCTAssertTrue(listener === self.interactor)
@@ -148,55 +148,6 @@ final class GameInteractorTests: TestCase {
         XCTAssertEqual(presenter.closeNewRoundCallCount, 1)
         XCTAssertEqual(newRoundBuilder.buildCallCount, 1)
     }
-
-    func test_gameSettingsDidUpdatePlayer_invalidPlayers_doesntSave() {
-        let players = ["P1", "P2", "P3"].map(Player.init)
-        let card = ScoreCard(orderedPlayers: players)
-        let identifier = UUID()
-        activeGameStream.currentActiveGameIdentifier = identifier
-        gameStorageManager.fetchScoreCardHandler = { id in
-            XCTAssertEqual(id, identifier)
-            return card
-        }
-
-        let brokenPlayers = ["P1", "P2", "P3"].map(Player.init)
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 0)
-
-        interactor.gameSettingsDidUpdatePlayers(brokenPlayers)
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 0)
-    }
-
-    func test_gameSettingsDidUpdatePlayer_validPlayers_updatesPlayers() {
-        let players = ["P1", "P2", "P3"].map(Player.init)
-        let card = ScoreCard(orderedPlayers: players)
-        let identifier = UUID()
-        activeGameStream.currentActiveGameIdentifier = identifier
-
-        let newPlayers: [Player] = players.reversed()
-
-        gameStorageManager.fetchScoreCardHandler = { id in
-            XCTAssertEqual(id, identifier)
-            return card
-        }
-
-        gameStorageManager.saveHandler = { card, id in
-            XCTAssertEqual(id, identifier)
-            XCTAssertEqual(card.orderedPlayers, newPlayers)
-        }
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 0)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 0)
-
-        interactor.gameSettingsDidUpdatePlayers(newPlayers)
-
-        XCTAssertEqual(gameStorageManager.fetchScoreCardCallCount, 1)
-        XCTAssertEqual(gameStorageManager.saveCallCount, 1)
-    }
-
 }
 
 private extension Player {

@@ -35,7 +35,7 @@ $ ./sftool develop
 
 ## Development
 
-This project is hosted at phab.vsanthanam.com and manage using phacility tools. The copy on github is just a mirror, and only contains the `main` branch. To contribute, visit [the hosted phabricator install](https://phab.vsanthanam.com) and request a user account.
+This project is hosted at phab.vsanthanam.com and manage using phacility tools. The copy on github is just a mirror, and only contains the `main` branch. To contribute, visit [the hosted phabricator install](https://phab.vsanthanam.com) and request a user account. You'll also need to [install arcanist](https://secure.phabricator.com/book/phabricator/article/arcanist_quick_start/)
 
 ### Running the Unit Tests
 
