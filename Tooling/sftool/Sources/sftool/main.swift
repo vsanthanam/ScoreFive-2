@@ -81,6 +81,7 @@ enum Commands {
             do {
                 return try shellOut(to: .readFile(at: root + "/App/ScoreFive/Resources/analytics_config.json"))
             } catch {
+                // swiftlint:disable:next force_cast
                 throw ConfigurationError.notFound(error: error as! ShellOutError)
             }
         }

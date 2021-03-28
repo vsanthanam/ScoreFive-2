@@ -41,8 +41,8 @@ struct TestCommand: ParsableCommand {
             print(results)
             print("Tests Complete! 🍻")
         } catch {
+            // swiftlint:disable:next force_cast
             print("\((error as! ShellOutError).message)")
-            throw error
         }
     }
 }

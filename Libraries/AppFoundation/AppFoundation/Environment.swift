@@ -143,7 +143,7 @@ public enum BaseEnvironment<T> where T: EnvironmentVariable {
             }
         }
 
-        // MARK: -  ExpressibleByFloatLiteral
+        // MARK: - ExpressibleByFloatLiteral
 
         public init(floatLiteral value: Double) {
             self.init(ambiguousValue: String(value))

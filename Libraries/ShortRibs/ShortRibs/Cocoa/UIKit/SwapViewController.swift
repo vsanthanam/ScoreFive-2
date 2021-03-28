@@ -65,8 +65,7 @@ public extension UINavigationController {
 
     func pushViewController(viewController: UIViewController,
                             animated: Bool,
-                            completion: (() -> Void)?)
-    {
+                            completion: (() -> Void)?) {
         pushViewController(viewController, animated: animated)
         guard animated, let coordinator = transitionCoordinator else {
             defer {
@@ -80,8 +79,7 @@ public extension UINavigationController {
     @discardableResult
     func popToViewController(_ viewController: UIViewController,
                              animated: Bool,
-                             completion: (() -> Void)?) -> [UIViewController]?
-    {
+                             completion: (() -> Void)?) -> [UIViewController]? {
         let vcs = popToViewController(viewController, animated: animated)
         guard animated, let coordinator = transitionCoordinator else {
             defer {

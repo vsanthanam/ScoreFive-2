@@ -32,7 +32,7 @@ struct GenerateCICommand: ParsableCommand {
             script = """
             #! /bin/sh
             set -euo pipefail
-            ./sftool lint --ci
+            ./sftool lint --test
             ./sftool analytics wipe
             ./sftool gen deps
             ./sftool gen mocks
@@ -43,7 +43,7 @@ struct GenerateCICommand: ParsableCommand {
             script = """
             #! /bin/sh
             set -euo pipefail
-            ./sftool lint --ci
+            ./sftool lint --test
             ./sftool analytics wipe
             ./sftool gen deps
             ./sftool gen mocks

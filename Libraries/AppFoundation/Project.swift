@@ -33,16 +33,16 @@ let project = Project(name: "AppFoundation",
                                  infoPlist: "AppFoundationTests/Info.plist",
                                  sources: ["AppFoundationTests/**"],
                                  dependencies: [
-                                     .target(name: "AppFoundation"),
+                                     .target(name: "AppFoundation")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .init(settings: [:], xcconfig: .relativeToManifest("Config/AppFoundationTests.xcconfig")),
                                                  release: .init(settings: [:], xcconfig: .relativeToManifest("Config/AppFoundationTests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "AppFoundation",
                                 shared: true,
                                 buildAction: BuildAction(targets: ["AppFoundation"]),
-                                testAction: TestAction(targets: ["AppFoundationTests"])),
+                                testAction: TestAction(targets: ["AppFoundationTests"]))
                       ])

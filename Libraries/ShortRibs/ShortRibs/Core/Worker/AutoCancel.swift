@@ -22,7 +22,7 @@ class AutoCancel {
             cancellable
         }
         set {
-            guard ((newValue as AnyObject) !== (cancellable as AnyObject)) else {
+            guard (newValue as AnyObject) !== (cancellable as AnyObject) else {
                 return
             }
             cancellable?.cancel()

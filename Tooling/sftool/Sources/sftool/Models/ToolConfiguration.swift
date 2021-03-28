@@ -36,6 +36,7 @@ func fetchConfiguration(on root: String) throws -> ToolConfiguration {
         do {
             return try shellOut(to: .readFile(at: root + "/.sftool-config"))
         } catch {
+            // swiftlint:disable:next force_cast
             throw ConfigurationError.notFound(error: error as! ShellOutError)
         }
     }
@@ -57,6 +58,9 @@ struct ToolConfiguration: Codable {
 
     /// SwiftFormat configuration
     let swiftformat: SwiftFormatConfiguration
+
+    /// SwiftLint configuration
+    let swiftlint: SwiftLintConfiguration
 
     /// Mockolo configuration
     let mockolo: MockoloConfiguration
@@ -97,6 +101,18 @@ struct SwiftFormatConfiguration: Codable {
 
     /// Swift version
     let swiftVersion: String
+}
+
+struct SwiftLintConfiguration: Codable {
+
+    /// Directories to exclude
+    let excludeDirs: [String]
+
+    /// Disabled rules
+    let disabledRules: [String]
+
+    /// Opt-In Rules
+    let optInRules: [String]
 }
 
 /// Mockolo Configuration

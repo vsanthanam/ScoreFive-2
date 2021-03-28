@@ -46,7 +46,7 @@ final class RootInteractorTests: TestCase {
     func test_activate_firesAnalyticsEvent() {
         analyticsManager.sendHandler = { event, _ in
             guard let event = event as? AnalyticsEvent else {
-                XCTFail()
+                XCTFail("missing analytis event!")
                 return
             }
             XCTAssertEqual(event, .app_tree_activated)

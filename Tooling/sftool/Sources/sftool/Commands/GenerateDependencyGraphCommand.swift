@@ -31,13 +31,8 @@ struct GenerateDependencyGraphCommand: ParsableCommand {
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)
-        do {
-            try generateDependencyGraph(with: configuration)
-            print("Process Complete! 🍻")
-        } catch {
-            print("Needle Failed: \((error as! ShellOutError).message)")
-            throw error
-        }
+        try generateDependencyGraph(with: configuration)
+        print("Generated Needle DI Graph! 🍻")
     }
 
     // MARK: - API

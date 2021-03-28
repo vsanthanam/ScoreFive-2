@@ -22,7 +22,7 @@ let project = Project(name: "ShortRibs",
                                                   private: [],
                                                   project: []),
                                  dependencies: [
-                                     .project(target: "SnapKit", path: "../../Vendor/SnapKit"),
+                                     .project(target: "SnapKit", path: "../../Vendor/SnapKit")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .init(settings: [:], xcconfig: .relativeToManifest("Config/ShortRibs.xcconfig")),
@@ -35,16 +35,16 @@ let project = Project(name: "ShortRibs",
                                  infoPlist: "ShortRibsTests/Info.plist",
                                  sources: ["ShortRibsTests/**"],
                                  dependencies: [
-                                     .target(name: "ShortRibs"),
+                                     .target(name: "ShortRibs")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .init(settings: [:], xcconfig: .relativeToManifest("Config/ShortRibsTests.xcconfig")),
                                                  release: .init(settings: [:], xcconfig: .relativeToManifest("Config/ShortRibsTests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "ShortRibs",
                                 shared: true,
                                 buildAction: BuildAction(targets: ["ShortRibs"]),
-                                testAction: TestAction(targets: ["ShortRibsTests"])),
+                                testAction: TestAction(targets: ["ShortRibsTests"]))
                       ])

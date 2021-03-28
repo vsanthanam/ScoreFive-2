@@ -6,6 +6,13 @@
 import ArgumentParser
 import Foundation
 import ShellOut
+import Yams
+
+enum LintError: Error {
+    case invalidConfiguration
+    case lintFailed
+    case unknownFailuer
+}
 
 struct LintCommand: ParsableCommand {
 
@@ -18,35 +25,62 @@ struct LintCommand: ParsableCommand {
     static let configuration = CommandConfiguration(commandName: "lint", abstract: "Lint swift code")
 
     func run() throws {
-        if ci {
-            precondition(!fix)
-            precondition(!arclint)
+        if test, (fix || arclint) {
+            throw LintError.invalidConfiguration
         }
         let configuration = try fetchConfiguration(on: root)
+
+        var lintOutput = [String]()
         do {
             try runSwiftFormat(with: configuration)
-            if fix {
-                print("🍻 Files Fixed!")
-            } else if !arclint {
-                print("🍻 No Errors!")
-            }
         } catch {
-            if fix || ci {
-                throw error
-            } else {
-                let message = (error as! ShellOutError).message
-                message
-                    .split(separator: "\n")
-                    .filter { $0.hasPrefix("/") }
-                    .map { output in
-                        if arclint {
-                            let comps = output.split(separator: ":")
-                            return "warning:\(comps[1]) \(comps[4])"
-                        } else {
-                            return output
-                        }
+            guard let message = (error as? ShellOutError)?.message else {
+                throw LintError.unknownFailuer
+            }
+            message
+                .split(separator: "\n")
+                .filter { $0.hasPrefix("/") }
+                .map { output in
+                    if arclint {
+                        let comps = output.split(separator: ":")
+                        return "warning:\(comps[1]) \(comps[4])(swiftformat)"
+                    } else {
+                        return String(output) + "(swiftformat)"
                     }
-                    .forEach { print($0) }
+                }
+                .forEach { line in
+                    lintOutput.append(line)
+                }
+        }
+        do {
+            try runSwiftLint(with: configuration)
+        } catch {
+            guard let message = (error as? ShellOutError)?.output else {
+                throw LintError.unknownFailuer
+            }
+            message
+                .split(separator: "\n")
+                .filter { $0.hasPrefix("/") }
+                .map { output in
+                    if arclint {
+                        let comps = output.split(separator: ":")
+                        return "warning:\(comps[1]) \(comps[4])(swiftlint)"
+                    } else {
+                        return String(output) + "(swiftlint)"
+                    }
+                }
+                .forEach { line in
+                    lintOutput.append(line)
+                }
+        }
+
+        wipeConfigurations()
+
+        if !lintOutput.isEmpty {
+            if test {
+                throw LintError.lintFailed
+            } else {
+                lintOutput.forEach { print($0) }
             }
         }
     }
@@ -68,8 +102,15 @@ struct LintCommand: ParsableCommand {
     @Option(name: .shortAndLong, help: "File or directory to lint")
     var input: String?
 
-    @Flag(name: .shortAndLong, help: "Run in CI")
-    var ci: Bool = false
+    @Flag(name: .shortAndLong, help: "Fail it code has errors. This option cannot be used with --arclint or with --fix")
+    var test: Bool = false
+
+    // MARK: - Private
+
+    private func wipeConfigurations() {
+        _ = try? shellOut(to: .removeFile(from: root + "/.swiftformat"))
+        _ = try? shellOut(to: .removeFile(from: root + "/.swiftlint.yml"))
+    }
 
     private func runSwiftFormat(with configuration: ToolConfiguration) throws {
         var configComponents: [String] = .init()
@@ -118,6 +159,37 @@ struct LintCommand: ParsableCommand {
             print("Running Command: \(command)")
         }
         try shellOut(to: command)
-        try shellOut(to: .removeFile(from: root + "/.swiftformat"))
+    }
+
+    private func runSwiftLint(with configuration: ToolConfiguration) throws {
+
+        struct SwiftLintConfig: Codable {
+            var excluded: [String] = []
+            var disabled_rules: [String] = []
+        }
+
+        var config = SwiftLintConfig()
+        let exclude = (configuration.swiftlint.excludeDirs + [configuration.vendorCodePath, configuration.diGraphPath, configuration.mockPath]).map { root + "/" + $0 }
+        config.excluded = exclude
+        config.disabled_rules = configuration.swiftlint.disabledRules
+
+        let encoder = YAMLEncoder()
+        let yaml = try encoder.encode(config)
+        if verbose {
+            print("SwiftLint Configuration:")
+            print(yaml)
+        }
+        let echo = "echo \"\(yaml)\" >> \(root)/.swiftlint.yml"
+        try shellOut(to: echo)
+        var command = Commands.swiftlint(on: root)
+        if fix {
+            command = [command, "--path", (input ?? root), "--fix", "--strict"].joined(separator: " ")
+        } else {
+            command = [command, "--path", (input ?? root), "--strict"].joined(separator: " ")
+        }
+        if verbose {
+            print("Running Command: \(command)")
+        }
+        try shellOut(to: command)
     }
 }

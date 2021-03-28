@@ -24,7 +24,7 @@ let project = Project(name: "Analytics",
                                  dependencies: [
                                      .project(target: "Logging", path: "../Logging"),
                                      .project(target: "Countly", path: "../../Vendor/Countly"),
-                                     .project(target: "AppFoundation", path: "../AppFoundation"),
+                                     .project(target: "AppFoundation", path: "../AppFoundation")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/Analytics.xcconfig")),
@@ -37,16 +37,16 @@ let project = Project(name: "Analytics",
                                  infoPlist: "AnalyticsTests/Info.plist",
                                  sources: ["AnalyticsTests/**"],
                                  dependencies: [
-                                     .target(name: "Analytics"),
+                                     .target(name: "Analytics")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/AnalyticsTests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/AnalyticsTests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "Analytics",
                                 shared: true,
                                 buildAction: BuildAction(targets: ["Analytics"]),
-                                testAction: TestAction(targets: ["AnalyticsTests"])),
+                                testAction: TestAction(targets: ["AnalyticsTests"]))
                       ])

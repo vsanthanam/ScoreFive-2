@@ -18,13 +18,13 @@ let project = Project(name: "ScoreFive",
                                  bundleId: "com.varunsanthanam.ScoreFive",
                                  infoPlist: "ScoreFive/Info.plist",
                                  sources: [
-                                     "ScoreFive/Src/**",
+                                     "ScoreFive/Src/**"
                                  ],
                                  resources: [
-                                     "ScoreFive/Resources/**",
+                                     "ScoreFive/Resources/**"
                                  ],
                                  actions: [
-                                     .pre(script: "../sftool gen deps -r ../", name: "Generate DI Graph"),
+                                     .pre(script: "../sftool gen deps -r ../", name: "Generate DI Graph")
                                  ],
                                  dependencies: [
                                      .project(target: "Analytics", path: "../Libraries/Analytics"),
@@ -39,14 +39,14 @@ let project = Project(name: "ScoreFive",
                                      .project(target: "CombineSchedulers", path: "../Vendor/CombineSchedulers"),
                                      .sdk(name: "UIKit.framework", status: .required),
                                      .sdk(name: "Combine.framework", status: .required),
-                                     .sdk(name: "CoreData.framework", status: .required),
+                                     .sdk(name: "CoreData.framework", status: .required)
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFive.xcconfig")),
                                                  defaultSettings: .recommended),
                                  coreDataModels: [
-                                     .init("ScoreFive/ScoreFive.xcdatamodeld", currentVersion: "ScoreFive"),
+                                     .init("ScoreFive/ScoreFive.xcdatamodeld", currentVersion: "ScoreFive")
                                  ]),
                           Target(name: "ScoreFiveTests",
                                  platform: .iOS,
@@ -54,19 +54,19 @@ let project = Project(name: "ScoreFive",
                                  bundleId: "com.varunsanthanam.ScoreFiveTests",
                                  infoPlist: "ScoreFiveTests/Info.plist",
                                  sources: [
-                                     "ScoreFiveTests/**",
+                                     "ScoreFiveTests/**"
                                  ],
                                  actions: [
-                                     .pre(script: "../sftool gen mocks -r ../", name: "Generate Mocks"),
+                                     .pre(script: "../sftool gen mocks -r ../", name: "Generate Mocks")
                                  ],
                                  dependencies: [
                                      .target(name: "ScoreFive"),
-                                     .project(target: "FBSnapshotTestCase", path: "../Vendor/FBSnapshotTestCase"),
+                                     .project(target: "FBSnapshotTestCase", path: "../Vendor/FBSnapshotTestCase")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFiveTests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreFiveTests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "App",
@@ -76,5 +76,5 @@ let project = Project(name: "ScoreFive",
                                 runAction: RunAction(executable: "ScoreFive",
                                                      arguments: .init(environment: ["FB_REFERENCE_IMAGE_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/ReferenceImages",
                                                                                     "IMAGE_DIFF_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/FailureDiffs",
-                                                                                    "AN_ALLOW_ANONYMOUS_ANALYTICS": "YES"]))),
+                                                                                    "AN_ALLOW_ANONYMOUS_ANALYTICS": "YES"])))
                       ])

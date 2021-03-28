@@ -137,10 +137,10 @@ public extension Publisher where Failure == Never {
         combineLatest(interactor.isActiveStream) { element, isActive in
             (element, isActive)
         }
-        .filter { element, isActive in
+        .filter { _, isActive in
             isActive
         }
-        .map { element, isActive in
+        .map { element, _ in
             element
         }
         .eraseToAnyPublisher()

@@ -29,6 +29,7 @@ open class PresentableInteractor<Presenter>: Interactor, PresentableInteractable
     // MARK: - PresentableInteractable
 
     public var viewControllable: ViewControllable {
+        // swiftlint:disable:next force_cast
         presenter as! ViewControllable
     }
 

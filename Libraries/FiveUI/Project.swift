@@ -22,7 +22,7 @@ let project = Project(name: "FiveUI",
                                                   private: [],
                                                   project: []),
                                  dependencies: [
-                                     .project(target: "SnapKit", path: "../../Vendor/SnapKit"),
+                                     .project(target: "SnapKit", path: "../../Vendor/SnapKit")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/FiveUI.xcconfig")),
@@ -35,16 +35,16 @@ let project = Project(name: "FiveUI",
                                  infoPlist: "FiveUITests/Info.plist",
                                  sources: ["FiveUITests/**"],
                                  dependencies: [
-                                     .target(name: "FiveUI"),
+                                     .target(name: "FiveUI")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/FiveUITests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/FiveUITests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "FiveUI",
                                 shared: true,
                                 buildAction: BuildAction(targets: ["FiveUI"]),
-                                testAction: TestAction(targets: ["FiveUITests"])),
+                                testAction: TestAction(targets: ["FiveUITests"]))
                       ])

@@ -33,16 +33,16 @@ let project = Project(name: "ScoreKeeping",
                                  infoPlist: "ScoreKeepingTests/Info.plist",
                                  sources: ["ScoreKeepingTests/**"],
                                  dependencies: [
-                                     .target(name: "ScoreKeeping"),
+                                     .target(name: "ScoreKeeping")
                                  ],
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/ScoreKeepingTests.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "ScoreKeeping",
                                 shared: true,
                                 buildAction: BuildAction(targets: ["ScoreKeeping"]),
-                                testAction: TestAction(targets: ["ScoreKeepingTests"])),
+                                testAction: TestAction(targets: ["ScoreKeepingTests"]))
                       ])

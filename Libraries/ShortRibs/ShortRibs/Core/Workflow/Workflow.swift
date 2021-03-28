@@ -155,8 +155,7 @@ open class Step<WorkflowActionableItemType, ActionableItemType, ValueType> {
     // MARK: - Private
 
     fileprivate init(workflow: Workflow<WorkflowActionableItemType>,
-                     publisher: AnyPublisher<(ActionableItemType, ValueType), Error>)
-    {
+                     publisher: AnyPublisher<(ActionableItemType, ValueType), Error>) {
         self.workflow = workflow
         self.publisher = publisher
     }

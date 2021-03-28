@@ -78,8 +78,7 @@ open class BaseScopeViewController<T>: UIViewController, ViewControllable where 
                                                         .viewWillAppear,
                                                         .viewWillDisappear],
                         once: Bool = false,
-                        closure: @escaping () -> Void)
-    {
+                        closure: @escaping () -> Void) {
         confineTo(viewEvents: viewEvents,
                   value: (),
                   once: once,
@@ -97,8 +96,7 @@ open class BaseScopeViewController<T>: UIViewController, ViewControllable where 
                                                            .viewWillDisappear],
                            value: T,
                            once: Bool = false,
-                           closure: @escaping (T) -> Void)
-    {
+                           closure: @escaping (T) -> Void) {
         var confined = Just<T>(value)
             .eraseToAnyPublisher()
             .confineTo(viewEvents: viewEvents,
@@ -229,10 +227,10 @@ extension Publisher where Failure == Never {
             .combineLatest(self) { withinEventsSet, value in
                 (withinEventsSet, value)
             }
-            .filter { withinEventsSet, value in
+            .filter { withinEventsSet, _ in
                 withinEventsSet
             }
-            .map { withinEventsSet, value in
+            .map { _, value in
                 value
             }
             .eraseToAnyPublisher()

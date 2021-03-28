@@ -17,7 +17,7 @@ let workspace = Workspace(name: "ScoreFive",
                               "Vendor/NeedleFoundation",
                               "Vendor/Countly",
                               "Vendor/FBSnapshotTestCase",
-                              "Vendor/CombineSchedulers",
+                              "Vendor/CombineSchedulers"
                           ],
                           schemes: [
                               .init(name: "ScoreFive",
@@ -28,11 +28,11 @@ let workspace = Workspace(name: "ScoreFive",
                                         .init(target: .project(path: "Libraries/ScoreKeeping", target: "ScoreKeepingTests")),
                                         .init(target: .project(path: "Vendor/NeedleFoundation", target: "NeedleFoundationTests")),
                                         .init(target: .project(path: "Vendor/SnapKit", target: "SnapKitTests")),
-                                        .init(target: .project(path: "Vendor/CombineSchedulers", target: "CombineSchedulersTests")),
+                                        .init(target: .project(path: "Vendor/CombineSchedulers", target: "CombineSchedulersTests"))
                                     ]),
                                     runAction: RunAction(executable: .project(path: "App", target: "ScoreFive"),
                                                          arguments: .init(environment: ["FB_REFERENCE_IMAGE_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/ReferenceImages",
                                                                                         "IMAGE_DIFF_DIR": "$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/FailureDiffs",
-                                                                                        "AN_ALLOW_ANONYMOUS_ANALYTICS": "YES"]))),
+                                                                                        "AN_ALLOW_ANONYMOUS_ANALYTICS": "YES"])))
                           ],
                           additionalFiles: [])

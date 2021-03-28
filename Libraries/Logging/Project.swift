@@ -25,10 +25,10 @@ let project = Project(name: "Logging",
                                  settings: .init(base: [:],
                                                  debug: .settings([:], xcconfig: .relativeToManifest("Config/Logging.xcconfig")),
                                                  release: .settings([:], xcconfig: .relativeToManifest("Config/Logging.xcconfig")),
-                                                 defaultSettings: .recommended)),
+                                                 defaultSettings: .recommended))
                       ],
                       schemes: [
                           .init(name: "Logging",
                                 shared: true,
-                                buildAction: BuildAction(targets: ["Logging"])),
+                                buildAction: BuildAction(targets: ["Logging"]))
                       ])

@@ -19,8 +19,7 @@ public struct ScoreCard: Codable, Equatable, Hashable {
     ///   - orderedPlayers: The players in this game, ordered by who plays first.
     /// - Note: This initializer produces a runtime failure if the provided score limit is less than 50, if fewer than 2 players are provided, or if more than 8 players are provided.b
     public init(scoreLimit: Int = 250,
-                orderedPlayers: [Player])
-    {
+                orderedPlayers: [Player]) {
         precondition(orderedPlayers.count >= 2, "There must be at least 2 players in a game")
         precondition(orderedPlayers.count <= 8, "There can only be 8 players in a game")
         precondition(scoreLimit >= 50, "Score limit must be at least 50")
