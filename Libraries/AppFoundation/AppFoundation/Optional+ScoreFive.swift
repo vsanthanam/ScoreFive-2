@@ -11,7 +11,6 @@ public protocol OptionalType {
     var asOptional: Wrapped? { get }
 }
 
-/// Implementation of the OptionalType protocol by the Optional type
 extension Optional: OptionalType {
     public var asOptional: Wrapped? { self }
 }

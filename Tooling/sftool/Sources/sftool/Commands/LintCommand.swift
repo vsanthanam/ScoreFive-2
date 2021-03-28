@@ -39,8 +39,12 @@ struct LintCommand: ParsableCommand {
                     .split(separator: "\n")
                     .filter { $0.hasPrefix("/") }
                     .map { output in
-                        let comps = output.split(separator: ":")
-                        return "warning:\(comps[1]) \(comps[4])"
+                        if arclint {
+                            let comps = output.split(separator: ":")
+                            return "warning:\(comps[1]) \(comps[4])"
+                        } else {
+                            return output
+                        }
                     }
                     .forEach { print($0) }
             }
