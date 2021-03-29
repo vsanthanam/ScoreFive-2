@@ -11,7 +11,9 @@ ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
 Xcode projects are generated using the provided tooling, and are not checked into the repo.
 
-1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, `uber/needle` for compile-time safe dependency injection and `uber/mockolo` for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments, paths & settings use. The source code for this tool is included in the repo. Build the latest version of the t=tool and move it to the root directory with the provided script.
+1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, [uber/needle](https://github.com/uber/needle) for compile-time safe dependency injection and [uber/mockolo](https://github.com/uber/mockolo) for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `sftool` to that knows the right arguments, paths & settings use. `sftool` is integrated into arc workflows and the xcode workspace schemes. The source code for this tool is included in the repo.
+
+Build the latest version of the tool and move it to the root directory with the provided script.
 
 ```
 $ cd path/to/repo
