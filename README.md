@@ -24,7 +24,7 @@ $ ./update-sftool.sh
 $ cd path/to/repo
 $ ./sftool bootstrap
 ```
-> *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/` and right click on the included binaries and click "open" on the offending binary. This will tell the OS that you're okay to run them.
+> *Warning*: If you get gatekeeper errors from macOS, navigate to `path/to/repo/bin/`, right click on the offending binary and click "open". This will tell the OS that you're okay to run the tool. You may need to do this for multiple binaries.
 
 3. Finally, you can generate the Xcode projects with `./sftool`
 
