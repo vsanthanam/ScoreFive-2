@@ -1,4 +1,6 @@
 {
   "phabricator.uri": "https://phab.vsanthanam.com/",
-  "arc.land.onto.default": "main"
+  "arc.land.onto": [
+    "main"
+  ]
 }
