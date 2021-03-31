@@ -4,6 +4,9 @@
 			"type": "json",
 			"include": ["(\\.sftool-config)"]
 		},
+		"arctools": {
+			"type": "php"
+		},
 		"swift-lint": {
 			"type": "script-and-regex",
 			"script-and-regex.script": "./sftool lint --arclint --input",
