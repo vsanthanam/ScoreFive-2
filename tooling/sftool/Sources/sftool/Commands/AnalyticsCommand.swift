@@ -41,7 +41,8 @@ struct AnalyticsInstall: ParsableCommand {
 
     func run() throws {
         let config = AnalyticsConfig(appKey: key, host: host)
-        try Commands.writeAnalyticsConfiguration(root, config: config)
+        let toolConfig = try fetchConfiguration(on: root)
+        try Commands.writeAnalyticsConfiguration(root, tuistRoot: toolConfig.tuistRoot, config: config)
     }
 
 }
@@ -59,7 +60,8 @@ struct AnalyticsWipe: ParsableCommand {
                                                     abstract: "Clear countly host & key settings")
 
     func run() throws {
-        try Commands.writeAnalyticsConfiguration(root)
+        let config = try fetchConfiguration(on: root)
+        try Commands.writeAnalyticsConfiguration(root, tuistRoot: config.tuistRoot)
     }
 
 }
@@ -77,7 +79,8 @@ struct AnalyticsStatus: ParsableCommand {
                                                     abstract: "Current Countly Status")
 
     func run() throws {
-        let config = try Commands.readAnalyticsConfiguration(root)
+        let toolConfig = try fetchConfiguration(on: root)
+        let config = try Commands.readAnalyticsConfiguration(root, tuistRoot: toolConfig.tuistRoot)
         if config == .empty {
             print("No Analytics Configuration Installed")
         } else {

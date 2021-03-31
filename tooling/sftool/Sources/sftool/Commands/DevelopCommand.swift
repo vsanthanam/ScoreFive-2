@@ -26,9 +26,10 @@ struct DevelopCommand: ParsableCommand {
 
     func run() throws {
         try? Commands.killXcode()
-        try Commands.generate(on: root)
+        let config = try fetchConfiguration(on: root)
+        try Commands.generate(on: root, tuistRoot: config.tuistRoot)
         if !dontOpenXcode {
-            try Commands.openWorkspace(on: root)
+            try Commands.openWorkspace(on: root, tuistRoot: config.tuistRoot)
         }
     }
 }

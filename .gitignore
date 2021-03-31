@@ -2,10 +2,10 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,objective-c
 
 ### ScoreFive ###
-App/ScoreFive/Resources/analytics_config.json
-App/ScoreFive/Src/Infra/DependencyGraph.swift
-App/ScoreFiveTests/Mocks.swift
-App/ScoreFiveTests/FailureDiffs/
+ScoreFive/App/ScoreFive/Resources/analytics_config.json
+ScoreFive/App/ScoreFive/Src/Infra/DependencyGraph.swift
+ScoreFive/App/ScoreFiveTests/Mocks.swift
+ScoreFive/App/ScoreFiveTests/FailureDiffs/
 
 ### Sftool <-> SwiftFormat ###
 .swiftformat

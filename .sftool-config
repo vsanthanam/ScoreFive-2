@@ -9,7 +9,7 @@
                          "wrapMultilineStatementBraces",
                          "trailingCommas",
                          "braces"],
-        "excludeDirs": ["App/Derived",
+        "excludeDirs": ["ScoreFive/App/Derived",
                         "bin/tuist"],
 	"swiftVersion": "5.4"
     },
@@ -19,9 +19,9 @@
 			    "Analytics"]
     },
     "swiftlint": {
-        "excludeDirs": ["App/Derived",
+        "excludeDirs": ["ScoreFive/App/Derived",
                         "bin",
-                        "Tooling/sftool/.build"],
+                        "tooling/sftool/.build"],
         "disabledRules": ["line_length",
                           "nesting",
                           "function_body_length",
@@ -38,10 +38,11 @@
         "device": "iPhone 8 Plus",
         "os": "14.4"
     },
-    "vendorCodePath": "Vendor",
-    "diCodePath": "App/ScoreFive/Src/Features/",
-    "diGraphPath": "App/ScoreFive/Src/Infra/DependencyGraph.swift",
-    "mockPath": "App/ScoreFiveTests/Mocks.swift",
-    "featureCodePath": "App/ScoreFive/Src",
-    "libraryCodePath": "Libraries"
+    "vendorCodePath": "ScoreFive/Vendor",
+    "diCodePath": "ScoreFive/App/ScoreFive/Src/Features/",
+    "diGraphPath": "ScoreFive/App/ScoreFive/Src/Infra/DependencyGraph.swift",
+    "mockPath": "ScoreFive/App/ScoreFiveTests/Mocks.swift",
+    "featureCodePath": "ScoreFive/App/ScoreFive/Src",
+    "libraryCodePath": "ScoreFive/Libraries",
+    "tuistRoot": "ScoreFive"
 }

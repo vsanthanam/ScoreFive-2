@@ -85,6 +85,9 @@ struct ToolConfiguration: Codable {
 
     /// Library code path
     let libraryCodePath: String
+
+    /// Root tuist workspace path
+    let tuistRoot: String
 }
 
 /// SwiftFormat configuration

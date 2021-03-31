@@ -37,7 +37,7 @@ struct GenerateCICommand: ParsableCommand {
             ./sftool gen deps
             ./sftool gen mocks
             ./sftool develop -d
-            xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
+            xcodebuild -workspace \(configuration.tuistRoot)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
             """
         } else {
             script = """
@@ -48,7 +48,7 @@ struct GenerateCICommand: ParsableCommand {
             ./sftool gen deps
             ./sftool gen mocks
             ./sftool develop -d
-            xcodebuild -workspace ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test
+            xcodebuild -workspace \(configuration.tuistRoot)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test
             """
         }
         print(script)

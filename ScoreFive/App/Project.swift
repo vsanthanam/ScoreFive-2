@@ -24,7 +24,7 @@ let project = Project(name: "ScoreFive",
                                      "ScoreFive/Resources/**"
                                  ],
                                  actions: [
-                                     .pre(script: "../sftool gen deps -r ../", name: "Generate DI Graph")
+                                     .pre(script: "../../sftool gen deps -r ../../", name: "Generate DI Graph")
                                  ],
                                  dependencies: [
                                      .project(target: "Analytics", path: "../Libraries/Analytics"),
@@ -57,7 +57,7 @@ let project = Project(name: "ScoreFive",
                                      "ScoreFiveTests/**"
                                  ],
                                  actions: [
-                                     .pre(script: "../sftool gen mocks -r ../", name: "Generate Mocks")
+                                     .pre(script: "../../sftool gen mocks -r ../../", name: "Generate Mocks")
                                  ],
                                  dependencies: [
                                      .target(name: "ScoreFive"),

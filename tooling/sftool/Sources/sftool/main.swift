@@ -69,17 +69,17 @@ enum Commands {
         try shellOut(to: command)
     }
 
-    static func writeAnalyticsConfiguration(_ root: String, config: AnalyticsConfig = .empty) throws {
+    static func writeAnalyticsConfiguration(_ root: String, tuistRoot: String, config: AnalyticsConfig = .empty) throws {
         let data = try JSONEncoder().encode(config)
         let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
-        try shellOut(to: .removeFile(from: root + targetPath))
-        try NSData(data: data).write(toFile: root + targetPath)
+        try shellOut(to: .removeFile(from: root + "/" + tuistRoot + targetPath))
+        try NSData(data: data).write(toFile: root + "/" + tuistRoot + targetPath)
     }
 
-    static func readAnalyticsConfiguration(_ root: String) throws -> AnalyticsConfig {
+    static func readAnalyticsConfiguration(_ root: String, tuistRoot: String) throws -> AnalyticsConfig {
         func readFile() throws -> String {
             do {
-                return try shellOut(to: .readFile(at: root + "/App/ScoreFive/Resources/analytics_config.json"))
+                return try shellOut(to: .readFile(at: root + "/" + tuistRoot + "/App/ScoreFive/Resources/analytics_config.json"))
             } catch {
                 // swiftlint:disable:next force_cast
                 throw ConfigurationError.notFound(error: error as! ShellOutError)
@@ -93,11 +93,11 @@ enum Commands {
         return try decoder.decode(AnalyticsConfig.self, from: jsonData)
     }
 
-    static func runTests(_ root: String, name: String, os: String) throws -> String {
-        try tuist(on: root) {
+    static func runTests(_ root: String, tuistRoot: String, name: String, os: String) throws -> String {
+        try tuist(on: root, tuistRoot: tuistRoot) {
             try killXcode()
-            try generate(on: root)
-            return try shellOut(to: "xcodebuild -workspace \(root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(name),OS=\(os)' test")
+            try generate(on: root, tuistRoot: tuistRoot)
+            return try shellOut(to: "xcodebuild -workspace \(root)/\(tuistRoot)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(name),OS=\(os)' test")
         }
     }
 
@@ -105,15 +105,16 @@ enum Commands {
         try shellOut(to: "killall Xcode")
     }
 
-    static func generate(on root: String) throws {
-        try tuist(on: root) {
+    static func generate(on root: String, tuistRoot: String) throws {
+        try tuist(on: root, tuistRoot: tuistRoot) {
             let command = root + "/bin/tuist/tuist"
-            return try shellOut(to: "\(command) generate")
+            let tuistDir = root + "/" + tuistRoot
+            return try shellOut(to: "\(command) generate --path \(tuistDir)")
         }
     }
 
-    static func openWorkspace(on root: String) throws {
-        let path = root + "/ScoreFive.xcworkspace"
+    static func openWorkspace(on root: String, tuistRoot: String) throws {
+        let path = root + "/" + tuistRoot + "/ScoreFive.xcworkspace"
         try shellOut(to: "open \(path)")
     }
 
@@ -134,7 +135,7 @@ enum Commands {
     }
 
     @discardableResult
-    fileprivate static func tuist(on root: String, action: () throws -> String) throws -> String {
+    fileprivate static func tuist(on root: String, tuistRoot: String, action: () throws -> String) throws -> String {
         let settings = """
         import ProjectDescription
 
@@ -145,7 +146,7 @@ enum Commands {
             ]
         )
         """
-        let dir = root + "/Tuist"
+        let dir = root + "/" + tuistRoot + "/Tuist"
         let path = dir + "/Config.swift"
         _ = try? shellOut(to: "rm -rf \(dir)")
         try shellOut(to: "mkdir \(dir)")
