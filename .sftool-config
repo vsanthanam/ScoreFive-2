@@ -31,7 +31,8 @@
                           "type_name",
                           "function_parameter_count",
                           "generic_type_name",
-                          "unused_setter_value"],
+                          "unused_setter_value",
+                          "trailing_whitespace"],
         "optInRules": []
     },
     "testConfig": {
