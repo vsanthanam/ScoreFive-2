@@ -6,5 +6,5 @@
   "load": [
     "tooling/arctools"
   ],
-  "unit.engine": "TuistGenTestEngine"
+  "unit.engine": "ScoreFiveUnitTestEngine"
 }

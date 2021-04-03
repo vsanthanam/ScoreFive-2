@@ -9,10 +9,10 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
-    'TuistGenTestEngine' => 'src/TuistGenTestEngine.php',
+    'ScoreFiveUnitTestEngine' => 'src/ScoreFiveUnitTestEngine.php',
   ),
   'function' => array(),
   'xmap' => array(
-    'TuistGenTestEngine' => 'ArcanistUnitTestEngine',
+    'ScoreFiveUnitTestEngine' => 'ArcanistUnitTestEngine',
   ),
 ));
