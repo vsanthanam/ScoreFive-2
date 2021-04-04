@@ -9,10 +9,12 @@
 phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
-    'ScoreFiveUnitTestEngine' => 'src/ScoreFiveUnitTestEngine.php',
+    'CommandUnitTestEngine' => 'src/CommandUnitTestEngine.php',
+    'MultiTestEngine' => 'src/MultiTestEngine.php',
   ),
   'function' => array(),
   'xmap' => array(
-    'ScoreFiveUnitTestEngine' => 'ArcanistUnitTestEngine',
+    'CommandUnitTestEngine' => 'ArcanistUnitTestEngine',
+    'MultiTestEngine' => 'ArcanistUnitTestEngine',
   ),
 ));

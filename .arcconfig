@@ -6,5 +6,17 @@
   "load": [
     "tooling/arctools"
   ],
-  "unit.engine": "ScoreFiveUnitTestEngine"
+  "unit.engine": "MultiTestEngine",
+  "unit.engine.multi-test.engines": [
+    {
+      "engine": "CommandUnitTestEngine",
+      "unit.engine.command": "./sftool develop --arcunit",
+      "unit.engine.command.name": "Check Project Manifest"
+    },
+    {
+      "engine": "CommandUnitTestEngine",
+      "unit.engine.command": "sh update-sftool.sh",
+      "unit.engine.command.name": "Update SFTool"
+    }
+  ]
 }
