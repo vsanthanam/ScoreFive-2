@@ -20,9 +20,19 @@ final class GameFooterView: BaseView {
     // MARK: - API
 
     func apply(scores: [String], positiveLabel: String?, negativeLabel: String?) {
-        stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        scores.forEach { name in
-            let view = IndexView()
+        if stack.arrangedSubviews.count != scores.count {
+            stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+            scores.forEach { _ in
+                let view = IndexView()
+                stack.addArrangedSubview(view)
+            }
+        }
+
+        for i in 0 ..< scores.count {
+            guard let view = stack.arrangedSubviews[i] as? IndexView else {
+                return
+            }
+            let name = scores[i]
             view.title = name
             if name == positiveLabel {
                 view.titleColor = .contentPositive
@@ -31,7 +41,6 @@ final class GameFooterView: BaseView {
             } else {
                 view.titleColor = .contentPrimary
             }
-            stack.addArrangedSubview(view)
         }
     }
 
@@ -105,7 +114,14 @@ final class GameFooterView: BaseView {
 
         var title: String? {
             get { label.text }
-            set { label.text = newValue }
+            set {
+                if let value = newValue, let countable = Float(value) {
+                    label.countingMethod = .linear
+                    label.countFromCurrent(to: countable, duration: .brisk)
+                } else {
+                    label.text = newValue
+                }
+            }
         }
 
         var titleColor: UIColor? {
@@ -117,7 +133,7 @@ final class GameFooterView: BaseView {
             }
         }
 
-        private let label = UILabel()
+        private let label = CountingLabel()
 
         private func setUp() {
             backgroundColor = .backgroundPrimary
