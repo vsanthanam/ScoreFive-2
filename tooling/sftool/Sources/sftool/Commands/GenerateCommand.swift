@@ -19,6 +19,7 @@ struct GenerateCommand: ParsableCommand {
         abstract: "Generate code",
         subcommands: [GenerateMocksCommand.self,
                       GenerateDependencyGraphCommand.self,
-                      GenerateCICommand.self]
+                      GenerateTestScriptCommand.self,
+                      GenerateValidateScriptCommand.self]
     )
 }

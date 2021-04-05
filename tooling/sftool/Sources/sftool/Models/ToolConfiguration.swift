@@ -136,6 +136,7 @@ struct TestConfiguration: Codable {
 
 }
 
+/// Tuist Configuration
 struct TuistConfiguration: Codable {
 
     /// Root app directory

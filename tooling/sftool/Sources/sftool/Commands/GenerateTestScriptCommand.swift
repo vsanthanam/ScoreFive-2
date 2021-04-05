@@ -6,7 +6,7 @@
 import ArgumentParser
 import Foundation
 
-struct GenerateCICommand: ParsableCommand {
+struct GenerateTestScriptCommand: ParsableCommand {
 
     // MARK: - Initializers
 
@@ -28,8 +28,8 @@ struct GenerateCICommand: ParsableCommand {
 
     // MARK: - ParsableCommand
 
-    static let configuration = CommandConfiguration(commandName: "ci",
-                                                    abstract: "generate ci script")
+    static let configuration = CommandConfiguration(commandName: "test-script",
+                                                    abstract: "Generate unit test C/I script")
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)
