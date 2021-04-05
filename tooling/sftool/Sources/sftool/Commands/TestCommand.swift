@@ -13,10 +13,7 @@ struct TestCommand: ParsableCommand {
 
     init() {}
 
-    // MARK: - ParsableCommand
-
-    static let configuration = CommandConfiguration(commandName: "test",
-                                                    abstract: "Run Unit Tests")
+    // MARK: - API
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
@@ -29,6 +26,11 @@ struct TestCommand: ParsableCommand {
 
     @Flag(name: .shortAndLong, help: "Verbose Logging")
     var verbose: Bool = false
+
+    // MARK: - ParsableCommand
+
+    static let configuration = CommandConfiguration(commandName: "test",
+                                                    abstract: "Run Unit Tests")
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)

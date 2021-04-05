@@ -12,16 +12,18 @@ struct GenerateCICommand: ParsableCommand {
 
     init() {}
 
-    // MARK: - ParsableCommand
-
-    static let configuration = CommandConfiguration(commandName: "ci",
-                                                    abstract: "generate ci script")
+    // MARK: - API
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
 
     @Flag(name: .shortAndLong, help: "Use pretty results")
     var pretty: Bool = false
+
+    // MARK: - ParsableCommand
+
+    static let configuration = CommandConfiguration(commandName: "ci",
+                                                    abstract: "generate ci script")
 
     func run() throws {
         let configuration = try fetchConfiguration(on: root)

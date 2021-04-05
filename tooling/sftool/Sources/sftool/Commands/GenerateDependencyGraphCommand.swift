@@ -24,17 +24,6 @@ struct GenerateDependencyGraphCommand: ParsableCommand {
 
     init() {}
 
-    // MARK: - ParsableCommand
-
-    static let configuration = CommandConfiguration(commandName: "deps",
-                                                    abstract: "Generate DI Graph with Needle")
-
-    func run() throws {
-        let configuration = try fetchConfiguration(on: root)
-        try generateDependencyGraph(with: configuration)
-        print("Generated Needle DI Graph! 🍻")
-    }
-
     // MARK: - API
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
@@ -50,6 +39,17 @@ struct GenerateDependencyGraphCommand: ParsableCommand {
                                              diCodePath: configuration.diCodePath,
                                              diGraphPath: configuration.diGraphPath,
                                              verbose: verbose)
+    }
+
+    // MARK: - ParsableCommand
+
+    static let configuration = CommandConfiguration(commandName: "deps",
+                                                    abstract: "Generate DI Graph with Needle")
+
+    func run() throws {
+        let configuration = try fetchConfiguration(on: root)
+        try generateDependencyGraph(with: configuration)
+        print("Generated Needle DI Graph! 🍻")
     }
 
 }

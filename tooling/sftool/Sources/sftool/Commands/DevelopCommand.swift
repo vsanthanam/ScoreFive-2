@@ -13,10 +13,7 @@ struct DevelopCommand: ParsableCommand {
 
     init() {}
 
-    // MARK: - ParsableCommand
-
-    static let configuration = CommandConfiguration(commandName: "develop",
-                                                    abstract: "Generate the project")
+    // MARK: - API
 
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var root: String = FileManager.default.currentDirectoryPath
@@ -26,6 +23,11 @@ struct DevelopCommand: ParsableCommand {
 
     @Flag(name: .shortAndLong, help: "Used by arcanist")
     var arcunit: Bool = false
+
+    // MARK: - ParsableCommand
+
+    static let configuration = CommandConfiguration(commandName: "develop",
+                                                    abstract: "Generate the project")
 
     func run() throws {
         if !arcunit {

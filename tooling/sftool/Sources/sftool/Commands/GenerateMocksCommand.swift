@@ -13,6 +13,14 @@ struct GenerateMocksCommand: ParsableCommand {
 
     init() {}
 
+    // MARK: - API
+
+    @Option(name: .shortAndLong, help: "Location of the score five repo")
+    var root: String = FileManager.default.currentDirectoryPath
+
+    @Flag(name: .shortAndLong, help: "Verbose Logging")
+    var verbose: Bool = false
+
     // MARK: - ParsableCommand
 
     static let configuration = CommandConfiguration(commandName: "mocks",
@@ -23,14 +31,6 @@ struct GenerateMocksCommand: ParsableCommand {
         try generateMocks(with: config)
         print("Generated Mocks! 🍻")
     }
-
-    // MARK: - API
-
-    @Option(name: .shortAndLong, help: "Location of the score five repo")
-    var root: String = FileManager.default.currentDirectoryPath
-
-    @Flag(name: .shortAndLong, help: "Verbose Logging")
-    var verbose: Bool = false
 
     // MARK: - Private
 

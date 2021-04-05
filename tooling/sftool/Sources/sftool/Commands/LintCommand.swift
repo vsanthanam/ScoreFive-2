@@ -20,6 +20,26 @@ struct LintCommand: ParsableCommand {
 
     init() {}
 
+    // MARK: - API
+
+    @Flag(name: .shortAndLong, help: "Display verbose logging")
+    var verbose: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Fix errors")
+    var fix: Bool = false
+
+    @Option(name: .shortAndLong, help: "Location of the score five repo")
+    var root: String = FileManager.default.currentDirectoryPath
+
+    @Flag(name: .shortAndLong, help: "For internal use by arcanist. Do not use.")
+    var arclint: Bool = false
+
+    @Option(name: .shortAndLong, help: "File or directory to lint")
+    var input: String?
+
+    @Flag(name: .shortAndLong, help: "Fail it code has errors. This option cannot be used with --arclint or with --fix")
+    var test: Bool = false
+
     // MARK: - ParsableCommand
 
     static let configuration = CommandConfiguration(commandName: "lint", abstract: "Lint swift code")
@@ -88,26 +108,6 @@ struct LintCommand: ParsableCommand {
             }
         }
     }
-
-    // MARK: - API
-
-    @Flag(name: .shortAndLong, help: "Display verbose logging")
-    var verbose: Bool = false
-
-    @Flag(name: .shortAndLong, help: "Fix errors")
-    var fix: Bool = false
-
-    @Option(name: .shortAndLong, help: "Location of the score five repo")
-    var root: String = FileManager.default.currentDirectoryPath
-
-    @Flag(name: .shortAndLong, help: "For internal use by arcanist. Do not use.")
-    var arclint: Bool = false
-
-    @Option(name: .shortAndLong, help: "File or directory to lint")
-    var input: String?
-
-    @Flag(name: .shortAndLong, help: "Fail it code has errors. This option cannot be used with --arclint or with --fix")
-    var test: Bool = false
 
     // MARK: - Private
 

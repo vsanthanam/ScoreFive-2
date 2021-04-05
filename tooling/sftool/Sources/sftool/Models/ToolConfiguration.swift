@@ -138,8 +138,10 @@ struct TestConfiguration: Codable {
 
 struct TuistConfiguration: Codable {
 
+    /// Root app directory
     let root: String
 
+    /// Generation options
     let generationOptions: [String]
 
 }
