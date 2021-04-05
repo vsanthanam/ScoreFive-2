@@ -10,13 +10,13 @@
   "unit.engine.multi-test.engines": [
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "./sftool develop --arcunit",
-      "unit.engine.command.name": "Check Project Manifest"
+      "unit.engine.command": "sh update-sftool.sh",
+      "unit.engine.command.name": "Update SFTool"
     },
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "sh update-sftool.sh",
-      "unit.engine.command.name": "Update SFTool"
+      "unit.engine.command": "./sftool develop --arcunit",
+      "unit.engine.command.name": "Check Project Manifest"
     }
   ]
 }

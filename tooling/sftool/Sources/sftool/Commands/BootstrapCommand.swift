@@ -25,10 +25,10 @@ struct BootstrapCommand: ParsableCommand {
 
     func run() throws {
         let config = try fetchConfiguration(on: root)
-        try Commands.writeAnalyticsConfiguration(root, tuistRoot: config.tuistRoot)
+        try Commands.writeAnalyticsConfiguration(root, tuistRoot: config.tuist.root)
         try Commands.generateDependencyGraph(root, diCodePath: config.diCodePath, diGraphPath: config.diGraphPath, verbose: false)
         try Commands.generateMocks(root, featureCodePath: config.featureCodePath, libraryCodePath: config.libraryCodePath, mockPath: config.mockPath, testableImports: config.mockolo.testableImports, verbose: false)
         try? Commands.killXcode()
-        try Commands.generate(on: root, tuistRoot: config.tuistRoot)
+        try Commands.generate(on: root, tuistConfig: config.tuist)
     }
 }

@@ -86,8 +86,8 @@ struct ToolConfiguration: Codable {
     /// Library code path
     let libraryCodePath: String
 
-    /// Root tuist workspace path
-    let tuistRoot: String
+    /// Root tuist
+    let tuist: TuistConfiguration
 }
 
 /// SwiftFormat configuration
@@ -133,5 +133,13 @@ struct TestConfiguration: Codable {
 
     /// Test OS
     let os: String
+
+}
+
+struct TuistConfiguration: Codable {
+
+    let root: String
+
+    let generationOptions: [String]
 
 }

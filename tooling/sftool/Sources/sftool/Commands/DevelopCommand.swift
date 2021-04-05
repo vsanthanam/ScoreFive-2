@@ -32,9 +32,9 @@ struct DevelopCommand: ParsableCommand {
             try? Commands.killXcode()
         }
         let config = try fetchConfiguration(on: root)
-        try Commands.generate(on: root, tuistRoot: config.tuistRoot)
+        try Commands.generate(on: root, tuistConfig: config.tuist)
         if !dontOpenXcode, !arcunit {
-            try Commands.openWorkspace(on: root, tuistRoot: config.tuistRoot)
+            try Commands.openWorkspace(on: root, tuistRoot: config.tuist.root)
         }
     }
 }
