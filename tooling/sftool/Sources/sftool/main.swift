@@ -22,7 +22,8 @@ struct sftool: ParsableCommand {
                       BootstrapCommand.self,
                       AnalyticsCommand.self,
                       TestCommand.self,
-                      DevelopCommand.self]
+                      DevelopCommand.self,
+                      CleanCommand.self]
     )
 }
 
