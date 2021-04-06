@@ -7,6 +7,7 @@ final class CommandUnitTestEngine extends ArcanistUnitTestEngine {
 
     private $command;
     private $manual;
+    private $buildStart;
 
     public function init() {
         $config_manager = $this->getConfigurationManager();
@@ -20,6 +21,7 @@ final class CommandUnitTestEngine extends ArcanistUnitTestEngine {
         $results = array();
         $this->init();
         
+        $this->buildStart = microtime(true);
         $results[] = $this->execute();
         return $results;
     }
@@ -38,14 +40,21 @@ final class CommandUnitTestEngine extends ArcanistUnitTestEngine {
 
         try {
             list($stdout, $stderr) = execx($this->command);
+            $this->saveDuration($result);
             $result->setResult(ArcanistUnitTestResult::RESULT_PASS);
             $this->console->writeOut("\r%s", $this->renderer->renderUnitResult($result));
         } catch(CommandException $exec) {
             $result->setUserdata($exc->getStdout() . "\n" . $exc->getStderr());
+            $this->saveDuration($result);
             $result->setResult(ArcanistUnitTestResult::RESULT_FAIL);
             $this->console->writeOut("\r%s", $this->renderer->renderUnitResult($result));
         }
         return $result;
+    }
+    
+    private function saveDuration($result) {
+        $duration = microtime(true) - $this->buildStart;
+        $result->setDuration($duration);
     }
 }
 
