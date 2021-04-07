@@ -76,12 +76,11 @@ open class Interactor: Interactable {
 
     // MARK: - WorkerScope
 
-    public final var isActive: Bool {
-        internalIsActive
-    }
+    @Published
+    public private(set) final var isActive: Bool = false
 
     public final var isActiveStream: AnyPublisher<Bool, Never> {
-        $internalIsActive
+        $isActive
             .removeDuplicates()
             .eraseToAnyPublisher()
     }
@@ -93,7 +92,7 @@ open class Interactor: Interactable {
             return
         }
         storage = Set<AnyCancellable>()
-        internalIsActive = true
+        isActive = true
         didBecomeActive()
     }
 
@@ -101,15 +100,13 @@ open class Interactor: Interactable {
         guard isActive else {
             return
         }
+        willResignActive()
         storage?.forEach { cancellable in cancellable.cancel() }
         storage = nil
-        internalIsActive = false
+        isActive = false
     }
 
     // MARK: - Private
-
-    @Published
-    private var internalIsActive: Bool = false
 
     private var storage: Set<AnyCancellable>?
 
@@ -127,7 +124,7 @@ open class Interactor: Interactable {
         if isActive {
             deactivate()
         }
-        children.forEach { detach(child: $0) }
+        children.forEach { child in detach(child: child) }
     }
 }
 
