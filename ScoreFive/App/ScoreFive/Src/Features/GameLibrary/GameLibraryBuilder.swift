@@ -43,8 +43,7 @@ final class GameLibraryBuilder: ComponentizedBuilder<GameLibraryComponent, Prese
     // MARK: - GameLibraryBuildable
 
     func build(withListener listener: GameLibraryListener) -> PresentableInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }

@@ -59,8 +59,7 @@ final class HomeBuilder: ComponentizedBuilder<HomeComponent, PresentableInteract
     // MARK: - HomeBuildable
 
     func build(withListener listener: HomeListener) -> PresentableInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }

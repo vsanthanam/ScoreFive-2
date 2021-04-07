@@ -56,8 +56,8 @@ final class NewRoundBuilder: ComponentizedBuilder<NewRoundComponent, Presentable
     // MARK: - NewRoundBuildable
 
     func build(withListener listener: NewRoundListener, round: Round, replacingIndex: Int?) -> PresentableInteractable {
-        build(withDynamicBuildDependency: (listener, round, replacingIndex),
-              dynamicComponentDependency: ())
+        let dynamicBuildDependency = (listener, round, replacingIndex)
+        return build(withDynamicBuildDependency: dynamicBuildDependency)
     }
 
 }

@@ -38,8 +38,7 @@ final class MoreOptionsBuilder: ComponentizedBuilder<MoreOptionsComponent, Prese
     // MARK: - MoreBuildable
 
     func build(withListener listener: MoreOptionsListener) -> PresentableInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }

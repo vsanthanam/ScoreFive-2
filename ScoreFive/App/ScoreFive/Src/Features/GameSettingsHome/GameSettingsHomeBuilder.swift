@@ -45,8 +45,7 @@ final class GameSettingsHomeBuilder: ComponentizedBuilder<GameSettingsHomeCompon
     // MARK: - GameSettingsHomeBuildable
 
     func build(withListener listener: GameSettingsHomeListener) -> PresentableInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }

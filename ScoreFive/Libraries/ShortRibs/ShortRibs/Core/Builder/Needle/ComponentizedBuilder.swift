@@ -52,14 +52,28 @@ open class SimpleComponentizedBuilder<Component, Interactor>: ComponentizedBuild
         fatalError("Abstract Method Not Implemented!")
     }
 
-    public final func build() -> Interactor {
-        build(withDynamicBuildDependency: (),
-              dynamicComponentDependency: ())
-    }
-
     // MARK: - ComponentizedBuilder
 
     override public final func build(with component: Component, _ dynamicBuildDependency: Void) -> Interactor {
         build(with: component)
+    }
+}
+
+public extension ComponentizedBuilder where DynamicBuildDependency == Void {
+    final func build(withDynamicComponentDependencya dynamicComponentDependency: DynamicComponentDependency) -> Interactor {
+        build(withDynamicBuildDependency: (), dynamicComponentDependency: dynamicComponentDependency)
+    }
+}
+
+public extension ComponentizedBuilder where DynamicComponentDependency == Void {
+    final func build(withDynamicBuildDependency dynamicBuildDependency: DynamicBuildDependency) -> Interactor {
+        build(withDynamicBuildDependency: dynamicBuildDependency, dynamicComponentDependency: ())
+    }
+}
+
+public extension ComponentizedBuilder where DynamicBuildDependency == Void, DynamicComponentDependency == Void {
+    final func build() -> Interactor {
+        build(withDynamicBuildDependency: (),
+              dynamicComponentDependency: ())
     }
 }

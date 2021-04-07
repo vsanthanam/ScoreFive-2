@@ -47,8 +47,7 @@ final class ScoreCardBuilder: ComponentizedBuilder<ScoreCardComponent, ScoreCard
     // MARK: - ScoreCardBuildable
 
     func build(withListener listener: ScoreCardListener) -> ScoreCardInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }

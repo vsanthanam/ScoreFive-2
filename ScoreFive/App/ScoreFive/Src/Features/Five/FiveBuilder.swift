@@ -79,8 +79,7 @@ final class FiveBuilder: ComponentizedBuilder<FiveComponent, PresentableInteract
     // MARK: - FiveBuildable
 
     func build(withListener listener: FiveListener) -> PresentableInteractable {
-        build(withDynamicBuildDependency: listener,
-              dynamicComponentDependency: ())
+        build(withDynamicBuildDependency: listener)
     }
 
 }
