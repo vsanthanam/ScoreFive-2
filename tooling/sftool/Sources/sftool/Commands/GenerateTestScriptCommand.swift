@@ -35,58 +35,34 @@ struct GenerateTestScriptCommand: ParsableCommand {
         let configuration = try fetchConfiguration(on: root)
         let device = configuration.testConfig.device
         let os = configuration.testConfig.os
-        var script: String
-        if pretty {
-            if relaxed {
-                script = """
-                #! /bin/sh
-                set -euo pipefail
-                ./sftool analytics wipe
-                ./sftool gen deps
-                ./sftool gen mocks
-                ./sftool develop -d
-                xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
-                """
-            } else {
-                script = """
-                #! /bin/sh
-                set -euo pipefail
-                ./sftool lint --test
-                ./sftool analytics wipe
-                ./sftool gen deps
-                ./sftool gen mocks
-                ./sftool develop -d
-                xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c
-                """
-            }
-        } else {
-            if relaxed {
-                script = """
-                #! /bin/sh
-                set -euo pipefail
-                ./sftool analytics wipe
-                ./sftool gen deps
-                ./sftool gen mocks
-                ./sftool develop -d
-                xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test
-                """
-            } else {
-                script = """
-                #! /bin/sh
-                set -euo pipefail
-                ./sftool lint --test
-                ./sftool analytics wipe
-                ./sftool gen deps
-                ./sftool gen mocks
-                ./sftool develop -d
-                xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test
-                """
-            }
+        var script: String = """
+        #! /bin/sh
+        set -euo pipefail
+        """
 
+        if !relaxed {
+            script += "\n./sftool lint --test"
         }
+
+        script += "\n"
+
+        script += """
+        ./sftool analytics wipe
+        ./sftool gen deps
+        ./sftool gen mocks
+        ./sftool develop -d
+        """
+
+        if pretty {
+            script += "\nxcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c"
+        } else {
+            script += "xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
+        }
+
         if autoclean {
             script += "\n./sftool clean"
         }
+
         print(script)
     }
 }

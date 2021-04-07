@@ -15,11 +15,6 @@
     },
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "./sftool develop --arcunit",
-      "unit.engine.command.name": "Check Project Manifest"
-    },
-    {
-      "engine": "CommandUnitTestEngine",
       "unit.engine.command": "./sftool gen deps",
       "unit.engine.command.name": "Check DI Graph"
     },
