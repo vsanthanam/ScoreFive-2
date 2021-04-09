@@ -141,11 +141,7 @@ enum Commands {
             .generationOptions
             .map { "." + $0 }
             .reduce("") { prev, option in
-                if prev == "" {
-                    return option
-                } else {
-                    return prev + ", " + option
-                }
+                prev == "" ? option : prev + ", " + option
             }
         let settings = """
         import ProjectDescription

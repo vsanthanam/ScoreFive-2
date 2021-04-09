@@ -10,11 +10,6 @@
   "unit.engine.multi-test.engines": [
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "sh update-sftool.sh && git add bin/sftool/sftool && git commit --amend --no-edit",
-      "unit.engine.command.name": "Update SFTool"
-    },
-    {
-      "engine": "CommandUnitTestEngine",
       "unit.engine.command": "./sftool gen deps",
       "unit.engine.command.name": "Check DI Graph"
     },
