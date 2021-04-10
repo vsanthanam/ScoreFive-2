@@ -10,13 +10,13 @@
   "unit.engine.multi-test.engines": [
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "./sftool gen deps",
-      "unit.engine.command.name": "Check DI Graph"
+      "unit.engine.command": "./tooling/arcscripts/gen-deps.sh",
+      "unit.engine.command.name": "gen-deps.sh"
     },
     {
       "engine": "CommandUnitTestEngine",
-      "unit.engine.command": "./sftool gen mocks",
-      "unit.engine.command.name": "Check Mocks"
+      "unit.engine.command": "./tooling/arcscripts/gen-deps.sh",
+      "unit.engine.command.name": "gen-mocks.sh"
     }
   ]
 }
