@@ -47,11 +47,14 @@ struct LintCommand: ParsableCommand, DasutCommand {
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
 
-    @Flag(name: .short, help: "Fix errors where able")
+    @Flag(name: .long, help: "Fix errors where able")
     var autofix: Bool = false
 
-    @Flag(name: .shortAndLong, help: "Fail if there are unresolved messages")
+    @Flag(name: .long, help: "Fail if there are unresolved messages")
     var test: Bool = false
+
+    @Flag(name: .long, help: "For internal use by arcanist. Do not use.")
+    var arclint: Bool = false
 
     // MARK: - ParsableCommand
 
@@ -69,7 +72,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
 
         wipeConfig()
 
-        if autofix {
+        if autofix, !arclint {
             try runSwiftLint(with: configuration, fix: true)
             try runSwiftFormat(with: configuration, fix: true)
             wipeConfig()
@@ -83,15 +86,25 @@ struct LintCommand: ParsableCommand, DasutCommand {
         }
 
         for result in results {
-            switch result.level {
-            case .warning:
-                write(message: result.description, withColor: .yellow)
-            case .error:
-                write(message: result.description, withColor: .red)
+            if arclint {
+                let formatted = "\(result.level.rawValue):\(result.line):\(result.col) \(result.message) [swiftlint]"
+                write(message: formatted)
+            } else {
+                switch result.level {
+                case .warning:
+                    write(message: result.description, withColor: .yellow)
+                case .error:
+                    write(message: result.description, withColor: .red)
+                }
             }
         }
 
         wipeConfig()
+
+        if arclint {
+            complete(with: nil)
+            return
+        }
 
         if !results.isEmpty {
             let warnings = results.filter { $0.level == .warning }.count
@@ -107,7 +120,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
                 if test {
                     throw CustomDasutError(message: "Unresolved Errors!")
                 } else {
-                    complete(with: "Found \(warnings) warnings, \(errors) errors after fixing", color: .yellow)
+                    complete(with: "Found \(warnings) warnings, \(errors) errors", color: .yellow)
                 }
             }
 
@@ -140,7 +153,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         config.disabled_rules = configuration.swiftlint.disabledRules
         let encoder = YAMLEncoder()
         let yaml = try encoder.encode(config)
-        if trace {
+        if trace, !arclint {
             write(message: "SwifLint Configuration")
             write(message: yaml)
         }
@@ -152,7 +165,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         } else {
             command = [command, "--path", (input ?? repoRoot), "--strict"].joined(separator: " ")
         }
-        if trace {
+        if trace, !arclint {
             write(message: "Running Command: \(command)")
         }
         do {
@@ -200,7 +213,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
             configComponents.append(enable)
         }
 
-        let exclude = [configuration.vendorCodePath] + [configuration.diGraphPath] + [configuration.mockPath] + configuration.swiftformat.excludeDirs
+        let exclude = [configuration.vendorCodePath] + [configuration.diGraphPath] + configuration.mockolo.destinations + configuration.swiftformat.excludeDirs
 
         exclude
             .forEach { exclude in
@@ -221,8 +234,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         let echo = "echo \"\(swiftformat)\" >> .swiftformat"
         try shellOut(to: echo)
         let configToUse = try shellOut(to: .readFile(at: ".swiftformat"), at: repoRoot)
-//        if trace, !arclint {
-        if trace {
+        if trace, !arclint {
             write(message: "SwiftFormat config:")
             write(message: configToUse)
         }
@@ -232,7 +244,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         } else {
             command = ["bin/swiftformat/swiftformat", "--lint", input ?? repoRoot, headerCommand].joined(separator: " ")
         }
-        if trace {
+        if trace, !arclint {
             write(message: "Running Command: \(command)")
         }
         do {

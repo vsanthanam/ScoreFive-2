@@ -34,7 +34,8 @@
                           "function_parameter_count",
                           "generic_type_name",
                           "unused_setter_value",
-                          "trailing_whitespace"],
+                          "trailing_whitespace",
+                          "cyclomatic_complexity"],
         "optInRules": []
     },
     "testConfig": {

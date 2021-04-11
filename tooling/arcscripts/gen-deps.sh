@@ -1,3 +1,3 @@
 #! /bin/sh
 set -euo pipefail
-./sftool gen deps
+./dasut update-deps

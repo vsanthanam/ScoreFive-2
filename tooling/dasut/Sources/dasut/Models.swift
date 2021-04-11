@@ -21,9 +21,6 @@ struct ToolConfiguration: Codable {
     /// Test configuration
     let testConfig: TestConfiguration
 
-    /// Mock source path
-    let mockPath: String
-
     /// DI graph source path
     let diGraphPath: String
 
