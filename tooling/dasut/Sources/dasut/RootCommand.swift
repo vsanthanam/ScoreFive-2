@@ -13,7 +13,8 @@ struct RootCommand: ParsableCommand, DasutCommand {
     static let configuration = CommandConfiguration(commandName: "Dasut",
                                                     version: "2.0",
                                                     subcommands: [DependencyGraphCommand.self,
-                                                                  MockCommand.self])
+                                                                  MockCommand.self,
+                                                                  LintCommand.self])
 
     // MARK: - DasutCommand
 

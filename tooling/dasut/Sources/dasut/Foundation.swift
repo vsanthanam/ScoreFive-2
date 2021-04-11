@@ -47,9 +47,9 @@ extension DasutCommand {
         }
     }
 
-    func complete(with message: String? = "Success! 🍻") {
+    func complete(with message: String? = "Success! 🍻", color: Color = .green) {
         if let message = message {
-            print(message.withColor(.green), to: &io.standardOut)
+            print(message.withColor(color), to: &io.standardOut)
             Darwin.exit(EXIT_SUCCESS)
         }
     }
