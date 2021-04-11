@@ -16,7 +16,8 @@
     "mockolo": {
         "testableImports": ["ShortRibs",
                             "ScoreFive",
-			    "Analytics"]
+			                "Analytics"],
+        "destinations": ["ScoreFive/App/ScoreFiveTests/Mocks.swift"]
     },
     "swiftlint": {
         "excludeDirs": ["ScoreFive/App/Derived",

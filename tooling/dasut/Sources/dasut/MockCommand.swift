@@ -1,0 +1,93 @@
+//
+// ScoreFive
+// Varun Santhanam
+//
+
+import ArgumentParser
+import Foundation
+import ShellOut
+
+struct MockCommand: ParsableCommand, DasutCommand {
+
+    // MARK: - API
+
+    enum MockCommandError: Error, DasutError {
+        case noInputs
+        case noOutputs
+
+        var message: String {
+            switch self {
+            case .noInputs:
+                return "No paths to mock! Suply a config file or use --output"
+            case .noOutputs:
+                return "No mock destination! Suppy a config file or use --inputs"
+            }
+        }
+    }
+
+    @Option(name: .long, help: "Needle")
+    var bin: String = "bin/mockolo/mockolo"
+
+    @Option(name: .long, help: "Generated code destinations")
+    var outputs: [String] = []
+
+    @Option(name: .long, help: "Files to mock")
+    var inputs: [String] = []
+
+    @Option(name: .long, help: "Location of the score five repo")
+    var repoRoot: String = FileManager.default.currentDirectoryPath
+
+    @Option(name: .long, help: "Location of the configuration file")
+    var toolConfiguration: String = ".dasut-config"
+
+    @Flag(name: .long, help: "Display verbose logging")
+    var trace: Bool = false
+
+    // MARK: - ParsableCommand
+
+    static let configuration: CommandConfiguration = .init(commandName: "mock",
+                                                           abstract: "Generate mocks",
+                                                           version: "2.0")
+
+    // MARK: - DasutCommand
+
+    func action() throws {
+        let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
+
+        var paths = [String]()
+
+        if !inputs.isEmpty {
+            paths = inputs
+        } else if let configuration = configuration {
+            paths.append(configuration.featureCodePath)
+            paths.append(configuration.libraryCodePath)
+        } else {
+            throw MockCommandError.noInputs
+        }
+
+        var destinations = [String]()
+
+        if !outputs.isEmpty {
+            destinations = outputs
+        } else if let configuration = configuration {
+            destinations = configuration.mockolo.destinations
+        } else {
+            throw MockCommandError.noOutputs
+        }
+
+        let baseCommand = "\(bin) -s \(paths.joined(separator: " "))"
+
+        for destination in destinations {
+            var command = baseCommand + " -d \(destination)"
+            if let imports = configuration?.mockolo.testableImports {
+                command += " "
+                command += (["-i"] + imports).joined(separator: " ")
+            }
+            try shell(script: command,
+                      at: repoRoot,
+                      errorMessage: "Mockolo failed!",
+                      verbose: trace)
+        }
+        complete(with: "Mocks generated! 🍻")
+    }
+}
