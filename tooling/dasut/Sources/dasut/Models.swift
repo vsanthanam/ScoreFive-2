@@ -38,6 +38,9 @@ struct ToolConfiguration: Codable {
 
     /// Root tuist
     let tuist: TuistConfiguration
+
+    /// Root app directory
+    let workspaceRoot: String
 }
 
 /// SwiftFormat configuration
@@ -91,9 +94,6 @@ struct TestConfiguration: Codable {
 
 /// Tuist Configuration
 struct TuistConfiguration: Codable {
-
-    /// Root app directory
-    let root: String
 
     /// Generation options
     let generationOptions: [String]

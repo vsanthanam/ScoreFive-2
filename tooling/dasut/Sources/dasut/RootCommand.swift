@@ -14,7 +14,8 @@ struct RootCommand: ParsableCommand, DasutCommand {
                                                     version: "2.0",
                                                     subcommands: [DependencyGraphCommand.self,
                                                                   MockCommand.self,
-                                                                  LintCommand.self])
+                                                                  LintCommand.self,
+                                                                  TestCommand.self])
 
     // MARK: - DasutCommand
 
