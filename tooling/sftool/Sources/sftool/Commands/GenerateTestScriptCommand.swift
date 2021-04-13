@@ -41,22 +41,22 @@ struct GenerateTestScriptCommand: ParsableCommand {
         """
 
         if !relaxed {
-            script += "\n./sftool lint --test"
+            script += "\n./dasut lint"
         }
 
         script += "\n"
 
         script += """
         ./sftool analytics wipe
-        ./sftool gen deps
-        ./sftool gen mocks
+        ./dasut update-deps
+        ./dasut mock
         ./sftool develop -d
         """
 
         if pretty {
             script += "\nxcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c"
         } else {
-            script += "xcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
+            script += "\nxcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
         }
 
         if autoclean {

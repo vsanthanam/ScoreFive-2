@@ -50,9 +50,6 @@ struct LintCommand: ParsableCommand, DasutCommand {
     @Flag(name: .long, help: "Fix errors where able")
     var autofix: Bool = false
 
-    @Flag(name: .long, help: "Fail if there are unresolved messages")
-    var test: Bool = false
-
     @Flag(name: .long, help: "For internal use by arcanist. Do not use.")
     var arclint: Bool = false
 
@@ -85,16 +82,18 @@ struct LintCommand: ParsableCommand, DasutCommand {
             lhs.file < rhs.file
         }
 
+        
+        
         for result in results {
             if arclint {
-                let formatted = "\(result.level.rawValue):\(result.line):\(result.col) \(result.message) [swiftlint]"
+                let formatted = "\(result.level.rawValue):\(result.line):\(result.col) \(result.message) [\(result.source.rawValue)]"
                 write(message: formatted)
             } else {
                 switch result.level {
                 case .warning:
-                    write(message: result.description, withColor: .yellow)
+                    warn(message: result.description, withColor: .yellow)
                 case .error:
-                    write(message: result.description, withColor: .red)
+                    warn(message: result.description, withColor: .red)
                 }
             }
         }
@@ -110,20 +109,10 @@ struct LintCommand: ParsableCommand, DasutCommand {
             let warnings = results.filter { $0.level == .warning }.count
             let errors = results.filter { $0.level == .error }.count
             if autofix {
-                if test {
-                    throw CustomDasutError(message: "Unresolved Errors!")
-                } else {
-                    complete(with: "Found \(warnings) warnings, \(errors) errors after fixing", color: .yellow)
-                }
-
+                throw CustomDasutError(message: "Found \(warnings) warnings, \(errors) errors after fixing")
             } else {
-                if test {
-                    throw CustomDasutError(message: "Unresolved Errors!")
-                } else {
-                    complete(with: "Found \(warnings) warnings, \(errors) errors", color: .yellow)
-                }
+                throw CustomDasutError(message: "Found \(warnings) warnings, \(errors) errors")
             }
-
         } else {
             if autofix {
                 complete(with: "No errors found after fixing! 🍻")

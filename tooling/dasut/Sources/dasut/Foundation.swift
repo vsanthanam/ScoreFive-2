@@ -47,6 +47,14 @@ extension DasutCommand {
         }
     }
 
+    func warn(message: String, withColor color: Color? = nil) {
+        if let color = color {
+            print(message.withColor(color), to: &io.standardError)
+        } else {
+            print(message, to: &io.standardError)
+        }
+    }
+
     func complete(with message: String? = "Success! 🍻", color: Color = .green) {
         if let message = message {
             print(message.withColor(color), to: &io.standardOut)
