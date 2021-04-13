@@ -82,8 +82,6 @@ struct LintCommand: ParsableCommand, DasutCommand {
             lhs.file < rhs.file
         }
 
-        
-        
         for result in results {
             if arclint {
                 let formatted = "\(result.level.rawValue):\(result.line):\(result.col) \(result.message) [\(result.source.rawValue)]"
@@ -169,18 +167,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
                 .split(separator: "\n")
                 .filter { $0.hasPrefix("/") }
                 .map { output -> LintResult in
-                    let comps = output.split(separator: ":")
-                    let file = comps[0]
-                    let line = Int(comps[1])!
-                    let col = Int(comps[2])!
-                    let level = LintResult.Level(rawValue: String(comps[3].dropFirst()))!
-                    let message = comps[4].dropFirst()
-                    return LintResult(message: .init(message),
-                                      file: String(file),
-                                      line: line,
-                                      col: col,
-                                      level: level,
-                                      source: .swiftlint)
+                    .fromOutput(.init(output))
                 }
                 .forEach { line in
                     output.append(line)
@@ -248,23 +235,29 @@ struct LintCommand: ParsableCommand, DasutCommand {
                 .split(separator: "\n")
                 .filter { $0.hasPrefix("/") }
                 .map { output -> LintResult in
-                    let comps = output.split(separator: ":")
-                    let file = comps[0]
-                    let line = Int(comps[1])!
-                    let col = Int(comps[2])!
-                    let level = LintResult.Level(rawValue: String(comps[3].dropFirst()))!
-                    let message = comps[4].dropFirst()
-                    return LintResult(message: .init(message),
-                                      file: String(file),
-                                      line: line,
-                                      col: col,
-                                      level: level,
-                                      source: .swiftformat)
+                    .fromOutput(.init(output))
                 }
                 .forEach { line in
                     output.append(line)
                 }
             return output
         }
+    }
+}
+
+extension LintCommand.LintResult {
+    static func fromOutput(_ output: String) -> LintCommand.LintResult {
+        let comps = output.split(separator: ":")
+        let file = comps[0]
+        let line = Int(comps[1])!
+        let col = Int(comps[2])!
+        let level = LintCommand.LintResult.Level(rawValue: String(comps[3].dropFirst()))!
+        let message = comps[4 ..< comps.count].joined(separator: " | ")
+        return .init(message: .init(message),
+                     file: String(file),
+                     line: line,
+                     col: col,
+                     level: level,
+                     source: .swiftformat)
     }
 }
