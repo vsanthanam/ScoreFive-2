@@ -26,7 +26,7 @@ enum ConfigurationError: Error, DasutError {
     var message: String {
         switch self {
         case let .decodingFailed(error):
-            return "Malformed configuration file -- \(error.localizedDescription)"
+            return "Malformed configuration file -- \(error)"
         }
     }
 }

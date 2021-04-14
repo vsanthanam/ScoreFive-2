@@ -8,32 +8,10 @@ import Foundation
 import ShellOut
 import Yams
 
+/// Lint command
 struct LintCommand: ParsableCommand, DasutCommand {
 
     // MARK: - API
-
-    struct LintResult: CustomStringConvertible {
-        enum Source: String {
-            case swiftlint
-            case swiftformat
-        }
-
-        enum Level: String {
-            case warning
-            case error
-        }
-
-        let message: String
-        let file: String
-        let line: Int
-        let col: Int
-        let level: Level
-        let source: Source
-
-        var description: String {
-            "[\(level.rawValue)] \(file) at line \(line):\(col) — \(message)"
-        }
-    }
 
     @Option(name: .long, help: "File to lint")
     var input: String?
@@ -43,6 +21,24 @@ struct LintCommand: ParsableCommand, DasutCommand {
 
     @Option(name: .long, help: "Location of the configuration file")
     var toolConfiguration: String = ".dasut-config"
+
+    @Option(name: .long, help: "Swift Version")
+    var swiftVersion: String?
+
+    @Option(name: .long, help: "Excluded directories")
+    var excludeDirs: [String] = []
+
+    @Option(name: .long, help: "Disabled swiftlint rules")
+    var disabledLintRules: [String] = []
+
+    @Option(name: .long, help: "Enabled swiftlint rules")
+    var enabledLintRules: [String] = []
+
+    @Option(name: .long, help: "Disabled swiftformat rules")
+    var disabledFormatRules: [String] = []
+
+    @Option(name: .long, help: "Enabled swiftformat rules")
+    var enabledFormatRules: [String] = []
 
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
@@ -56,30 +52,62 @@ struct LintCommand: ParsableCommand, DasutCommand {
     // MARK: - ParsableCommand
 
     static let configuration: CommandConfiguration = .init(commandName: "lint",
-                                                           abstract: "Lint .swift files",
+                                                           abstract: "Lint `.swift` files",
                                                            version: "2.0")
 
     // MARK: - DasutCommand
 
     func action() throws {
 
-        guard let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration) else {
-            fatalError()
+        let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
+        let excludeDirs = self.excludeDirs + (configuration?.lint.excludeDirs ?? [])
+        let swiftVersion = self.swiftVersion ?? configuration?.lint.swiftformat.swiftVersion
+        let disabledLintRules = self.disabledLintRules + (configuration?.lint.swiftlint.disabledRules ?? [])
+        let enabledLintRules = self.enabledLintRules + (configuration?.lint.swiftlint.optInRules ?? [])
+        let disabledFormatRules = self.disabledFormatRules + (configuration?.lint.swiftformat.disableRules ?? [])
+        let enabledFormatRules = self.enabledFormatRules + (configuration?.lint.swiftformat.enableRules ?? [])
+
+        guard let version = swiftVersion else {
+            throw CustomDasutError(message: "No swift version specified in config file or arguments")
         }
 
         wipeConfig()
 
         if autofix, !arclint {
-            try runSwiftLint(with: configuration, fix: true)
-            try runSwiftFormat(with: configuration, fix: true)
+            try runSwiftLint(with: configuration,
+                             enabledRules: enabledLintRules,
+                             disabledRules: disabledLintRules,
+                             excludeDirs: excludeDirs,
+                             fix: true)
+            try runSwiftFormat(with: configuration,
+                               enabledRules: enabledFormatRules,
+                               disabledRules: disabledFormatRules,
+                               swiftVersion: version,
+                               excludeDirs: excludeDirs,
+                               fix: true)
             wipeConfig()
         }
 
-        let lintResults = try runSwiftLint(with: configuration, fix: false)
-        let formatResults = try runSwiftFormat(with: configuration, fix: false)
+        let lintResults = try runSwiftLint(with: configuration,
+                                           enabledRules: enabledLintRules,
+                                           disabledRules: disabledLintRules,
+                                           excludeDirs: excludeDirs,
+                                           fix: false)
+        let formatResults = try runSwiftFormat(with: configuration,
+                                               enabledRules: enabledFormatRules,
+                                               disabledRules: disabledFormatRules,
+                                               swiftVersion: version,
+                                               excludeDirs: excludeDirs,
+                                               fix: false)
 
         let results = (lintResults + formatResults).sorted { lhs, rhs in
-            lhs.file < rhs.file
+            guard lhs.file != rhs.file else {
+                guard lhs.line != rhs.line else {
+                    return lhs.col < rhs.col
+                }
+                return lhs.line < rhs.line
+            }
+            return lhs.file < rhs.file
         }
 
         for result in results {
@@ -128,16 +156,18 @@ struct LintCommand: ParsableCommand, DasutCommand {
     }
 
     @discardableResult
-    private func runSwiftLint(with configuration: ToolConfiguration, fix: Bool) throws -> [LintResult] {
+    private func runSwiftLint(with configuration: ToolConfiguration?, enabledRules: [String], disabledRules: [String], excludeDirs: [String], fix: Bool) throws -> [LintResult] {
         struct SwiftLintConfig: Codable {
             var excluded: [String] = []
             var disabled_rules: [String] = []
         }
 
         var config = SwiftLintConfig()
-        let exclude = (configuration.swiftlint.excludeDirs + [configuration.vendorCodePath, configuration.diGraphPath] + configuration.mockolo.destinations).map { repoRoot + "/" + $0 }
+        let exclude = (excludeDirs + [configuration?.vendorCodePath, configuration?.diGraphPath] + (configuration?.mockolo.destinations ?? []))
+            .compactMap { $0 }
+            .map { repoRoot + "/" + $0 }
         config.excluded = exclude
-        config.disabled_rules = configuration.swiftlint.disabledRules
+        config.disabled_rules = disabledRules
         let encoder = YAMLEncoder()
         let yaml = try encoder.encode(config)
         if trace, !arclint {
@@ -177,19 +207,19 @@ struct LintCommand: ParsableCommand, DasutCommand {
     }
 
     @discardableResult
-    private func runSwiftFormat(with configuration: ToolConfiguration, fix: Bool) throws -> [LintResult] {
+    private func runSwiftFormat(with configuration: ToolConfiguration?, enabledRules: [String], disabledRules: [String], swiftVersion: String, excludeDirs: [String], fix: Bool) throws -> [LintResult] {
         var configComponents: [String] = .init()
-        if !configuration.swiftformat.disableRules.isEmpty {
-            let disable = "--disable" + " " + configuration.swiftformat.disableRules.joined(separator: ",")
+        if !disabledRules.isEmpty {
+            let disable = "--disable" + " " + disabledRules.joined(separator: ",")
             configComponents.append(disable)
 
         }
-        if !configuration.swiftformat.enableRules.isEmpty {
-            let enable = "--enable" + " " + configuration.swiftformat.enableRules.joined(separator: ",")
+        if !enabledRules.isEmpty {
+            let enable = "--enable" + " " + enabledRules.joined(separator: ",")
             configComponents.append(enable)
         }
 
-        let exclude = [configuration.vendorCodePath] + [configuration.diGraphPath] + configuration.mockolo.destinations + configuration.swiftformat.excludeDirs
+        let exclude = ([configuration?.vendorCodePath, configuration?.diGraphPath] + (configuration?.mockolo.destinations ?? []) + excludeDirs).compactMap { $0 }
 
         exclude
             .forEach { exclude in
@@ -197,7 +227,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
                 configComponents.append(component)
             }
 
-        configComponents.append("--swiftversion \(configuration.swiftformat.swiftVersion)")
+        configComponents.append("--swiftversion \(swiftVersion)")
 
         let header = """
         //
@@ -245,13 +275,35 @@ struct LintCommand: ParsableCommand, DasutCommand {
     }
 }
 
-extension LintCommand.LintResult {
-    static func fromOutput(_ output: String) -> LintCommand.LintResult {
+struct LintResult: CustomStringConvertible {
+
+    enum Source: String {
+        case swiftlint
+        case swiftformat
+    }
+
+    enum Level: String {
+        case warning
+        case error
+    }
+
+    let message: String
+    let file: String
+    let line: Int
+    let col: Int
+    let level: Level
+    let source: Source
+
+    var description: String {
+        "[\(level.rawValue)] \(file) at line \(line):\(col) — \(message)"
+    }
+
+    static func fromOutput(_ output: String) -> LintResult {
         let comps = output.split(separator: ":")
         let file = comps[0]
         let line = Int(comps[1])!
         let col = Int(comps[2])!
-        let level = LintCommand.LintResult.Level(rawValue: String(comps[3].dropFirst()))!
+        let level = Level(rawValue: String(comps[3].dropFirst()))!
         let message = comps[4 ..< comps.count].joined(separator: " | ")
         return .init(message: .init(message),
                      file: String(file),

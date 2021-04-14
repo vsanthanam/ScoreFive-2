@@ -10,10 +10,7 @@ import ShellOut
 struct ToolConfiguration: Codable {
 
     /// SwiftFormat configuration
-    let swiftformat: SwiftFormatConfiguration
-
-    /// SwiftLint configuration
-    let swiftlint: SwiftLintConfiguration
+    let lint: LintConfiguration
 
     /// Mockolo configuration
     let mockolo: MockoloConfiguration
@@ -43,6 +40,16 @@ struct ToolConfiguration: Codable {
     let workspaceRoot: String
 }
 
+struct LintConfiguration: Codable {
+
+    var excludeDirs: [String]
+
+    let swiftlint: SwiftLintConfiguration
+
+    let swiftformat: SwiftFormatConfiguration
+
+}
+
 /// SwiftFormat configuration
 struct SwiftFormatConfiguration: Codable {
 
@@ -52,17 +59,11 @@ struct SwiftFormatConfiguration: Codable {
     /// Rules to disable
     let disableRules: [String]
 
-    /// Directories to exclude
-    let excludeDirs: [String]
-
     /// Swift version
     let swiftVersion: String
 }
 
 struct SwiftLintConfiguration: Codable {
-
-    /// Directories to exclude
-    let excludeDirs: [String]
 
     /// Disabled rules
     let disabledRules: [String]

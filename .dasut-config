@@ -1,42 +1,42 @@
 {
-    "swiftformat": {
-        "enableRules": ["isEmpty"],
-        "disableRules": ["blankLinesAtEndOfScope",
-                         "blankLinesAtStartOfScope",
-                         "redundantNilInit",
-                         "unusedArguments",
-                         "redundantParens",
-                         "wrapMultilineStatementBraces",
-                         "trailingCommas",
-                         "braces"],
+    "lint": {
         "excludeDirs": ["ScoreFive/App/Derived",
-                        "bin/tuist"],
-	"swiftVersion": "5.4"
+                       "bin",
+                       "tooling/sftool/.build",
+                       "tooling/dasut/.build"],
+        "swiftformat": {
+            "enableRules": ["isEmpty"],
+            "disableRules": ["blankLinesAtEndOfScope",
+                             "blankLinesAtStartOfScope",
+                             "redundantNilInit",
+                             "unusedArguments",
+                             "redundantParens",
+                             "wrapMultilineStatementBraces",
+                             "trailingCommas",
+                             "braces"],
+	        "swiftVersion": "5.4"
+        },
+        "swiftlint": {
+            "disabledRules": ["line_length",
+                              "nesting",
+                              "function_body_length",
+                              "identifier_name",
+                              "redundant_optional_initialization",
+                              "type_body_length",
+                              "type_name",
+                              "function_parameter_count",
+                              "generic_type_name",
+                              "unused_setter_value",
+                              "trailing_whitespace",
+                              "cyclomatic_complexity"],
+            "optInRules": []
+        }
     },
     "mockolo": {
         "testableImports": ["ShortRibs",
                             "ScoreFive",
 			                "Analytics"],
         "destinations": ["ScoreFive/App/ScoreFiveTests/Mocks.swift"]
-    },
-    "swiftlint": {
-        "excludeDirs": ["ScoreFive/App/Derived",
-                        "bin",
-                        "tooling/sftool/.build",
-                        "tooling/dasut/.build"],
-        "disabledRules": ["line_length",
-                          "nesting",
-                          "function_body_length",
-                          "identifier_name",
-                          "redundant_optional_initialization",
-                          "type_body_length",
-                          "type_name",
-                          "function_parameter_count",
-                          "generic_type_name",
-                          "unused_setter_value",
-                          "trailing_whitespace",
-                          "cyclomatic_complexity"],
-        "optInRules": []
     },
     "testConfig": {
         "device": "iPhone 8 Plus",
