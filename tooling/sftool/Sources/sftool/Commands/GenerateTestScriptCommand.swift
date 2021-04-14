@@ -54,9 +54,9 @@ struct GenerateTestScriptCommand: ParsableCommand {
         """
 
         if pretty {
-            script += "\nxcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | tee -a build.log | xcpretty -c"
+            script += "\n./dasut test --pretty"
         } else {
-            script += "\nxcodebuild -workspace \(configuration.tuist.root)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
+            script += "\n./dasut test"
         }
 
         if autoclean {
