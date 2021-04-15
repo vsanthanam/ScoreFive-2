@@ -7,7 +7,7 @@ import Foundation
 
 extension DasutCommand {
 
-    func tuist(on root: String, toolConfig: String, generationOptions: [String], workspace: String, verbose: Bool, action: () throws -> Void) throws {
+    func tuist(on root: String, bin: String, toolConfig: String, generationOptions: [String], workspace: String, verbose: Bool, action: () throws -> Void) throws {
         let options = generationOptions
             .map { "." + $0 }
             .reduce("") { prev, option in
@@ -29,7 +29,7 @@ extension DasutCommand {
         _ = try? shell(script: "rm -rf \(dir)", at: root)
         try shell(script: "mkdir \(dir)", at: root, errorMessage: "Couldn't Generate Temporary Directory", verbose: verbose)
         try shell(script: "echo \"\(settings)\" > \(path)", at: root, errorMessage: "Couldn't Write Tuist Configuration", verbose: verbose)
-        try shell(script: "bin/tuist/tuist generate --path \(workspace)", at: root, errorMessage: "Couldn't Generate Project", verbose: verbose)
+        try shell(script: "\(bin) generate --path \(workspace)", at: root, errorMessage: "Couldn't Generate Project", verbose: verbose)
         _ = try? shell(script: "rm -rf \(dir)", at: root)
         _ = try? shell(script: "open \(workspace)/ScoreFive.xcworkspace", at: root)
     }

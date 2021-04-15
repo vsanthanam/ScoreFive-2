@@ -11,17 +11,22 @@ struct TestCommand: ParsableCommand, DasutCommand {
 
     // MARK: - API
 
+    enum TestCommandError: Error, DasutError {
+        case missingTestConfig
+
+        var message: String {
+            switch self {
+            case .missingTestConfig:
+                return "Missing test options in arguments or configuration!"
+            }
+        }
+    }
+
     @Option(name: .long, help: "Location of the score five repo")
     var repoRoot: String = FileManager.default.currentDirectoryPath
 
     @Option(name: .long, help: "Location of the configuration file")
     var toolConfiguration: String = ".dasut-config"
-
-    @Flag(name: .long, help: "Display verbose logging")
-    var trace: Bool = false
-
-    @Flag(name: .long, help: "Display pretty results (requires xcpretty)")
-    var pretty: Bool = false
 
     @Option(name: .long, help: "Simulator Device Name")
     var device: String?
@@ -31,6 +36,15 @@ struct TestCommand: ParsableCommand, DasutCommand {
 
     @Option(name: .long, help: "Workspace Root")
     var workspaceRoot: String?
+
+    @Option(name: .long, help: "Tuist")
+    var bin: String = "bin/tuist/tuist"
+
+    @Flag(name: .long, help: "Display verbose logging")
+    var trace: Bool = false
+
+    @Flag(name: .long, help: "Display pretty results (requires xcpretty)")
+    var pretty: Bool = false
 
     // MARK: - ParsableCommand
 
@@ -48,10 +62,15 @@ struct TestCommand: ParsableCommand, DasutCommand {
         guard let device = configDevice,
               let os = configOs,
               let workspace = workspaceRoot else {
-            throw CustomDasutError(message: "Missing test settings!")
+            throw TestCommandError.missingTestConfig
         }
 
-        try tuist(on: repoRoot, toolConfig: toolConfiguration, generationOptions: configuration?.tuist.generationOptions ?? [], workspace: workspace, verbose: trace) {
+        try tuist(on: repoRoot,
+                  bin: bin,
+                  toolConfig: toolConfiguration,
+                  generationOptions: configuration?.tuist.generationOptions ?? [],
+                  workspace: workspace,
+                  verbose: trace) {
             let command: String
 
             if pretty {

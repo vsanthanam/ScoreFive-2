@@ -25,14 +25,14 @@ struct DependencyGraphCommand: ParsableCommand, DasutCommand {
         }
     }
 
-    @Option(name: .long, help: "Needle")
-    var bin: String = "bin/needle/needle"
-
-    @Option(name: .long, help: "Generated code destination")
+    @Argument(help: "Generated code destination")
     var output: String?
 
-    @Option(name: .long, help: "Files to examine")
+    @Argument(help: "Files to examine")
     var input: String?
+
+    @Option(name: .long, help: "Needle")
+    var bin: String = "bin/needle/needle"
 
     @Option(name: .long, help: "Location of the score five repo")
     var repoRoot: String = FileManager.default.currentDirectoryPath

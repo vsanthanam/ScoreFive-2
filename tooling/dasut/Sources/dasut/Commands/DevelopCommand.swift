@@ -15,14 +15,19 @@ struct DevelopCommand: ParsableCommand, DasutCommand {
 
     // MARK: - API
 
+    enum DevelopCommandError: Error, DasutError {
+        case noWorkspace
+
+        var message: String {
+            switch self {
+            case .noWorkspace:
+                return "No workspace specified in configuration or arguments!"
+            }
+        }
+    }
+
     @Option(name: .shortAndLong, help: "Location of the score five repo")
     var repoRoot: String = FileManager.default.currentDirectoryPath
-
-    @Flag(name: .long, help: "Display verbose logging")
-    var trace: Bool = false
-
-    @Flag(name: .shortAndLong, help: "Don't automatically open Xcode")
-    var dontOpenXcode: Bool = false
 
     @Option(name: .long, help: "Location of the configuration file")
     var toolConfiguration: String = ".dasut-config"
@@ -30,25 +35,38 @@ struct DevelopCommand: ParsableCommand, DasutCommand {
     @Option(name: .long, help: "Workspace Root")
     var workspaceRoot: String?
 
+    @Option(name: .long, help: "Tuist")
+    var bin: String = "bin/tuist/tuist"
+
+    @Flag(name: .long, help: "Display verbose logging")
+    var trace: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Don't automatically open Xcode")
+    var dontOpenXcode: Bool = false
+
     // MARK: - ParsableCommand
 
     static let configuration = CommandConfiguration(commandName: "develop",
-                                                    abstract: "Generate the project")
+                                                    abstract: "Generate the project",
+                                                    version: "2.0")
 
     func action() throws {
 
         let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
 
         guard let workspace = workspaceRoot ?? configuration?.workspaceRoot else {
-            throw CustomDasutError(message: "Missing workspace root")
+            throw DevelopCommandError.noWorkspace
         }
 
         try tuist(on: repoRoot,
+                  bin: bin,
                   toolConfig: toolConfiguration,
                   generationOptions: configuration?.tuist.generationOptions ?? [],
                   workspace: workspace,
                   verbose: trace) {
-            try shell(script: "bin/tuist/tuist generate --path \(workspace)", at: repoRoot, errorMessage: "Couldn't Generate Project", verbose: trace)
+            try shell(script: "bin/tuist/tuist generate --path \(workspace)",
+                      at: repoRoot,
+                      errorMessage: "Couldn't Generate Project", verbose: trace)
         }
     }
 }

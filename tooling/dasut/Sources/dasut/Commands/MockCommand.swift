@@ -25,13 +25,10 @@ struct MockCommand: ParsableCommand, DasutCommand {
         }
     }
 
-    @Option(name: .long, help: "Needle")
-    var bin: String = "bin/mockolo/mockolo"
-
-    @Option(name: .long, help: "Generated code destinations")
+    @Argument(help: "Mock destination")
     var outputs: [String] = []
 
-    @Option(name: .long, help: "Files to mock")
+    @Argument(help: "Files to mock")
     var inputs: [String] = []
 
     @Option(name: .long, help: "Location of the score five repo")
@@ -39,6 +36,9 @@ struct MockCommand: ParsableCommand, DasutCommand {
 
     @Option(name: .long, help: "Location of the configuration file")
     var toolConfiguration: String = ".dasut-config"
+
+    @Option(name: .long, help: "Mockolo")
+    var bin: String = "bin/mockolo/mockolo"
 
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false

@@ -13,7 +13,25 @@ struct LintCommand: ParsableCommand, DasutCommand {
 
     // MARK: - API
 
-    @Option(name: .long, help: "File to lint")
+    enum LintCommandError: Error, DasutError {
+        case noSwiftVersion
+        case lintFailed(warnings: Int, errors: Int, afterFix: Bool)
+
+        var message: String {
+            switch self {
+            case .noSwiftVersion:
+                return "No swift version in arguments or configuration!"
+            case let .lintFailed(warnings, errors, afterFix):
+                if afterFix {
+                    return "Found \(warnings) warnings, \(errors) errors after fixing"
+                } else {
+                    return "Found \(warnings) warnings, \(errors) errors"
+                }
+            }
+        }
+    }
+
+    @Argument(help: "File to lint")
     var input: String?
 
     @Option(name: .long, help: "Location of the score five repo")
@@ -68,7 +86,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         let enabledFormatRules = self.enabledFormatRules + (configuration?.lint.swiftformat.enableRules ?? [])
 
         guard let version = swiftVersion else {
-            throw CustomDasutError(message: "No swift version specified in config file or arguments")
+            throw LintCommandError.noSwiftVersion
         }
 
         wipeConfig()
@@ -134,11 +152,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
         if !results.isEmpty {
             let warnings = results.filter { $0.level == .warning }.count
             let errors = results.filter { $0.level == .error }.count
-            if autofix {
-                throw CustomDasutError(message: "Found \(warnings) warnings, \(errors) errors after fixing")
-            } else {
-                throw CustomDasutError(message: "Found \(warnings) warnings, \(errors) errors")
-            }
+            throw LintCommandError.lintFailed(warnings: warnings, errors: errors, afterFix: autofix)
         } else {
             if autofix {
                 complete(with: "No errors found after fixing! 🍻")

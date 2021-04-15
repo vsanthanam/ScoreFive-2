@@ -24,7 +24,9 @@ struct CleanCommand: ParsableCommand, DasutCommand {
     // MARK: - ParsableCommand
 
     static let configuration = CommandConfiguration(commandName: "clean",
-                                                    abstract: "clean the repo")
+                                                    abstract: "Clean the repo")
+
+    // MARK: - DasutCommand
 
     func action() throws {
         let config = try fetchConfiguration(on: repoRoot)
