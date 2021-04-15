@@ -29,6 +29,9 @@ struct TestCommand: ParsableCommand, DasutCommand {
     @Option(name: .long, help: "Simulator Version")
     var os: String?
 
+    @Option(name: .long, help: "Workspace Root")
+    var workspaceRoot: String?
+
     // MARK: - ParsableCommand
 
     static let configuration: CommandConfiguration = .init(commandName: "test",
@@ -41,21 +44,24 @@ struct TestCommand: ParsableCommand, DasutCommand {
         let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
         let configDevice = self.device ?? configuration?.testConfig.device
         let configOs = self.os ?? configuration?.testConfig.os
+        let workspaceRoot = self.workspaceRoot ?? configuration?.workspaceRoot
         guard let device = configDevice,
               let os = configOs,
-              let workspace = configuration?.workspaceRoot else {
+              let workspace = workspaceRoot else {
             throw CustomDasutError(message: "Missing test settings!")
         }
 
-        let command: String
+        try tuist(on: repoRoot, toolConfig: toolConfiguration, generationOptions: configuration?.tuist.generationOptions ?? [], workspace: workspace, verbose: trace) {
+            let command: String
 
-        if pretty {
-            command = "set -o pipefail && xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | xcpretty"
-        } else {
-            command = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
+            if pretty {
+                command = "set -o pipefail && xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | xcpretty"
+            } else {
+                command = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
+            }
+
+            try shell(script: command, at: repoRoot, verbose: true)
+            complete(with: "Test Suceeded!")
         }
-
-        try shell(script: command, at: repoRoot, verbose: true)
-        complete(with: "Test Suceeded!")
     }
 }
