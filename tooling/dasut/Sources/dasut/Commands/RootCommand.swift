@@ -16,7 +16,8 @@ struct RootCommand: ParsableCommand, DasutCommand {
                                                                   MockCommand.self,
                                                                   LintCommand.self,
                                                                   TestCommand.self,
-                                                                  DevelopCommand.self])
+                                                                  DevelopCommand.self,
+                                                                  CleanCommand.self])
 
     // MARK: - DasutCommand
 
