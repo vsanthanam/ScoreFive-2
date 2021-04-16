@@ -43,11 +43,7 @@ extension DasutCommand {
                                 outputHandle: verbose ? io.stdout : nil,
                                 errorHandle: verbose ? io.stderr : nil)
         } catch {
-            if verbose {
-                throw CustomDasutError(message: "Command \(command.string) failed with error: \(errorMessage ?? "unknown")")
-            } else {
-                throw CustomDasutError(message: errorMessage ?? "Command Failed!")
-            }
+            throw CustomDasutError(message: errorMessage ?? "Command Failed!")
         }
     }
 
