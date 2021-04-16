@@ -9,8 +9,8 @@ import ShellOut
 /// Errors from parsing the configuration file
 enum ConfigurationError: Error, DasutError {
 
-    /// `.sftool-config.json` could not be parsed into a `Configuration object`
-    /// - seeAlso: `Configuration`
+    /// `.dasut-config` could not be parsed into a configuration object.
+    /// - seeAlso: `ToolConfiguration`
     case decodingFailed(error: Error)
 
     /// The error message

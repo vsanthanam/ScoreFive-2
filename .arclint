@@ -1,8 +1,8 @@
 {
 	"linters": {
-		"sftool-config": {
+		"dasut-config": {
 			"type": "json",
-			"include": ["(\\.sftool-config)"]
+			"include": ["(\\.dasut-config)"]
 		},
 		"arctools": {
 			"type": "php"

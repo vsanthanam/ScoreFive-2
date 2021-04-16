@@ -49,7 +49,7 @@ public final class AnalyticsManager: AnalyticsManaging {
         else {
             guard AnalyticsEnvironment[.allowAnonymousAnalytics] == true else {
                 fatalError("""
-                Empty or invalid analytics configuration! Run `./sftool analytics install` or run the app with EV `AN_ALLOW_ANONYMOUS_ANALYTICS` as `YES`
+                Empty or invalid analytics configuration! Run `./dasut analytics install` or run the app with EV `AN_ALLOW_ANONYMOUS_ANALYTICS` as `YES`
                 """)
             }
             isStarted = true
