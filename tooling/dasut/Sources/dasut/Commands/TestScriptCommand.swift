@@ -49,7 +49,7 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
         guard let device = configDevice,
               let os = configOs,
               let workspace = workspaceRoot else {
-            fatalError()
+            throw CustomDasutError(message: "Missing test configuration!")
         }
         var script: String = """
         #! /bin/sh
@@ -63,7 +63,7 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
         script += "\n"
 
         script += """
-        ./dasut analytics wipe --trace
+        ./dasut analytics wipe
         ./dasut update-deps --trace
         ./dasut mock --trace
         ./dasut develop -d --trace
@@ -77,11 +77,7 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
             testCommand = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
         }
 
-        if pretty {
-            script += "\n\(testCommand)"
-        } else {
-            script += "\n\(testCommand)"
-        }
+        script += "\n\(testCommand)"
 
         if autoclean {
             script += "\n./dasut clean"

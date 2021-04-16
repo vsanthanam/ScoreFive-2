@@ -7,6 +7,7 @@ import class Foundation.Bundle
 import XCTest
 
 final class dasutTests: XCTestCase {
+
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
@@ -31,7 +32,7 @@ final class dasutTests: XCTestCase {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
 
-        XCTAssertEqual(output, "Hello, world!\n")
+        XCTAssertEqual(output, "Welcome to ScoreFive! Run ./dasut -h for more options\n")
     }
 
     /// Returns path to the built products directory.

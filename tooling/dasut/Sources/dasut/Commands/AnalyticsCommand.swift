@@ -53,9 +53,6 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
         @Option(name: .long, help: "Workspace Root")
         var workspaceRoot: String?
 
-        @Flag(name: .long, help: "Display verbose logging")
-        var trace: Bool = false
-
         // MARK: - ParsableCommand
 
         static let configuration = CommandConfiguration(commandName: "install",
@@ -71,7 +68,7 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
             }
             let data = try JSONEncoder().encode(config)
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
-            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot, verbose: trace)
+            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot)
             try NSData(data: data).write(toFile: workspace + targetPath)
         }
     }
@@ -89,9 +86,6 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
         @Option(name: .long, help: "Location of the configuration file")
         var toolConfiguration: String = ".dasut-config"
 
-        @Flag(name: .long, help: "Display verbose logging")
-        var trace: Bool = false
-
         // MARK: - ParsableCommand
 
         static let configuration = CommandConfiguration(commandName: "wipe",
@@ -106,7 +100,7 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
             }
             let data = try JSONEncoder().encode(AnalyticsConfig.empty)
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
-            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot, verbose: trace)
+            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot)
             try NSData(data: data).write(toFile: workspace + targetPath)
         }
 
