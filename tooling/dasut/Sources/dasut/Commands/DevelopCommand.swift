@@ -68,5 +68,11 @@ struct DevelopCommand: ParsableCommand, DasutCommand {
                       at: repoRoot,
                       errorMessage: "Couldn't Generate Project", verbose: trace)
         }
+
+        if !dontOpenXcode {
+            _ = try? shell(script: "open \(workspace)/ScoreFive.xcworkspace", at: repoRoot)
+        }
+
+        complete(with: "Project Generated! 🍻")
     }
 }

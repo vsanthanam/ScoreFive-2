@@ -80,7 +80,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
             }
 
             try shell(script: command, at: repoRoot, verbose: true)
-            complete(with: "Test Suceeded!")
         }
+        complete(with: "Test Suceeded!")
     }
 }

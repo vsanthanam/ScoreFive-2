@@ -43,15 +43,7 @@ struct MockCommand: ParsableCommand, DasutCommand {
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
 
-    // MARK: - ParsableCommand
-
-    static let configuration: CommandConfiguration = .init(commandName: "mock",
-                                                           abstract: "Generate mocks",
-                                                           version: "2.0")
-
-    // MARK: - DasutCommand
-
-    func action() throws {
+    func generateMocks() throws {
         let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
 
         var paths = [String]()
@@ -88,6 +80,18 @@ struct MockCommand: ParsableCommand, DasutCommand {
                       errorMessage: "Mockolo failed!",
                       verbose: trace)
         }
+    }
+
+    // MARK: - ParsableCommand
+
+    static let configuration: CommandConfiguration = .init(commandName: "mock",
+                                                           abstract: "Generate mocks",
+                                                           version: "2.0")
+
+    // MARK: - DasutCommand
+
+    func action() throws {
+        try generateMocks()
         complete(with: "Mocks generated! 🍻")
     }
 }

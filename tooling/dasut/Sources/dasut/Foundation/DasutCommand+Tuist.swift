@@ -31,7 +31,6 @@ extension DasutCommand {
         try shell(script: "echo \"\(settings)\" > \(path)", at: root, errorMessage: "Couldn't Write Tuist Configuration", verbose: verbose)
         try shell(script: "\(bin) generate --path \(workspace)", at: root, errorMessage: "Couldn't Generate Project", verbose: verbose)
         _ = try? shell(script: "rm -rf \(dir)", at: root)
-        _ = try? shell(script: "open \(workspace)/ScoreFive.xcworkspace", at: root)
     }
 
 }
