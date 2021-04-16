@@ -19,18 +19,21 @@ struct BootstrapCommand: ParsableCommand, DasutCommand {
         let arguments = CommandLine.arguments.dropFirst(2)
 
         guard let mockCommand = (try MockCommand.parseAsRoot(.init(arguments)) as? MockCommand) else {
-            fatalError()
+            throw CustomDasutError.unknown
         }
-        try mockCommand.action()
 
         guard let dependencyGraphCommand = (try DependencyGraphCommand.parseAsRoot(.init(arguments)) as? DependencyGraphCommand) else {
-            fatalError()
+            throw CustomDasutError.unknown
         }
-        try dependencyGraphCommand.action()
 
         guard var developCommand = (try DevelopCommand.parseAsRoot(.init(arguments)) as? DevelopCommand) else {
-            fatalError()
+            throw CustomDasutError.unknown
         }
+
+        try mockCommand.action()
+
+        try dependencyGraphCommand.action()
+
         developCommand.dontOpenXcode = true
         try developCommand.action()
     }

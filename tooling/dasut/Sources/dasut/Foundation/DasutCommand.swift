@@ -13,6 +13,8 @@ protocol DasutError {
 
 struct CustomDasutError: Error, DasutError {
     let message: String
+
+    static let unknown: CustomDasutError = .init(message: "Unknown Error")
 }
 
 protocol DasutCommand {

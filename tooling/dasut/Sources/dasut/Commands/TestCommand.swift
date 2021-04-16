@@ -79,7 +79,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
                 command = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
             }
 
-            try shell(script: command, at: repoRoot, verbose: true)
+            try shell(script: command, at: repoRoot, errorMessage: "Testing failed!", verbose: true)
         }
         complete(with: "Test Suceeded!")
     }

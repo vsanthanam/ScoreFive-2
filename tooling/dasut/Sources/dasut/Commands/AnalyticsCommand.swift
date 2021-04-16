@@ -8,6 +8,19 @@ import Foundation
 
 struct AnalyticsCommand: ParsableCommand, DasutCommand {
 
+    // MARK: - API
+
+    enum AnalyticsCommandError: Error, DasutError {
+        case missingWorkspace
+
+        var message: String {
+            switch self {
+            case .missingWorkspace:
+                return "Missing workspace from arguments or configuration"
+            }
+        }
+    }
+
     // MARK: - ParsableCommand
 
     static let configuration = CommandConfiguration(commandName: "analytics",
@@ -40,6 +53,9 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
         @Option(name: .long, help: "Workspace Root")
         var workspaceRoot: String?
 
+        @Flag(name: .long, help: "Display verbose logging")
+        var trace: Bool = false
+
         // MARK: - ParsableCommand
 
         static let configuration = CommandConfiguration(commandName: "install",
@@ -51,11 +67,11 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
             let config = AnalyticsConfig(appKey: key, host: host)
             let toolConfig = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
             guard let workspace = workspaceRoot ?? toolConfig?.workspaceRoot else {
-                throw CustomDasutError(message: "bliqqy")
+                throw AnalyticsCommandError.missingWorkspace
             }
             let data = try JSONEncoder().encode(config)
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
-            try shell(script: "rm \(workspace + targetPath)", at: repoRoot)
+            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot, verbose: trace)
             try NSData(data: data).write(toFile: workspace + targetPath)
         }
     }
@@ -73,6 +89,9 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
         @Option(name: .long, help: "Location of the configuration file")
         var toolConfiguration: String = ".dasut-config"
 
+        @Flag(name: .long, help: "Display verbose logging")
+        var trace: Bool = false
+
         // MARK: - ParsableCommand
 
         static let configuration = CommandConfiguration(commandName: "wipe",
@@ -83,11 +102,11 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
         func action() throws {
             let config = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
             guard let workspace = workspaceRoot ?? config?.workspaceRoot else {
-                throw CustomDasutError(message: "bliqqy")
+                throw AnalyticsCommandError.missingWorkspace
             }
             let data = try JSONEncoder().encode(AnalyticsConfig.empty)
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
-            try shell(script: "rm \(workspace + targetPath)", at: repoRoot)
+            _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot, verbose: trace)
             try NSData(data: data).write(toFile: workspace + targetPath)
         }
 

@@ -12,14 +12,15 @@ struct RootCommand: ParsableCommand, DasutCommand {
 
     static let configuration = CommandConfiguration(commandName: "Dasut",
                                                     version: "2.0",
-                                                    subcommands: [DependencyGraphCommand.self,
+                                                    subcommands: [BootstrapCommand.self,
+                                                                  DevelopCommand.self,
+                                                                  DependencyGraphCommand.self,
                                                                   MockCommand.self,
                                                                   LintCommand.self,
                                                                   TestCommand.self,
-                                                                  DevelopCommand.self,
+                                                                  AnalyticsCommand.self,
                                                                   CleanCommand.self,
-                                                                  BootstrapCommand.self,
-                                                                  AnalyticsCommand.self])
+                                                                  TestScriptCommand.self])
 
     // MARK: - DasutCommand
 

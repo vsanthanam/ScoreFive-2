@@ -15,12 +15,15 @@ struct LintCommand: ParsableCommand, DasutCommand {
 
     enum LintCommandError: Error, DasutError {
         case noSwiftVersion
+        case lintExecutionFailed
         case lintFailed(warnings: Int, errors: Int, afterFix: Bool)
 
         var message: String {
             switch self {
             case .noSwiftVersion:
                 return "No swift version in arguments or configuration!"
+            case .lintExecutionFailed:
+                return "Lint execution failed!"
             case let .lintFailed(warnings, errors, afterFix):
                 if afterFix {
                     return "Found \(warnings) warnings, \(errors) errors after fixing"
@@ -204,7 +207,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
             return []
         } catch {
             guard let error = error as? ShellOutError else {
-                throw CustomDasutError(message: "Linting failed!")
+                throw LintCommandError.lintExecutionFailed
             }
             var output = [LintResult]()
             error.output
@@ -272,7 +275,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
             return []
         } catch {
             guard let error = error as? ShellOutError else {
-                throw CustomDasutError(message: "Linting failed!")
+                throw LintCommandError.lintExecutionFailed
             }
             var output = [LintResult]()
             error.message
