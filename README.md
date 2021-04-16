@@ -11,7 +11,7 @@ ScoreFive is comprised of several proejcts and a single workspace.
 Vendor code and other dependencies do not use a package manager, and are included in the repository directly.
 Xcode projects are generated using the provided tooling, and are not checked into the repo.
 
-1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, [uber/needle](https://github.com/uber/needle) for compile-time safe dependency injection and [uber/mockolo](https://github.com/uber/mockolo) for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called `dasut` to that knows the right arguments, paths & settings use. `dasut` is integrated into arc workflows and generated Xcode project/workspace schemes. The source code for this tool is included in the repo.
+1. ScoreFive uses [Tuist](https://tuist.io/docs/usage/get-started/) for project generation, [uber/needle](https://github.com/uber/needle) for compile-time safe dependency injection and [uber/mockolo](https://github.com/uber/mockolo) for efficient Swift mock generation. The correct versions of these tools are bundled with the repo. Rather than interfacing with these tools directly, ScoreFive provides a built-in command line utility called Dasut to that knows the right arguments, paths & settings use. Dasut is integrated into arc workflows and generated Xcode project/workspace schemes. The source code for this tool is included in the repo.
 
 Build the latest version of the tool and move it to the root directory with the provided script.
 
@@ -48,7 +48,7 @@ $ cd path/to/repo
 $ ./dasut mock
 ```
 
-2. Run the tests with via `xcodebuild` using `dasut`. You can add the `--pretty` flag for better looking test results (requires local install of `xcpretty`)
+2. Run the tests with via xcodebuild using Dasut. You can add the `--pretty` flag for better looking test results (requires local install of `xcpretty`)
 
 ```
 $ cd path/to/repo
@@ -70,12 +70,12 @@ $ ./dasut lint
 Some violations and formatting errors can be fixed automatically. To do this, add the `--autofix` flag. 
 You can configure the rules and options in `.dasut-config`, or with command line arguments. See `./dasut lint -h` for more information.
 
-By default ,`./sftool lint` runs on the entire repo, but you can provide a specific path to lint using arguments.
+By default, the `lint` command runs on the entire repo, but you can provide a specific path to lint using arguments.
 You can also lint changed files only using `arc lint`, if you're using arcanist.
 
 ### Updating the DI Graph
 
-1. Run `needle` via `dasut`
+1. Run Needle via Dasut
 
 ```
 $ cd path/to/repo
@@ -109,7 +109,7 @@ I use BuildKite for continuous builds. If you want to fork this repo and setup y
 
 ```
 $ cd /path/to/repo
-$ ./sftool test-script --pretty > buildkite.sh
+$ ./dasut test-script --pretty > buildkite.sh
 $ chmod +x buildkite.sh
 $ ./buildkite.sh
 ```
