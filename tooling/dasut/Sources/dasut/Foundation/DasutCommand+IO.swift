@@ -36,7 +36,7 @@ extension DasutCommand {
     func shell(_ command: ShellOutCommand, at path: String = ".", errorMessage: String? = nil, verbose: Bool = false) throws -> String {
         do {
             if verbose {
-                write(message: command.string)
+                write(message: "\n" + command.string + "\n")
             }
             return try shellOut(to: command,
                                 at: path,

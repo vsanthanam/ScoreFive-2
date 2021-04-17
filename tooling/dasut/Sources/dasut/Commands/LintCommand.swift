@@ -200,7 +200,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
             command = [command, "--path", (input ?? repoRoot), "--strict"].joined(separator: " ")
         }
         if trace, !arclint {
-            write(message: "Running Command: \(command)")
+            write(message: "\n" + command + "\n")
         }
         do {
             try shellOut(to: command, at: repoRoot)
@@ -268,7 +268,7 @@ struct LintCommand: ParsableCommand, DasutCommand {
             command = ["bin/swiftformat/swiftformat", "--lint", input ?? repoRoot, headerCommand].joined(separator: " ")
         }
         if trace, !arclint {
-            write(message: "Running Command: \(command)")
+            write(message: "\n" + command + "\n")
         }
         do {
             try shellOut(to: command, at: repoRoot)
