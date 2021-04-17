@@ -40,6 +40,9 @@ struct TestCommand: ParsableCommand, DasutCommand {
     @Option(name: .long, help: "Tuist")
     var bin: String = "bin/tuist/tuist"
 
+    @Flag(name: .long, help: "Do not generate the test")
+    var noGen: Bool = false
+
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
 
@@ -65,12 +68,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
             throw TestCommandError.missingTestConfig
         }
 
-        try tuist(on: repoRoot,
-                  bin: bin,
-                  toolConfig: toolConfiguration,
-                  generationOptions: configuration?.tuist.generationOptions ?? [],
-                  workspace: workspace,
-                  verbose: trace) {
+        let test: () throws -> Void = {
             let command: String
 
             if pretty {
@@ -80,6 +78,19 @@ struct TestCommand: ParsableCommand, DasutCommand {
             }
 
             try shell(script: command, at: repoRoot, errorMessage: "Testing failed!", verbose: true)
+        }
+
+        if noGen {
+            try test()
+        } else {
+            try tuist(on: repoRoot,
+                      bin: bin,
+                      toolConfig: toolConfiguration,
+                      generationOptions: configuration?.tuist.generationOptions ?? [],
+                      workspace: workspace,
+                      verbose: trace) {
+                try test()
+            }
         }
         complete(with: "Test Suceeded!")
     }
