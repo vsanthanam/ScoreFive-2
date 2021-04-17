@@ -45,8 +45,7 @@ public final class AnalyticsManager: AnalyticsManaging {
     /// - Parameter config: The configuration, used to determine where to send events
     public func startAnalytics(with config: AnalyticsConfig) {
         guard let appKey = config.appKey,
-              let host = config.host
-        else {
+              let host = config.host else {
             guard AnalyticsEnvironment[.allowAnonymousAnalytics] == true else {
                 fatalError("""
                 Empty or invalid analytics configuration! Run `./dasut analytics install` or run the app with EV `AN_ALLOW_ANONYMOUS_ANALYTICS` as `YES`

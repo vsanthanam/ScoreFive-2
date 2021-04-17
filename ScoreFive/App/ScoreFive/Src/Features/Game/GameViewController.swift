@@ -32,17 +32,6 @@ final class GameViewController: ScopeViewController, GamePresentable, GameViewCo
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        switch traitCollection.userInterfaceStyle {
-        case .dark:
-            return .lightContent
-        case .light, .unspecified:
-            return .darkContent
-        @unknown default:
-            return .darkContent
-        }
-    }
-
     // MARK: - GamePresentable
 
     weak var listener: GamePresentableListener?
