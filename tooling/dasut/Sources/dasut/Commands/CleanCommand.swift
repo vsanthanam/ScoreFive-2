@@ -9,17 +9,30 @@ import ShellOut
 
 struct CleanCommand: ParsableCommand, DasutCommand {
 
-    // MARK: - Initializers
-
-    init() {}
-
     // MARK: - API
+
+    enum CleanCommandError: Error, DasutError {
+        case missingWorkspaceConfiguration
+
+        var message: String {
+            switch self {
+            case .missingWorkspaceConfiguration:
+                return "Missing workspace from arguments or configuration!"
+            }
+        }
+    }
 
     @Option(name: .long, help: "Location of the score five repo")
     var repoRoot: String = FileManager.default.currentDirectoryPath
 
     @Option(name: .long, help: "Location of the configuration file")
     var toolConfiguration: String = ".dasut-config"
+
+    @Flag(name: .long, help: "Display verbose logging")
+    var trace: Bool = false
+
+    @Option(name: .long, help: "Workspace Root")
+    var workspaceRoot: String?
 
     // MARK: - ParsableCommand
 
@@ -29,17 +42,33 @@ struct CleanCommand: ParsableCommand, DasutCommand {
     // MARK: - DasutCommand
 
     func action() throws {
-        let config = try fetchConfiguration(on: repoRoot)
-        let tuistConfigDir = config!.workspaceRoot + "/Tuist"
-        _ = try? shell(script: "rm -rf \(tuistConfigDir)", at: repoRoot)
-        let swiftformat = ".swiftformat"
-        _ = try? shell(script: "rm \(swiftformat)", at: repoRoot)
-        let swiftlint = ".swiftlint.yml"
-        _ = try? shell(script: "rm \(swiftlint)", at: repoRoot)
-        let projects = "find \(config!.workspaceRoot) -type d -name \'*.xcodeproj\' -prune -exec rm -rf {} \\;"
-        _ = try? shell(script: projects, at: repoRoot)
-        let workspaces = "find \(config!.workspaceRoot) -type d -name \'*.xcworkspace\' -prune -exec rm -rf {} \\;"
-        _ = try? shell(script: workspaces, at: repoRoot)
+
+        let config = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
+        guard let workspace = workspaceRoot ?? config?.workspaceRoot else {
+            throw CleanCommandError.missingWorkspaceConfiguration
+        }
+
+        let tuistDir = [workspace, "Tuist"].joined(separator: "/")
+
+        let clean = """
+        #! /bin/sh
+        swiftlint=.swiftlint.yml
+        swiftforamt=.swiftformat
+        tuist=\(tuistDir)
+        if [ -f "$swiftlint" ]; then
+            rm $swiftlint
+        fi
+        if [ -f "$swiftformat" ]; then
+            rm $swiftformat
+        fi
+        if [ -f "tuist" ]; then
+            rm -r $tuist
+        fi
+        find \(workspace) -type d -name \'*.xcodeproj\' -prune -exec rm -rf {} \\;
+        find \(workspace) -type d -name \'*.xcworkspace\' -prune -exec rm -rf {} \\;
+        """
+
+        try shell(script: clean, at: repoRoot, verbose: trace)
         complete(with: "Clean Complete! 🍻")
     }
 }
