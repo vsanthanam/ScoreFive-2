@@ -42,7 +42,7 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
     @Option(name: .long, help: "Simulator Version")
     var os: String?
 
-    @Flag(name: .long, help: "")
+    @Flag(name: .long, help: "Allow lint failure in test script")
     var relaxed: Bool = false
 
     @Flag(name: .long, help: "Display pretty results (requires xcpretty)")

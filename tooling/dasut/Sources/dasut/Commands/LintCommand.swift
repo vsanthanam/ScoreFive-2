@@ -81,7 +81,6 @@ struct LintCommand: ParsableCommand, DasutCommand {
     // MARK: - DasutCommand
 
     func action() throws {
-
         let configuration = try fetchConfiguration(on: repoRoot, location: toolConfiguration)
         let excludeDirs = self.excludeDirs + (configuration?.lint.excludeDirs ?? [])
         let swiftVersion = self.swiftVersion ?? configuration?.lint.swiftformat.swiftVersion
@@ -193,8 +192,14 @@ struct LintCommand: ParsableCommand, DasutCommand {
             write(message: "SwifLint Configuration")
             write(message: yaml)
         }
-        let echo = "echo \"\(yaml)\" >> .swiftlint.yml"
-        try shellOut(to: echo, at: repoRoot)
+        guard let data = yaml.data(using: .utf8) else {
+            throw CustomDasutError(message: "Couldn't write swiftlint configuration")
+        }
+        do {
+            try NSData(data: data).write(toFile: repoRoot + "/" + ".swiftlint.yml")
+        } catch {
+            throw CustomDasutError(message: "Couldn't write swiftlint configuration")
+        }
         var command = "bin/swiftlint/swiftlint"
         if fix {
             command = [command, "--path", (input ?? repoRoot), "--fix", "--strict"].joined(separator: " ")
@@ -256,8 +261,14 @@ struct LintCommand: ParsableCommand, DasutCommand {
         """
         let headerCommand = "--header \"\(header)\""
         let swiftformat = configComponents.joined(separator: "\n")
-        let echo = "echo \"\(swiftformat)\" >> .swiftformat"
-        try shellOut(to: echo)
+        guard let data = swiftformat.data(using: .utf8) else {
+            throw CustomDasutError(message: "Couldn't write swiftformat config!")
+        }
+        do {
+            try NSData(data: data).write(toFile: repoRoot + "/" + ".swiftformat")
+        } catch {
+            throw CustomDasutError(message: "Couldn't write swiftformat config!")
+        }
         let configToUse = try shellOut(to: .readFile(at: ".swiftformat"), at: repoRoot)
         if trace, !arclint {
             write(message: "SwiftFormat config:")

@@ -7,7 +7,7 @@ import Foundation
 
 extension DasutCommand {
 
-    func tuist(on root: String, bin: String, toolConfig: String, generationOptions: [String], workspace: String, verbose: Bool, action: () throws -> Void) throws {
+    func tuist(on root: String, bin: String, toolConfig: String, generationOptions: [String], workspace: String, verbose: Bool, action: (() throws -> Void)? = nil) throws {
         let options = generationOptions
             .map { "." + $0 }
             .reduce("") { prev, option in
@@ -18,18 +18,31 @@ extension DasutCommand {
         import ProjectDescription
 
         let config = Config(
+            compatibleXcodeVersions: .list([\"12.4\"]),
             generationOptions: [
                 \(options)
             ]
         )
         """
 
+        if verbose {
+            write(message: settings)
+        }
+
         let dir = workspace + "/Tuist"
         let path = dir + "/Config.swift"
         _ = try? shell(script: "rm -rf \(dir)", at: root)
         try shell(script: "mkdir \(dir)", at: root, errorMessage: "Couldn't Generate Temporary Directory", verbose: verbose)
-        try shell(script: "echo \"\(settings)\" > \(path)", at: root, errorMessage: "Couldn't Write Tuist Configuration", verbose: verbose)
+        guard let data = settings.data(using: .utf8) else {
+            throw CustomDasutError(message: "Couldn't Write Tuist Configuration")
+        }
+        do {
+            try NSData(data: data).write(toFile: root + "/" + path)
+        } catch {
+            throw CustomDasutError(message: "Couldn't Write Tuist Configuration")
+        }
         try shell(script: "\(bin) generate --path \(workspace)", at: root, errorMessage: "Couldn't Generate Project", verbose: verbose)
+        try action?()
         _ = try? shell(script: "rm -rf \(dir)", at: root)
     }
 

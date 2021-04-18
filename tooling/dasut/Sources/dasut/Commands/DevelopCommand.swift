@@ -63,11 +63,7 @@ struct DevelopCommand: ParsableCommand, DasutCommand {
                   toolConfig: toolConfiguration,
                   generationOptions: configuration?.tuist.generationOptions ?? [],
                   workspace: workspace,
-                  verbose: trace) {
-            try shell(script: "bin/tuist/tuist generate --path \(workspace)",
-                      at: repoRoot,
-                      errorMessage: "Couldn't Generate Project", verbose: trace)
-        }
+                  verbose: trace)
 
         if !dontOpenXcode {
             _ = try? shell(script: "open \(workspace)/ScoreFive.xcworkspace", at: repoRoot)
