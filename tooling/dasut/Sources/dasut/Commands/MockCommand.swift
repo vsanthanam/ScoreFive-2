@@ -92,6 +92,6 @@ struct MockCommand: ParsableCommand, DasutCommand {
 
     func action() throws {
         try generateMocks()
-        complete(with: "Mocks generated! 🍻")
+        complete(with: "Mocks Generated! 🍻")
     }
 }

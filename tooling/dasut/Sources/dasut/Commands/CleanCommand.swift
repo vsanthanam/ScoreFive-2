@@ -40,5 +40,6 @@ struct CleanCommand: ParsableCommand, DasutCommand {
         _ = try? shell(script: projects, at: repoRoot)
         let workspaces = "find \(config!.workspaceRoot) -type d -name \'*.xcworkspace\' -prune -exec rm -rf {} \\;"
         _ = try? shell(script: workspaces, at: repoRoot)
+        complete(with: "Clean Complete! 🍻")
     }
 }

@@ -12,12 +12,18 @@ struct TestCommand: ParsableCommand, DasutCommand {
     // MARK: - API
 
     enum TestCommandError: Error, DasutError {
-        case missingTestConfig
+        case missingSimulatorName
+        case missingOs
+        case missingWorkspace
 
         var message: String {
             switch self {
-            case .missingTestConfig:
-                return "Missing test options in arguments or configuration!"
+            case .missingSimulatorName:
+                return "Missing simulator name in arguments or configuration!"
+            case .missingOs:
+                return "Missing device os in arguments or configuration!"
+            case .missingWorkspace:
+                return "Missing workspace in arguments or configuration!"
             }
         }
     }
@@ -41,7 +47,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
     var bin: String = "bin/tuist/tuist"
 
     @Flag(name: .long, help: "Do not generate the test")
-    var noGen: Bool = false
+    var skipGeneration: Bool = true
 
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
@@ -62,10 +68,17 @@ struct TestCommand: ParsableCommand, DasutCommand {
         let configDevice = self.device ?? configuration?.testConfig.device
         let configOs = self.os ?? configuration?.testConfig.os
         let workspaceRoot = self.workspaceRoot ?? configuration?.workspaceRoot
-        guard let device = configDevice,
-              let os = configOs,
-              let workspace = workspaceRoot else {
-            throw TestCommandError.missingTestConfig
+
+        guard let workspace = workspaceRoot else {
+            throw TestCommandError.missingWorkspace
+        }
+
+        guard let device = configDevice else {
+            throw TestCommandError.missingSimulatorName
+        }
+
+        guard let os = configOs else {
+            throw TestCommandError.missingOs
         }
 
         let test: () throws -> Void = {
@@ -80,7 +93,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
             try shell(script: command, at: repoRoot, errorMessage: "Testing failed!", verbose: true)
         }
 
-        if noGen {
+        if skipGeneration {
             try test()
         } else {
             try tuist(on: repoRoot,
@@ -92,6 +105,6 @@ struct TestCommand: ParsableCommand, DasutCommand {
                 try test()
             }
         }
-        complete(with: "Test Suceeded!")
+        complete(with: "Tests Succeeded! 🍻")
     }
 }

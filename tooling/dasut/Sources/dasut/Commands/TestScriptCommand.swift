@@ -10,6 +10,23 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
 
     // MARK: - API
 
+    enum TestScriptCommandError: Error, DasutError {
+        case missingSimulatorName
+        case missingOs
+        case missingWorkspace
+
+        var message: String {
+            switch self {
+            case .missingSimulatorName:
+                return "Missing simulator name in arguments or configuration!"
+            case .missingOs:
+                return "Missing device os in arguments or configuration!"
+            case .missingWorkspace:
+                return "Missing workspace in arguments or configuration!"
+            }
+        }
+    }
+
     @Option(name: .long, help: "Location of the score five repo")
     var repoRoot: String = FileManager.default.currentDirectoryPath
 
@@ -46,11 +63,19 @@ struct TestScriptCommand: ParsableCommand, DasutCommand {
         let configDevice = self.device ?? configuration?.testConfig.device
         let configOs = self.os ?? configuration?.testConfig.os
         let workspaceRoot = self.workspaceRoot ?? configuration?.workspaceRoot
-        guard let device = configDevice,
-              let os = configOs,
-              let workspace = workspaceRoot else {
-            throw CustomDasutError(message: "Missing test configuration!")
+
+        guard let workspace = workspaceRoot else {
+            throw TestScriptCommandError.missingWorkspace
         }
+
+        guard let device = configDevice else {
+            throw TestScriptCommandError.missingSimulatorName
+        }
+
+        guard let os = configOs else {
+            throw TestScriptCommandError.missingOs
+        }
+
         var script: String = """
         #! /bin/sh
         set -euo pipefail

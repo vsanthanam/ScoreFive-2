@@ -36,5 +36,6 @@ struct BootstrapCommand: ParsableCommand, DasutCommand {
 
         developCommand.dontOpenXcode = true
         try developCommand.action()
+        complete(with: "Bootstrapping complete! 🍻\nGenerate the project with ./dasut develop")
     }
 }

@@ -25,10 +25,12 @@ struct LintCommand: ParsableCommand, DasutCommand {
             case .lintExecutionFailed:
                 return "Lint execution failed!"
             case let .lintFailed(warnings, errors, afterFix):
+                let warningText = warnings == 1 ? "warning" : "warnings"
+                let errorText = errors == 1 ? "error" : "errors"
                 if afterFix {
-                    return "Found \(warnings) warnings, \(errors) errors after fixing"
+                    return "Found \(warnings) \(warningText), \(errors) \(errorText) after fixing"
                 } else {
-                    return "Found \(warnings) warnings, \(errors) errors"
+                    return "Found \(warnings) \(warningText), \(errors) \(errorText)"
                 }
             }
         }

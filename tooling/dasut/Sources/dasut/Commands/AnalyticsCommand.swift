@@ -70,6 +70,7 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
             _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot)
             try NSData(data: data).write(toFile: workspace + targetPath)
+            complete(with: "Configuration Installed! 🍻")
         }
     }
 
@@ -102,6 +103,7 @@ struct AnalyticsCommand: ParsableCommand, DasutCommand {
             let targetPath = "/App/ScoreFive/Resources/analytics_config.json"
             _ = try? shell(script: "rm \(workspace + targetPath)", at: repoRoot)
             try NSData(data: data).write(toFile: workspace + targetPath)
+            complete(with: "Configuration Wiped! 🍻")
         }
 
     }
