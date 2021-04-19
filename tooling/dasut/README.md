@@ -119,6 +119,9 @@ Usage:
 $ ./dasut analytics wipe [--repo-root <repo-root>] [--workspace-root <workspace-root>] [--tool-configuration <tool-configuration>]
 ```
 
+*Options*
+- `--workspace-root <root>` — The location of the workspace root directory within the scorefive monorepo. If none is provided, this value is inferred from `.dasut-config` file
+
 #### `install`
 
 Install Countly Host & API Key
@@ -134,8 +137,6 @@ $ ./dasut analytics install <host> <key> [--repo-root <repo-root>] [--tool-confi
 
 *Options*
 - `--workspace-root <root>` — The location of the workspace root directory within the scorefive monorepo. If none is provided, this value is inferred from `.dasut-config` file
-
-<TBA>
 
 ### `clean`
 
