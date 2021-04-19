@@ -43,12 +43,6 @@ struct TestCommand: ParsableCommand, DasutCommand {
     @Option(name: .long, help: "Workspace Root")
     var workspaceRoot: String?
 
-    @Option(name: .long, help: "Tuist")
-    var bin: String = "bin/tuist/tuist"
-
-    @Flag(name: .long, help: "Do not generate the test")
-    var skipGeneration: Bool = true
-
     @Flag(name: .long, help: "Display verbose logging")
     var trace: Bool = false
 
@@ -58,7 +52,7 @@ struct TestCommand: ParsableCommand, DasutCommand {
     // MARK: - ParsableCommand
 
     static let configuration: CommandConfiguration = .init(commandName: "test",
-                                                           abstract: "Run needle and update the runtime dependency graph",
+                                                           abstract: "Run the unit tests",
                                                            version: "2.0")
 
     // MARK: - DasutCommand
@@ -81,30 +75,14 @@ struct TestCommand: ParsableCommand, DasutCommand {
             throw TestCommandError.missingOs
         }
 
-        let test: () throws -> Void = {
-            let command: String
+        let command: String
 
-            if pretty {
-                command = "set -o pipefail && xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | xcpretty"
-            } else {
-                command = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
-            }
-
-            try shell(script: command, at: repoRoot, errorMessage: "Testing failed!", verbose: true)
-        }
-
-        if skipGeneration {
-            try test()
+        if pretty {
+            command = "set -o pipefail && xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test | xcpretty"
         } else {
-            try tuist(on: repoRoot,
-                      bin: bin,
-                      toolConfig: toolConfiguration,
-                      generationOptions: configuration?.tuist.generationOptions ?? [],
-                      workspace: workspace,
-                      verbose: trace) {
-                try test()
-            }
+            command = "xcodebuild -workspace \(workspace)/ScoreFive.xcworkspace -sdk iphonesimulator -scheme ScoreFive -destination 'platform=iOS Simulator,name=\(device),OS=\(os)' test"
         }
-        complete(with: "Tests Succeeded! 🍻")
+
+        try shell(script: command, at: repoRoot, errorMessage: "Testing failed!", verbose: true)
     }
 }
