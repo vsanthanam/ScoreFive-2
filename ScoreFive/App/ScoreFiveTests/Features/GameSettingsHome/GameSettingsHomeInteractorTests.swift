@@ -11,18 +11,12 @@ final class GameSettingsHomeInteractorTests: TestCase {
 
     let presenter = GameSettingsHomePresentableMock()
     let listener = GameSettingsHomeListenerMock()
-    let activeGameStream = ActiveGameStreamingMock()
-    let gameStorageProvider = GameStorageProvidingMock()
-    let userSettingsManager = UserSettingsManagingMock()
 
     var interactor: GameSettingsHomeInteractor!
 
     override func setUp() {
         super.setUp()
-        interactor = .init(presenter: presenter,
-                           activeGameStream: activeGameStream,
-                           gameStorageProvider: gameStorageProvider,
-                           userSettingsManager: userSettingsManager)
+        interactor = .init(presenter: presenter)
         interactor.listener = listener
     }
 
@@ -35,11 +29,4 @@ final class GameSettingsHomeInteractorTests: TestCase {
         interactor.didTapClose()
         XCTAssertEqual(listener.gameSettingsHomeDidResignCallCount, 1)
     }
-
-    func test_didUpdatePlayers_callsListener() {
-        XCTAssertEqual(listener.gameSettingsHomeDidUpdatePlayersCallCount, 0)
-        interactor.didUpdatePlayers([])
-        XCTAssertEqual(listener.gameSettingsHomeDidUpdatePlayersCallCount, 1)
-    }
-
 }

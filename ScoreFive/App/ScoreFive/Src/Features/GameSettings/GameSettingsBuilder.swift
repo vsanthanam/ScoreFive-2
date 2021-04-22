@@ -7,12 +7,7 @@ import Foundation
 import NeedleFoundation
 import ShortRibs
 
-protocol GameSettingsDependency: Dependency {
-    var activeGameStream: ActiveGameStreaming { get }
-    var gameStorageManager: GameStorageManaging { get }
-}
-
-class GameSettingsComponent: Component<GameSettingsDependency> {
+class GameSettingsComponent: Component<EmptyDependency> {
 
     fileprivate var gameSettingsHomeBuilder: GameSettingsHomeBuildable {
         GameSettingsHomeBuilder { GameSettingsHomeComponent(parent: self) }
@@ -40,9 +35,7 @@ final class GameSettingsBuilder: ComponentizedBuilder<GameSettingsComponent, Pre
         let listener = dynamicBuildDependency
         let viewController = GameSettingsViewController()
         let interactor = GameSettingsInteractor(presenter: viewController,
-                                                gameSettingsHomeBuilder: component.gameSettingsHomeBuilder,
-                                                activeGameStream: component.activeGameStream,
-                                                gameStorageManager: component.gameStorageManager)
+                                                gameSettingsHomeBuilder: component.gameSettingsHomeBuilder)
         viewController.listener = interactor
         interactor.listener = listener
         return interactor

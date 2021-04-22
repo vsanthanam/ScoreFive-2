@@ -7,13 +7,7 @@ import Foundation
 import NeedleFoundation
 import ShortRibs
 
-protocol GameSettingsHomeDependency: Dependency {
-    var activeGameStream: ActiveGameStreaming { get }
-    var gameStorageProvider: GameStorageProviding { get }
-    var userSettingsManager: UserSettingsManaging { get }
-}
-
-class GameSettingsHomeComponent: Component<GameSettingsHomeDependency> {}
+class GameSettingsHomeComponent: Component<EmptyDependency> {}
 
 /// @mockable
 protocol GameSettingsHomeInteractable: PresentableInteractable {}
@@ -34,10 +28,7 @@ final class GameSettingsHomeBuilder: ComponentizedBuilder<GameSettingsHomeCompon
     override final func build(with component: GameSettingsHomeComponent, _ dynamicBuildDependency: GameSettingsHomeDynamicBuildDependency) -> PresentableInteractable {
         let listener = dynamicBuildDependency
         let viewController = GameSettingsHomeViewController()
-        let interactor = GameSettingsHomeInteractor(presenter: viewController,
-                                                    activeGameStream: component.activeGameStream,
-                                                    gameStorageProvider: component.gameStorageProvider,
-                                                    userSettingsManager: component.userSettingsManager)
+        let interactor = GameSettingsHomeInteractor(presenter: viewController)
         interactor.listener = listener
         return interactor
     }

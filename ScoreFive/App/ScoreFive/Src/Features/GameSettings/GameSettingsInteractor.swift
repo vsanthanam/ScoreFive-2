@@ -23,12 +23,8 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
     // MARK: - Initializers
 
     init(presenter: GameSettingsPresentable,
-         gameSettingsHomeBuilder: GameSettingsHomeBuildable,
-         activeGameStream: ActiveGameStreaming,
-         gameStorageManager: GameStorageManaging) {
+         gameSettingsHomeBuilder: GameSettingsHomeBuildable) {
         self.gameSettingsHomeBuilder = gameSettingsHomeBuilder
-        self.activeGameStream = activeGameStream
-        self.gameStorageManager = gameStorageManager
         super.init(presenter: presenter)
     }
 
@@ -49,21 +45,9 @@ final class GameSettingsInteractor: PresentableInteractor<GameSettingsPresentabl
         listener?.gameSettingsDidResign()
     }
 
-    func gameSettingsHomeDidUpdatePlayers(_ players: [Player]) {
-        guard let identifier = activeGameStream.currentActiveGameIdentifier,
-              var card = try? gameStorageManager.fetchScoreCard(for: identifier),
-              card.canReplacePlayers(with: players) else {
-            return
-        }
-        card.replacePlayers(with: players)
-        try? gameStorageManager.save(scoreCard: card, with: identifier)
-    }
-
     // MARK: - Private
 
     private let gameSettingsHomeBuilder: GameSettingsHomeBuildable
-    private let activeGameStream: ActiveGameStreaming
-    private let gameStorageManager: GameStorageManaging
 
     private var currentGameSettingsHome: PresentableInteractable?
 
