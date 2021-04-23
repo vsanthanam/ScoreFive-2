@@ -2,7 +2,7 @@
 [![Build Status](https://img.shields.io/buildkite/d1c99f98602af9271e05a7020e2f18b941ed3a2f632d6eeb1b/refs/heads/main)](https://buildkite.com/varun-santhanam/scorefive-main-branch)
 [![License](https://img.shields.io/github/license/vsanthanam/scorefive-2)](https://opensource.org/licenses/MIT)
 [![Tuist badge](https://img.shields.io/badge/Powered%20by-Tuist-blue)](https://tuist.io)
-![Xcode](https://img.shields.io/badge/Xcode-12.4-blue)
+![Xcode](https://img.shields.io/badge/Xcode-12.5%20(RC)-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.4-blueviolet)
 
 ## Setup

@@ -18,7 +18,7 @@ extension DasutCommand {
         import ProjectDescription
 
         let config = Config(
-            compatibleXcodeVersions: .list([\"12.4\"]),
+            compatibleXcodeVersions: .list([\"12.5\"]),
             generationOptions: [
                 \(options)
             ]
