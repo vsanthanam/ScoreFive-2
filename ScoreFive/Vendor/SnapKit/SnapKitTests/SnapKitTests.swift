@@ -726,8 +726,8 @@ class SnapKitTests: XCTestCase {
         vc.view.addSubview(self.container)
         
         self.container.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(vc.topLayoutGuide.snp.bottom)
-            make.bottom.equalTo(vc.bottomLayoutGuide.snp.top)
+            make.top.equalTo(vc.view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(vc.view.safeAreaLayoutGuide.snp.top)
         }
          
         XCTAssertEqual(vc.view.snp_constraints.count, 2, "Should have 2 constraints installed")

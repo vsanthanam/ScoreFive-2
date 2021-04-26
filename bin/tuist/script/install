@@ -10,16 +10,6 @@ shell_join() {
   done
 }
 
-shell_join() {
-  local arg
-  printf "%s" "$1"
-  shift
-  for arg in "$@"; do
-    printf " "
-    printf "%s" "${arg// /\ }"
-  done
-}
-
 execute() {
   if ! "$@"; then
     abort "$(printf "Failed during: %s" "$(shell_join "$@")")"
@@ -84,8 +74,9 @@ ohai "Installing tuistenv..."
 if [[ ! -d "/usr/local/bin" ]]; then
   execute_sudo mkdir /usr/local/bin/
 fi
+execute_sudo mkdir -p /usr/local/bin
+execute_sudo rm -rf /usr/local/bin/tuist
 execute_sudo mv /tmp/tuistenv/tuistenv /usr/local/bin/tuist
-execute_sudo ln -sf /usr/local/bin/tuist /usr/local/bin/swift-project
 execute_sudo chmod +x /usr/local/bin/tuist
 
 rm -rf /tmp/tuistenv
