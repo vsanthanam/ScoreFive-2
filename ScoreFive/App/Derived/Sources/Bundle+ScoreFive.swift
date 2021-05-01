@@ -1,4 +1,5 @@
 // swiftlint:disable all
+// swift-format-ignore-file
 // swiftformat:disable all
 import Foundation
 

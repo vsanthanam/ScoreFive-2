@@ -2,7 +2,6 @@
     "lint": {
         "excludeDirs": ["ScoreFive/App/Derived",
                        "bin",
-                       "tooling/sftool/.build",
                        "tooling/dasut/.build"],
         "swiftformat": {
             "enableRules": ["isEmpty"],
@@ -28,7 +27,9 @@
                               "generic_type_name",
                               "unused_setter_value",
                               "trailing_whitespace",
-                              "cyclomatic_complexity"],
+                              "cyclomatic_complexity",
+                              "file_length",
+                              "todo"],
             "optInRules": []
         }
     },
