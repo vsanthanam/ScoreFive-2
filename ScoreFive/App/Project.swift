@@ -7,6 +7,12 @@ import ProjectDescription
 
 let project = Project(name: "ScoreFive",
                       organizationName: "Varun Santhanam",
+                      packages: [
+                          .remote(url: "https://github.com/vsanthanam/Ombi.git",
+                                  requirement: .upToNextMajor(from: "1.0.0")),
+                          .remote(url: "git@gitlab.com:vsanthanam/scorekeeping.git",
+                                  requirement: .branch("main"))
+                      ],
                       settings: .init(base: [:],
                                       debug: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
                                       release: .settings([:], xcconfig: .relativeToManifest("Config/Project.xcconfig")),
@@ -27,11 +33,13 @@ let project = Project(name: "ScoreFive",
                                      .pre(script: "../../dasut update-deps --repo-root ../../", name: "Generate DI Graph")
                                  ],
                                  dependencies: [
+                                     .package(product: "Ombi"),
+                                     .package(product: "ScoreKeeping"),
                                      .project(target: "Analytics", path: "../Libraries/Analytics"),
                                      .project(target: "AppFoundation", path: "../Libraries/AppFoundation"),
                                      .project(target: "FiveUI", path: "../Libraries/FiveUI"),
                                      .project(target: "Logging", path: "../Libraries/Logging"),
-                                     .project(target: "ScoreKeeping", path: "../Libraries/ScoreKeeping"),
+//                                     .project(target: "ScoreKeeping", path: "../Libraries/ScoreKeeping"),
                                      .project(target: "ShortRibs", path: "../Libraries/ShortRibs"),
                                      .project(target: "SnapKit", path: "../Vendor/SnapKit"),
                                      .project(target: "NeedleFoundation", path: "../Vendor/NeedleFoundation"),

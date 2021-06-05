@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,objective-c
 
 ### ScoreFive ###
+ScoreFive/.package.resolved
 ScoreFive/App/ScoreFive/Resources/analytics_config.json
 ScoreFive/App/ScoreFive/Src/Infra/DependencyGraph.swift
 ScoreFive/App/ScoreFiveTests/Mocks.swift

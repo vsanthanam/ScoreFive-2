@@ -83,7 +83,7 @@ final class GameInteractor: PresentableInteractor<GamePresentable>, GameInteract
               var card = try? gameStorageManager.fetchScoreCard(for: identifier) else {
             return
         }
-        card.removeRound(at: index)
+        card.removeRound(atIndex: index)
         try? gameStorageManager.save(scoreCard: card, with: identifier)
     }
 

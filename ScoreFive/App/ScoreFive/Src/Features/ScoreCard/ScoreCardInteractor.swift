@@ -83,7 +83,7 @@ final class ScoreCardInteractor: PresentableInteractor<ScoreCardPresentable>, Sc
                     let round = card[i]
                     let scores = card.orderedPlayers.map { round[$0.id] }
                     let index = indexByPlayer ? String(card.startingPlayer(atIndex: i).name.prefix(1)) : String(i + 1)
-                    let model = RoundCellModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(at: i))
+                    let model = RoundCellModel(visibleIndex: index, index: i, scores: scores, canRemove: card.canRemoveRound(atIndex: i))
                     models.append(model)
                 }
                 return models
@@ -100,7 +100,7 @@ private extension ScoreCard {
         if index == 0 {
             return orderedPlayers[index % orderedPlayers.count]
         } else {
-            let active = orderedActivePlayers(at: index - 1)
+            let active = orderedActivePlayers(atIndex: index - 1)
 
             if Set(active) == Set(orderedPlayers) {
                 return orderedPlayers[index % orderedPlayers.count]

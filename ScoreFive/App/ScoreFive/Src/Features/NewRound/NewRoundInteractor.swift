@@ -55,7 +55,7 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
             return
         }
 
-        players = card.orderedActivePlayers(at: (replacingIndex ?? card.rounds.count) - 1)
+        players = card.orderedActivePlayers(atIndex: (replacingIndex ?? card.rounds.count) - 1)
 
         guard Set(players.map(\.uuid)) == Set(round.playerIds) else {
             listener?.newRoundDidResign()
@@ -146,8 +146,8 @@ final class NewRoundInteractor: PresentableInteractor<NewRoundPresentable>, NewR
         }
 
         if let index = replacingIndex {
-            if card.canReplaceRound(at: index, with: round) {
-                card.replaceRound(at: index, with: round)
+            if card.canReplaceRound(atIndex: index, with: round) {
+                card.replaceRound(atIndex: index, with: round)
                 try? gameStorageManager.save(scoreCard: card, with: identifier)
                 listener?.newRoundDidResign()
             } else {
