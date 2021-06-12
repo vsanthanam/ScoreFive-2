@@ -10,7 +10,7 @@ let project = Project(name: "ScoreFive",
                       packages: [
                           .remote(url: "https://github.com/vsanthanam/Ombi.git",
                                   requirement: .upToNextMajor(from: "1.0.0")),
-                          .remote(url: "git@gitlab.com:vsanthanam/scorekeeping.git",
+                          .remote(url: "https://github.com/vsanthanam/ScoreKeeping.git",
                                   requirement: .branch("main"))
                       ],
                       settings: .init(base: [:],
